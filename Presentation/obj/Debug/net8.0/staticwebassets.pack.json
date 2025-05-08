@@ -5,8 +5,12 @@
       "PackagePath": "staticwebassets/Presentation.k1kcl344lb.bundle.scp.css"
     },
     {
-      "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/site.css",
-      "PackagePath": "staticwebassets/css/site.css"
+      "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/input.css",
+      "PackagePath": "staticwebassets/css/input.css"
+    },
+    {
+      "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
+      "PackagePath": "staticwebassets/css/output.css"
     },
     {
       "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/favicon.ico",

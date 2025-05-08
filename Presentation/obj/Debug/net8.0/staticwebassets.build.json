@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0iKkFp/fVxNY8OZTEDfzLLhn5JSxweILF5He/Q25GkQ=",
+  "Hash": "N1JjSzxrgxlfyX1eeZFgsB2vfbifjaTVUcao8syagpo=",
   "Source": "Presentation",
   "BasePath": "_content/Presentation",
   "Mode": "Default",
@@ -59,12 +59,12 @@
       "OriginalItemSpec": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/obj/Debug/net8.0/scopedcss/projectbundle/Presentation.bundle.scp.css"
     },
     {
-      "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/site.css",
+      "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/input.css",
       "SourceId": "Presentation",
       "SourceType": "Discovered",
       "ContentRoot": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/",
       "BasePath": "_content/Presentation",
-      "RelativePath": "css/site#[.{fingerprint}]?.css",
+      "RelativePath": "css/input#[.{fingerprint}]?.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -73,11 +73,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "fosamezn9b",
-      "Integrity": "r22M7xOahcMheWCkoVof2Nt7pQmj7mMSFKTei+SfmQ0=",
+      "Fingerprint": "i2vcc65qnd",
+      "Integrity": "SlyFnqRtyMJ/6E2n7SQo1Y/AOegGanHf2vV2jgUZRv0=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/css/site.css"
+      "OriginalItemSpec": "wwwroot/css/input.css"
+    },
+    {
+      "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
+      "SourceId": "Presentation",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/",
+      "BasePath": "_content/Presentation",
+      "RelativePath": "css/output#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ejlqb2hesw",
+      "Integrity": "dk0KfReVDM/B9ZYfzmChbw+QfoqPFg+BxsulZsPuLPQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/output.css"
     },
     {
       "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/favicon.ico",
@@ -1321,8 +1342,8 @@
   ],
   "Endpoints": [
     {
-      "Route": "css/site.css",
-      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/site.css",
+      "Route": "css/input.css",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/input.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1331,7 +1352,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "341"
+          "Value": "63"
         },
         {
           "Name": "Content-Type",
@@ -1339,11 +1360,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"r22M7xOahcMheWCkoVof2Nt7pQmj7mMSFKTei+SfmQ0=\""
+          "Value": "\"SlyFnqRtyMJ/6E2n7SQo1Y/AOegGanHf2vV2jgUZRv0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 08 Apr 2025 08:05:20 GMT"
+          "Value": "Thu, 08 May 2025 12:09:58 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1353,13 +1374,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-r22M7xOahcMheWCkoVof2Nt7pQmj7mMSFKTei+SfmQ0="
+          "Value": "sha256-SlyFnqRtyMJ/6E2n7SQo1Y/AOegGanHf2vV2jgUZRv0="
         }
       ]
     },
     {
-      "Route": "css/site.fosamezn9b.css",
-      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/site.css",
+      "Route": "css/input.i2vcc65qnd.css",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/input.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1368,7 +1389,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "341"
+          "Value": "63"
         },
         {
           "Name": "Content-Type",
@@ -1376,11 +1397,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"r22M7xOahcMheWCkoVof2Nt7pQmj7mMSFKTei+SfmQ0=\""
+          "Value": "\"SlyFnqRtyMJ/6E2n7SQo1Y/AOegGanHf2vV2jgUZRv0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 08 Apr 2025 08:05:20 GMT"
+          "Value": "Thu, 08 May 2025 12:09:58 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1390,15 +1411,97 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "fosamezn9b"
+          "Value": "i2vcc65qnd"
         },
         {
           "Name": "label",
-          "Value": "css/site.css"
+          "Value": "css/input.css"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-r22M7xOahcMheWCkoVof2Nt7pQmj7mMSFKTei+SfmQ0="
+          "Value": "sha256-SlyFnqRtyMJ/6E2n7SQo1Y/AOegGanHf2vV2jgUZRv0="
+        }
+      ]
+    },
+    {
+      "Route": "css/output.css",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9545"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"dk0KfReVDM/B9ZYfzmChbw+QfoqPFg+BxsulZsPuLPQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 08 May 2025 13:24:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-dk0KfReVDM/B9ZYfzmChbw+QfoqPFg+BxsulZsPuLPQ="
+        }
+      ]
+    },
+    {
+      "Route": "css/output.ejlqb2hesw.css",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9545"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"dk0KfReVDM/B9ZYfzmChbw+QfoqPFg+BxsulZsPuLPQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 08 May 2025 13:24:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ejlqb2hesw"
+        },
+        {
+          "Name": "label",
+          "Value": "css/output.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-dk0KfReVDM/B9ZYfzmChbw+QfoqPFg+BxsulZsPuLPQ="
         }
       ]
     },

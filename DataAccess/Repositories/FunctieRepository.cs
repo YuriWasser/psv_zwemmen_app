@@ -105,7 +105,7 @@ namespace DataAccess.Repositories
             string sql = "DELETE FROM functie WHERE id = @id";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", functie.Id);
+            //command.Parameters.AddWithValue("@id", functie.Id);
 
             int rowsAffected = command.ExecuteNonQuery();
 

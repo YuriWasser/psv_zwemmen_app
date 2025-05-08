@@ -145,3 +145,6 @@
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/bin/Debug/net8.0/Pomelo.EntityFrameworkCore.MySql.dll
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/bin/Debug/net8.0/Microsoft.AspNetCore.SpaServices.Extensions.dll
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/bin/Debug/net8.0/Tailwind.Extensions.AspNetCore.dll
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/bin/Debug/net8.0/package-lock.json
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/bin/Debug/net8.0/package.json
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/obj/Debug/net8.0/Presentation.sourcelink.json

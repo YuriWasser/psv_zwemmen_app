@@ -12,3 +12,4 @@
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.pdb
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.genruntimeconfig.cache
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/ref/Core.dll
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.sourcelink.json
