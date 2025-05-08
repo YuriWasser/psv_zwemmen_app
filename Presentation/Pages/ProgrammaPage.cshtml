@@ -1,0 +1,44 @@
+@page
+@model WebApp.Pages.ProgrammaPageModel
+
+@{
+    Layout = null; // Later kun je hier een layout toevoegen, zoals "_Layout"
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programma's voor Competitie</title>
+</head>
+<body>
+<h1>Programma's voor Competitie</h1>
+
+@if (Model.Programmas != null && Model.Programmas.Any())
+{
+    <ul>
+        @foreach (var programma in Model.Programmas)
+        {
+            <li>
+                <strong>Datum: @(programma.Datum.HasValue ? programma.Datum.Value.ToString("dd-MM-yyyy") : "Onbekend")</strong><br />
+                Starttijd: @(programma.StartTijd.HasValue ? programma.StartTijd.Value.ToString(@"hh\:mm") : "Nog niet bekend")<br />
+
+                
+                @if (programma.Afstanden != null && programma.Afstanden.Any())
+                {
+                    <ul>
+                        @foreach (var afstand in programma.Afstanden)
+                        {
+                            <li>@afstand.Beschrijving (@afstand.Meters meter)</li>
+                        }
+                    </ul>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Geen programma's gevonden voor deze competitie.</p>
+}
+</body>
+</html>

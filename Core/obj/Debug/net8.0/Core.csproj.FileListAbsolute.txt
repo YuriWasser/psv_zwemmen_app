@@ -1,0 +1,14 @@
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/bin/Debug/net8.0/Core.deps.json
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/bin/Debug/net8.0/Core.runtimeconfig.json
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/bin/Debug/net8.0/Core.dll
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/bin/Debug/net8.0/Core.pdb
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.csproj.AssemblyReference.cache
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.AssemblyInfoInputs.cache
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.AssemblyInfo.cs
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.csproj.CoreCompileInputs.cache
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.dll
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/refint/Core.dll
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.pdb
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/Core.genruntimeconfig.cache
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/obj/Debug/net8.0/ref/Core.dll
