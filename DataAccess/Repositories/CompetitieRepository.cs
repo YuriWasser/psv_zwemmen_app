@@ -7,14 +7,14 @@ namespace DataAccess.Repositories
     public class CompetitieRepository : ICompetitieRepository
     {
         private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-        
+
         public List<Competitie> GetAll()
         {
             List<Competitie> competities = new List<Competitie>();
-            
+
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
-            
+
             string sql = "SELECT * FROM competitie";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
@@ -25,8 +25,8 @@ namespace DataAccess.Repositories
                 competities.Add(
                     new Competitie(
                         (string)reader["naam"],
-                        (DateTime)reader["start_datum"],
-                        (DateTime)reader["eind_datum"],
+                        DateOnly.FromDateTime(Convert.ToDateTime(reader["start_datum"])),
+                        DateOnly.FromDateTime(Convert.ToDateTime(reader["eind_datum"])),
                         (int)reader["zwembad_id"]
                     )
                 );
@@ -37,22 +37,24 @@ namespace DataAccess.Repositories
 
         public Competitie GetById(int competitieId)
         {
+            List<Competitie> competities = new List<Competitie>();
+
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
 
             string sql = "SELECT * FROM competitie WHERE id = @id";
-            
+
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", competitieId);
-            
+
             using MySqlDataReader reader = command.ExecuteReader();
 
             if (reader.Read())
             {
                 return new Competitie(
                     (string)reader["naam"],
-                    (DateTime)reader["start_datum"],
-                    (DateTime)reader["eind_datum"],
+                    DateOnly.FromDateTime(Convert.ToDateTime(reader["start_datum"])),
+                    DateOnly.FromDateTime(Convert.ToDateTime(reader["eind_datum"])),
                     (int)reader["zwembad_id"]
                 );
             }
@@ -65,7 +67,8 @@ namespace DataAccess.Repositories
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
 
-            string sql = "INSERT INTO competitie (naam, start_datum, eind_datum, zwembad_id) VALUES (@naam, @start_datum, @eind_datum, @zwembad_id)";
+            string sql =
+                "INSERT INTO competitie (naam, start_datum, eind_datum, zwembad_id) VALUES (@naam, @start_datum, @eind_datum, @zwembad_id)";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@naam", competitie.Naam);
@@ -97,7 +100,7 @@ namespace DataAccess.Repositories
                          "eind_datum = @eind_datum, " +
                          "zwembad_id = @zwembad_id " +
                          "WHERE id = @id";
-            
+
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", competitie.Id);
             command.Parameters.AddWithValue("@naam", competitie.Naam);
@@ -119,7 +122,7 @@ namespace DataAccess.Repositories
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", competitie.Id);
-            
+
             int rowsAffected = command.ExecuteNonQuery();
 
             return rowsAffected > 0;

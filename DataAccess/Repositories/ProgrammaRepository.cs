@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
     {
         private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
         
-        public List<Programma> Getall()
+        public List<Programma> GetAll()
         {
             List<Programma> programmas = new List<Programma>();
 

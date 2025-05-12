@@ -9,8 +9,8 @@ namespace Core.Domain
         public int Id { get; set; }
         public int GebruikerId { get; set; }
         public int AfstandId { get; set; }
-        public TimeSpan? Tijd { get; set; }
-        public DateTime? Datum { get; set; }
+        public TimeSpan Tijd { get; set; }
+        public DateTime Datum { get; set; }
 
 
         public Clubrecord(int gebruikerId, int afstandId, TimeSpan tijd, DateTime datum)

@@ -10,7 +10,7 @@ public class Feedback
     public int ZwemmerId { get; set; }
     public int TrainerId { get; set; }
     public int ProgrammaId { get; set; }
-    public string? FeedbackText { get; set; }
+    public string FeedbackText { get; set; }
 
     public Feedback(int zwemmerId, int trainerId, int programmaId, string feedbackText)
     {

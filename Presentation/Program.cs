@@ -39,7 +39,7 @@ builder.Services.AddScoped<ProgrammaService>();
 //builder.Services.AddScoped<ClubrecordService>();
 //builder.Services.AddScoped<FunctieService>();
 //builder.Services.AddScoped<ResultaatService>();
-//builder.Services.AddScoped<ZwembadService>();
+builder.Services.AddScoped<ZwembadService>();
 
 var app = builder.Build();
 

@@ -7,12 +7,12 @@ namespace Core.Domain
     public class Competitie
     {
         public int Id { get; set; }
-        public string? Naam { get; set; }
-        public DateTime? StartDatum { get; set; }
-        public DateTime? EindDatum { get; set; }
-        public int? ZwembadId { get; set; }
+        public string Naam { get; set; }
+        public DateOnly StartDatum { get; set; }
+        public DateOnly EindDatum { get; set; }
+        public int ZwembadId { get; set; }
 
-        public Competitie(string naam, DateTime startDatum, DateTime eindDatum, int zwembadId)
+        public Competitie(string naam, DateOnly startDatum, DateOnly eindDatum, int zwembadId)
         {
             Naam = naam;
             StartDatum = startDatum;

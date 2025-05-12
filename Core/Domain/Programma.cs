@@ -7,10 +7,10 @@ namespace Core.Domain;
 public class Programma
 {
     public int Id { get; set; }
-    public int? CompetitieId { get; set; }
-    public string? Omschrijving { get; set; }
-    public DateTime? Datum { get; set; }
-    public TimeSpan? StartTijd { get; set; }
+    public int CompetitieId { get; set; }
+    public string Omschrijving { get; set; }
+    public DateTime Datum { get; set; }
+    public TimeSpan StartTijd { get; set; }
 
     public Programma(int competitieId, string omschrijving, DateTime datum, TimeSpan starttijd)
     {

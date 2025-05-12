@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
     {
         private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
         
-        public List<Afstand> Getall()
+        public List<Afstand> GetAll()
         {
             List<Afstand> afstanden = new List<Afstand>();
             

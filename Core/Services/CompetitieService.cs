@@ -19,9 +19,9 @@ namespace Core.Service
             {
                 return _competitieRepository.GetAll();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Doet het nog niet");
+                throw new Exception($"{ex.Message}");
             }
         }
 
@@ -37,7 +37,7 @@ namespace Core.Service
             throw new Exception("error");
         }
 
-        public Competitie Add(string naam, DateTime startDatum, DateTime eindDatum, int zwembadId)
+        public Competitie Add(string naam, DateOnly startDatum, DateOnly eindDatum, int zwembadId)
         {
             try
             {

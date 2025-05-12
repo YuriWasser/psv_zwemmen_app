@@ -8,7 +8,7 @@ namespace Core.Domain
     {
         public int Id { get; set; }
         public int Meters { get; set; }
-        public string? Beschrijving { get; set; }
+        public string Beschrijving { get; set; }
 
         public Afstand(int meters, string beschrijving)
         {
