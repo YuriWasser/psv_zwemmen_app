@@ -41,7 +41,7 @@ namespace Core.Service
         {
             try
             {
-                Competitie competitie = new Competitie(id, naam, startDatum, eindDatum, zwembadId, programmaId);
+                Competitie competitie = new Competitie(id, naam, startDatum, eindDatum, zwembadId);
                 competitie.Id = _competitieRepository.Add(competitie);
                 return competitie;
             }

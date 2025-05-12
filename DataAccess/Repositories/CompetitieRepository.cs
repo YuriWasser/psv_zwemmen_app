@@ -28,8 +28,7 @@ namespace DataAccess.Repositories
                         (string)reader["naam"],
                         DateOnly.FromDateTime(Convert.ToDateTime(reader["start_datum"])),
                         DateOnly.FromDateTime(Convert.ToDateTime(reader["eind_datum"])),
-                        (int)reader["zwembad_id"],
-                        (int)reader["programma_id"]
+                        (int)reader["zwembad_id"]
                     )
                 );
             }
@@ -58,8 +57,8 @@ namespace DataAccess.Repositories
                     (string)reader["naam"],
                     DateOnly.FromDateTime(Convert.ToDateTime(reader["start_datum"])),
                     DateOnly.FromDateTime(Convert.ToDateTime(reader["eind_datum"])),
-                    (int)reader["zwembad_id"],
-                    (int)reader["programma_id"]
+                    (int)reader["zwembad_id"]
+                    
                 );
             }
 
@@ -79,7 +78,6 @@ namespace DataAccess.Repositories
             command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
             command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
             command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
-            command.Parameters.AddWithValue("@programma_id", competitie.ProgrammaId);
 
             int rowsAffected = command.ExecuteNonQuery();
 
@@ -112,7 +110,6 @@ namespace DataAccess.Repositories
             command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
             command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
             command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
-            command.Parameters.AddWithValue("@programma_id", competitie.ProgrammaId);
 
             int rowsAffected = command.ExecuteNonQuery();
 
