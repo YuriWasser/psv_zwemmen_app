@@ -24,6 +24,7 @@ namespace DataAccess.Repositories
             {
                 clubrecords.Add(
                     new Clubrecord(
+                        (int)reader["id"],
                         (int)reader["gebruikerId"],
                         (int)reader["afstandId"],
                         (TimeSpan)reader["tijd"],
@@ -50,6 +51,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new Clubrecord(
+                    (int)reader["id"],
                     (int)reader["gebruikerId"],
                     (int)reader["afstandId"],
                     (TimeSpan)reader["tijd"],

@@ -10,8 +10,9 @@ public class Zwembad
     public string Naam { get; set; } 
     public string Adres { get; set; }
 
-    public Zwembad(string naam, string adres)
+    public Zwembad(int id, string naam, string adres)
     {
+        Id = id;
         Naam = naam;
         Adres = adres;
     }

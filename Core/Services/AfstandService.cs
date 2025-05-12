@@ -36,11 +36,11 @@ public class AfstandService
         throw new Exception("error");
     }
     
-    public Afstand Add(int meters, string beschrijving)
+    public Afstand Add(int id, int meters, string beschrijving)
     {
         try
         {
-            Afstand afstand = new Afstand(meters, beschrijving);
+            Afstand afstand = new Afstand(id, meters, beschrijving);
             afstand.Id = _afstandRepository.Add(afstand);
             return afstand;
         }
@@ -73,4 +73,17 @@ public class AfstandService
             throw new Exception("error");
         }
     }
+
+    public List<Afstand> GetByProgrammaId(int ProgrammaId)
+    {
+        try
+        {
+            return _afstandRepository.GetByProgrammaId(ProgrammaId);
+        }
+        catch
+        {
+            throw new Exception("error");
+        }
+    }
+  
 }

@@ -10,8 +10,9 @@ namespace Core.Domain
         public int GebruikerId { get; set; }
         public int TrainingId { get; set; }
 
-        public TrainingAfmelden(int gebruikerId, int trainingId)
+        public TrainingAfmelden(int id, int gebruikerId, int trainingId)
         {
+            Id = id;
             GebruikerId = gebruikerId;
             TrainingId = trainingId;
         }

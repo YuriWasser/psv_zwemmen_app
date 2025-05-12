@@ -7,16 +7,16 @@ namespace DataAccess.Repositories
     public class AfstandRepository : IAfstandRepository
     {
         private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-        
+
         public List<Afstand> GetAll()
         {
             List<Afstand> afstanden = new List<Afstand>();
-            
+
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
 
             string sql = "SELECT * FROM afstand";
-            
+
             using MySqlCommand command = new MySqlCommand(sql, connection);
             using MySqlDataReader reader = command.ExecuteReader();
 
@@ -24,6 +24,7 @@ namespace DataAccess.Repositories
             {
                 afstanden.Add(
                     new Afstand(
+                        (int)reader["id"],
                         (int)reader["meters"],
                         (string)reader["beschrijving"]
                     )
@@ -39,15 +40,16 @@ namespace DataAccess.Repositories
             connection.Open();
 
             string sql = "SELECT * FROM afstand WHERE id = @id";
-            
+
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", afstandId);
 
             using MySqlDataReader reader = command.ExecuteReader();
-            
+
             if (reader.Read())
             {
                 return new Afstand(
+                    (int)reader["id"],
                     (int)reader["meters"],
                     (string)reader["beschrijving"]
                 );
@@ -105,13 +107,44 @@ namespace DataAccess.Repositories
             connection.Open();
 
             string sql = "DELETE FROM afstand WHERE id = @id";
-            
+
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", afstand.Id);
 
             int rowsAffected = command.ExecuteNonQuery();
 
             return rowsAffected > 0;
+        }
+
+        public List<Afstand> GetByProgrammaId(int ProgrammaId)
+        {
+            List<Afstand> afstanden = new List<Afstand>();
+
+            using MySqlConnection connection = _dbConnection.GetConnection();
+            connection.Open();
+
+            string sql = @"
+                SELECT a.id, a.meters, a.beschrijving
+                FROM programma_afstand pa
+                INNER JOIN afstand a ON pa.afstand_id = a.id
+                WHERE pa.programma_id = @programmaId";
+
+            using MySqlCommand command = new MySqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@programmaId", ProgrammaId);
+
+            using MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                afstanden.Add(
+                    new Afstand(
+                        (int)reader["id"],
+                        (int)reader["meters"],
+                        (string)reader["beschrijving"]
+                    ));
+            }
+
+            return null;
         }
     }
 }

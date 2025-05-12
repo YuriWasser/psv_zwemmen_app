@@ -11,8 +11,9 @@ public class Training
     public DateTime Datum { get; set; }
     public TimeSpan StartTijd { get; set; }
 
-    public Training(int zwembadId, DateTime datum, TimeSpan startTijd)
+    public Training(int id, int zwembadId, DateTime datum, TimeSpan startTijd)
     {
+        Id = id;
         ZwembadId = zwembadId;
         Datum = datum;
         StartTijd = startTijd;

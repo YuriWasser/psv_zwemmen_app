@@ -12,8 +12,9 @@ public class WedstrijdInschrijving
         public int AfstandId { get; set; }
         public DateTime InschrijfDatum { get; set; }
 
-        public WedstrijdInschrijving(int gebruikerId, int programmaId, int afstandId, DateTime inschrijfDatum)
+        public WedstrijdInschrijving(int id, int gebruikerId, int programmaId, int afstandId, DateTime inschrijfDatum)
         {
+                Id = id;
                 GebruikerId = gebruikerId;
                 ProgrammaId = programmaId;
                 AfstandId = afstandId;

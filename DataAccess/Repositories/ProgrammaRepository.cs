@@ -24,6 +24,7 @@ namespace DataAccess.Repositories
             {
                 programmas.Add(
                     new Programma(
+                        (int)reader["id"],
                         (int)reader["competitieId"],
                         (string)reader["omschrijving"],
                         (DateTime)reader["datum"],
@@ -40,7 +41,7 @@ namespace DataAccess.Repositories
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
 
-            string sql = "SELECT * FROM programmas WHERE id = @id";
+            string sql = "SELECT * FROM programma WHERE id = @id";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", programmaId);
@@ -50,6 +51,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new Programma(
+                    (int)reader["id"],
                     (int)reader["competitieId"],
                     (string)reader["omschrijving"],
                     (DateTime)reader["datum"],
@@ -68,6 +70,7 @@ namespace DataAccess.Repositories
             string sql = "INSERT INTO programma (competitieId, omschrijving, datum, starttijd) VALUES (@competitieId, @omschrijving, @datum, @starttijd)";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@id", programma.Id);
             command.Parameters.AddWithValue("@competitieId", programma.CompetitieId);
             command.Parameters.AddWithValue("@omschrijving", programma.Omschrijving);
             command.Parameters.AddWithValue("@datum", programma.Datum);
@@ -99,6 +102,7 @@ namespace DataAccess.Repositories
                          "WHERE id = @id";
             
             using MySqlCommand command = new MySqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@id", programma.Id);
             command.Parameters.AddWithValue("@competitieId", programma.CompetitieId);
             command.Parameters.AddWithValue("@omschrijving", programma.Omschrijving);
             command.Parameters.AddWithValue("@datum", programma.Datum);
@@ -123,5 +127,7 @@ namespace DataAccess.Repositories
 
             return rowsAffected > 0;
         }
+        
+        
     } 
 }

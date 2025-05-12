@@ -24,6 +24,7 @@ namespace DataAccess.Repositories
             {
                 trainingAfmelden.Add(
                     new TrainingAfmelden(
+                        (int)reader["id"],
                         (int)reader["gebruikerId"],
                         (int)reader["trainingId"]
                     )
@@ -48,6 +49,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new TrainingAfmelden(
+                    (int)reader["id"],
                     (int)reader["gebruikerId"],
                     (int)reader["trainingId"]
                 );

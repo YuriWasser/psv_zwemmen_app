@@ -32,7 +32,8 @@ public class CompetitieModel : PageModel
                 competitie.StartDatum,
                 competitie.EindDatum,
                 competitie.ZwembadId,
-                _zwembadService.GetById(competitie.ZwembadId).Adres
+                _zwembadService.GetById(competitie.ZwembadId).Adres,
+                competitie.ProgrammaId
             ));
         }
 

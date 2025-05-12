@@ -30,7 +30,7 @@ builder.Services.AddScoped<IZwembadRepository, ZwembadRepository>();
 // Deze voeren de logica uit en maken gebruik van repositories
 builder.Services.AddScoped<CompetitieService>();
 builder.Services.AddScoped<ProgrammaService>();
-//builder.Services.AddScoped<AfstandService>();
+builder.Services.AddScoped<AfstandService>();
 //builder.Services.AddScoped<GebruikerService>();
 //builder.Services.AddScoped<WedstrijdInschrijvingService>();
 //builder.Services.AddScoped<TrainingService>();

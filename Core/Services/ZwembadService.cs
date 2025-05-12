@@ -36,11 +36,11 @@ public class ZwembadService
         throw new Exception("error");
     }
     
-    public Zwembad Add(string naam, string adres)
+    public Zwembad Add(int id, string naam, string adres)
     {
         try
         {
-            Zwembad zwembad = new Zwembad(naam, adres);
+            Zwembad zwembad = new Zwembad(id, naam, adres);
             zwembad.Id = _zwembadRepository.Add(zwembad);
             return zwembad;
         }

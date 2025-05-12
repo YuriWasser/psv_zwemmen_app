@@ -13,8 +13,9 @@ namespace Core.Domain
         public DateTime Datum { get; set; }
 
 
-        public Clubrecord(int gebruikerId, int afstandId, TimeSpan tijd, DateTime datum)
+        public Clubrecord(int id, int gebruikerId, int afstandId, TimeSpan tijd, DateTime datum)
         {
+            Id = id;
             GebruikerId = gebruikerId;
             AfstandId = afstandId;
             Tijd = tijd;

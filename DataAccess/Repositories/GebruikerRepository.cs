@@ -23,6 +23,7 @@ namespace DataAccess.Repositories
             {
                 gebruikers.Add(
                     new Gebruiker(
+                        (int)reader["id"],
                         (string)reader["gebruikersnaam"],
                         (string)reader["wachtwoord"],
                         (string)reader["email"],
@@ -51,6 +52,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new Gebruiker(
+                    (int)reader["id"],
                     (string)reader["gebruikersnaam"],
                     (string)reader["wachtwoord"],
                     (string)reader["email"],

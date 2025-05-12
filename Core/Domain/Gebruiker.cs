@@ -14,9 +14,10 @@ public class Gebruiker
     public string FunctieCode { get; set; }
 
 
-    public Gebruiker(string gebruikersnaam, string wachtwoord, string email, string voornaam, string achternaam,
+    public Gebruiker(int id, string gebruikersnaam, string wachtwoord, string email, string voornaam, string achternaam,
         string functieCode)
     {
+        Id = id;
         Gebruikersnaam = gebruikersnaam;
         Wachtwoord = wachtwoord;
         Email = email;

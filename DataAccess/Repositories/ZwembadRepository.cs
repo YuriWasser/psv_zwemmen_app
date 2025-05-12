@@ -24,6 +24,7 @@ namespace DataAccess.Repositories
             {
                 zwembaden.Add(
                     new Zwembad(
+                        (int)reader["id"],
                         (string)reader["naam"],
                         (string)reader["adres"]
                     )
@@ -48,6 +49,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new Zwembad(
+                    (int)reader["id"],
                     (string)reader["naam"],
                     (string)reader["adres"]
                 );

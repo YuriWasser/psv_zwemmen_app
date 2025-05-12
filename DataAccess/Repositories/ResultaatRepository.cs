@@ -24,6 +24,7 @@ namespace DataAccess.Repositories
             {
                 resultaten.Add(
                     new Resultaat(
+                        (int)reader["id"],
                         (int)reader["gebruikerId"],
                         (int)reader["programmaId"],
                         (int)reader["afstandId"],
@@ -51,6 +52,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new Resultaat(
+                    (int)reader["id"],
                     (int)reader["gebruikerId"],
                     (int)reader["programmaId"],
                     (int)reader["afstandId"],

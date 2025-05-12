@@ -13,8 +13,9 @@ public class Resultaat
     public TimeSpan Tijd { get; set; }
     public DateTime Datum { get; set; }
 
-    public Resultaat(int gebruikerId, int programmaId, int afstandId, TimeSpan tijd, DateTime datum)
+    public Resultaat(int id, int gebruikerId, int programmaId, int afstandId, TimeSpan tijd, DateTime datum)
     {
+        Id = id;
         GebruikerId = gebruikerId;
         ProgrammaId = programmaId;
         AfstandId = afstandId;

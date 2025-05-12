@@ -10,8 +10,9 @@ namespace Core.Domain
         public int Meters { get; set; }
         public string Beschrijving { get; set; }
 
-        public Afstand(int meters, string beschrijving)
+        public Afstand(int id, int meters, string beschrijving)
         {
+            Id = id;
             Meters = meters;
             Beschrijving = beschrijving;
         }

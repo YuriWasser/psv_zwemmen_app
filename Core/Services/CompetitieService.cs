@@ -3,7 +3,6 @@ using Core.Interface;
 
 namespace Core.Service
 {
-    
     public class CompetitieService
     {
         private readonly ICompetitieRepository _competitieRepository;
@@ -28,7 +27,7 @@ namespace Core.Service
         public Competitie GetById(int id)
         {
             Competitie competitie = _competitieRepository.GetById(id);
-            
+
             if (competitie != null)
             {
                 return competitie;
@@ -37,11 +36,12 @@ namespace Core.Service
             throw new Exception("error");
         }
 
-        public Competitie Add(string naam, DateOnly startDatum, DateOnly eindDatum, int zwembadId)
+        public Competitie Add(int id, string naam, DateOnly startDatum, DateOnly eindDatum, int zwembadId,
+            int programmaId)
         {
             try
             {
-                Competitie competitie = new Competitie(naam, startDatum, eindDatum, zwembadId);
+                Competitie competitie = new Competitie(id, naam, startDatum, eindDatum, zwembadId, programmaId);
                 competitie.Id = _competitieRepository.Add(competitie);
                 return competitie;
             }

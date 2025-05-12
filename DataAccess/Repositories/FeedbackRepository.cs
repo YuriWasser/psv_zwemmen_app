@@ -23,6 +23,7 @@ namespace DataAccess.Repositories
             {
                 feedbacks.Add(
                     new Feedback(
+                        (int)reader["id"],
                         (int)reader["zwemmerId"],
                         (int)reader["trainerId"],
                         (int)reader["programmaId"],
@@ -49,6 +50,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new Feedback(
+                    (int)reader["id"],
                     (int)reader["zwemmerId"],
                     (int)reader["trainerId"],
                     (int)reader["programmaId"],

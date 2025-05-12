@@ -24,6 +24,7 @@ namespace DataAccess.Repositories
             {
                 trainingen.Add(
                     new Training(
+                        (int)reader["id"],
                         (int)reader["zwembadId"],
                         (DateTime)reader["datum"],
                         (TimeSpan)reader["startTijd"]
@@ -49,6 +50,7 @@ namespace DataAccess.Repositories
             if (reader.Read())
             {
                 return new Training(
+                    (int)reader["id"],
                     (int)reader["zwembadId"],
                     (DateTime)reader["datum"],
                     (TimeSpan)reader["startTijd"]

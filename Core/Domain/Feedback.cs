@@ -12,8 +12,9 @@ public class Feedback
     public int ProgrammaId { get; set; }
     public string FeedbackText { get; set; }
 
-    public Feedback(int zwemmerId, int trainerId, int programmaId, string feedbackText)
+    public Feedback(int id, int zwemmerId, int trainerId, int programmaId, string feedbackText)
     {
+        Id = id;
         ZwemmerId = zwemmerId;
         TrainerId = trainerId;
         ProgrammaId = programmaId;
