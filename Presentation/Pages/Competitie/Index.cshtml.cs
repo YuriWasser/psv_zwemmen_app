@@ -6,23 +6,33 @@ using Presentation.ViewModels;
 
 namespace Presentation.Pages.Competitie;
 
+// Razor Page model voor het tonen van een lijst competities
 public class CompetitieModel : PageModel
 {
+    // Services voor competitie- en zwembadlogica
     private readonly CompetitieService _competitieService;
     private readonly ZwembadService _zwembadService;
 
+    // Constructor met dependency injection van de services
     public CompetitieModel(CompetitieService competitieService, ZwembadService zwembadService)
     {
         _zwembadService = zwembadService;
         _competitieService = competitieService;
     }
 
+    // Lijst van competities die aan de View worden getoond
     public List<CompetitieViewModel> Competities { get; set; } = new List<CompetitieViewModel>();
+
+    // Lijst van zwembaden 
     public List<Zwembad> Zwembaden { get; set; } = new List<Zwembad>();
 
+    // Methode die wordt aangeroepen bij een GET-verzoek naar de pagina
     public IActionResult OnGet()
     {
+        // Haal alle competities op via de service
         List<Core.Domain.Competitie> competitites = _competitieService.GetAll();
+
+        // Zet elke competitie om naar een ViewModel, inclusief ophalen van het adres van het zwembad
         foreach (var competitie in competitites)
         {
             Competities.Add(new CompetitieViewModel
@@ -32,10 +42,10 @@ public class CompetitieModel : PageModel
                 competitie.StartDatum,
                 competitie.EindDatum,
                 competitie.ZwembadId,
-                _zwembadService.GetById(competitie.ZwembadId).Adres
+                _zwembadService.GetById(competitie.ZwembadId).Adres // Zwembadadres ophalen
             ));
         }
 
-        return Page();
+        return Page(); // Rendert de bijbehorende Razor Page
     }
 }

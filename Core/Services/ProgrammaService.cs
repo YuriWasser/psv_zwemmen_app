@@ -80,5 +80,17 @@ namespace Core.Service
                 throw new Exception("error");
             }
         }
+
+        public List<Afstand> GetAfstandenByProgramma(int programmaId)
+        {
+            try
+            {
+                return _programmaRepository.GetAfstandenByProgramma(programmaId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{ex.Message}");
+            }
+        }
     }
 }

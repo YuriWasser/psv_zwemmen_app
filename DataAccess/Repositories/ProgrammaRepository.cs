@@ -7,7 +7,7 @@ namespace DataAccess.Repositories
     public class ProgrammaRepository : IProgrammaRepository
     {
         private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-        
+
         public List<Programma> GetAll()
         {
             List<Programma> programmas = new List<Programma>();
@@ -67,7 +67,8 @@ namespace DataAccess.Repositories
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
 
-            string sql = "INSERT INTO programma (competitieId, omschrijving, datum, starttijd) VALUES (@competitieId, @omschrijving, @datum, @starttijd)";
+            string sql =
+                "INSERT INTO programma (competitieId, omschrijving, datum, starttijd) VALUES (@competitieId, @omschrijving, @datum, @starttijd)";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", programma.Id);
@@ -100,7 +101,7 @@ namespace DataAccess.Repositories
                          "datum = @datum," +
                          "starttijd = @starttijd," +
                          "WHERE id = @id";
-            
+
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@id", programma.Id);
             command.Parameters.AddWithValue("@competitieId", programma.CompetitieId);
@@ -127,7 +128,37 @@ namespace DataAccess.Repositories
 
             return rowsAffected > 0;
         }
-        
-        
-    } 
+
+        public List<Afstand> GetAfstandenByProgramma(int programmaId)
+        {
+            List<Afstand> afstanden = new List<Afstand>();
+
+            using MySqlConnection connection = _dbConnection.GetConnection();
+            connection.Open();
+
+            string sql = @"
+                SELECT a.id, a.meters, a.beschrijving
+                FROM programma_afstand pa
+                JOIN afstand a ON pa.afstandId = a.id
+                WHERE pa.programmaId = @programmaId";
+
+            using MySqlCommand command = new MySqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@programmaId", programmaId);
+
+            using MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                afstanden.Add(
+                    new Afstand(
+                        (int)reader["id"],
+                        (int)reader["meters"],
+                        (string)reader["beschrijving"]
+                    )
+                );
+            }
+
+            return afstanden;
+        }
+    }
 }

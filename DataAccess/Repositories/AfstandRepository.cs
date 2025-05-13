@@ -63,11 +63,12 @@ namespace DataAccess.Repositories
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
 
-            string sql = "INSERT INTO afstand (metyers, beschrijving) VALUES (@meters, @beschrijving)";
+            string sql = "INSERT INTO afstand (meters, beschrijving) VALUES (@meters, @beschrijving)";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@meters", afstand.Meters);
             command.Parameters.AddWithValue("@beschrijving", afstand.Beschrijving);
+            
 
             int rowsAffected = command.ExecuteNonQuery();
 
@@ -87,14 +88,15 @@ namespace DataAccess.Repositories
             using MySqlConnection connection = _dbConnection.GetConnection();
             connection.Open();
 
-            string sql = "UPDATE afstand SET" +
-                         "meters = @meters," +
-                         "beschrijving = @beschrijving" +
+            string sql = "UPDATE afstand SET " +
+                         "meters = @meters, " +
+                         "beschrijving = @beschrijving " +
                          "WHERE id = @id";
 
             using MySqlCommand command = new MySqlCommand(sql, connection);
             command.Parameters.AddWithValue("@meters", afstand.Meters);
             command.Parameters.AddWithValue("@beschrijving", afstand.Beschrijving);
+            command.Parameters.AddWithValue("@id", afstand.Id);
 
             int rowsAffected = command.ExecuteNonQuery();
 

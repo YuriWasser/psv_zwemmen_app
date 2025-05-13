@@ -1,5 +1,6 @@
 namespace Presentation.ViewModels;
 
+// ViewModel die gebruikt wordt om een competitie weer te geven in de presentatie-laag (bijv. Razor Pages)
 public class CompetitieViewModel
 {
     public int Id { get; set; }
@@ -10,6 +11,8 @@ public class CompetitieViewModel
     public string ZwembadAdres { get; set; }
     public int ProgrammaId { get; set; }
 
+
+    // Constructor zonder zwembadadres
     public CompetitieViewModel(int id, string naam, DateOnly startDatum, DateOnly eindDatum,
         int zwembadId)
     {
@@ -20,6 +23,7 @@ public class CompetitieViewModel
         ZwembadId = zwembadId;
     }
 
+    // Constructor met zwembadadres
     public CompetitieViewModel(int id, string naam, DateOnly startDatum, DateOnly eindDatum,
         int zwembadId, string zwembadAdres)
     {
