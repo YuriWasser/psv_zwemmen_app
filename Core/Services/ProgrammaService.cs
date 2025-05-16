@@ -1,15 +1,19 @@
 using Core.Domain;
 using Core.Interface;
+using Core.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Service
 {
     public class ProgrammaService
     {
         private readonly IProgrammaRepository _programmaRepository;
+        private readonly ILogger<ProgrammaService> _logger;
 
-        public ProgrammaService(IProgrammaRepository programmaRepository)
+        public ProgrammaService(IProgrammaRepository programmaRepository, ILogger<ProgrammaService> logger)
         {
             _programmaRepository = programmaRepository;
+            _logger = logger;
         }
 
         public List<Programma> GetAll()
@@ -18,9 +22,15 @@ namespace Core.Service
             {
                 return _programmaRepository.GetAll();
             }
+            catch (DatabaseException ex)
+            {
+                _logger.LogError(ex, "Fout bij ophalen van alle programma's");
+                throw new DatabaseException("Er is een fout opgetreden bij het ophalen van programma's", ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                _logger.LogError(ex, "Onverwachte fout bij ophalen van programma's");
+                throw new Exception("Er is een fout opgetreden bij het ophalen van programma's", ex);
             }
         }
 
@@ -28,31 +38,42 @@ namespace Core.Service
         {
             try
             {
-                Programma programma = _programmaRepository.GetById(id);
-                if (programma != null)
-                {
-                    return programma;
-                }
+                return _programmaRepository.GetById(id);
+            }
+            catch (ProgrammaNotFoundException ex)
+            {
+                _logger.LogWarning(ex, "Programma met ID {Id} niet gevonden", id);
+                throw new Exception("Het gevraagde programma kon niet worden gevonden.", ex);
+            }
+            catch (DatabaseException ex)
+            {
+                _logger.LogError(ex, "Fout bij ophalen van programma met ID {Id}", id);
+                throw new DatabaseException("Er is een fout opgetreden bij het ophalen van het programma", ex);
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                _logger.LogError(ex, "Onverwachte fout bij ophalen van programma met ID {Id}", id);
+                throw new Exception("Er is een onverwachte fout opgetreden bij het ophalen van het programma", ex);
             }
-
-            return null;
         }
 
         public Programma Add(int id, int competitieId, string omschrijving, DateTime datum, TimeSpan starttijd)
         {
             try
             {
-                Programma programma = new Programma(id, competitieId, omschrijving, datum, starttijd);
+                var programma = new Programma(id, competitieId, omschrijving, datum, starttijd);
                 programma.Id = _programmaRepository.Add(programma);
                 return programma;
             }
+            catch (DatabaseException ex)
+            {
+                _logger.LogError(ex, "Fout bij toevoegen van programma");
+                throw new DatabaseException("Er is een fout opgetreden bij het toevoegen van een programma", ex);
+            }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                _logger.LogError(ex, "Onverwachte fout bij toevoegen van programma");
+                throw new Exception("Er is een fout opgetreden bij het toevoegen van een programma", ex);
             }
         }
 
@@ -62,9 +83,15 @@ namespace Core.Service
             {
                 return _programmaRepository.Update(programma);
             }
-            catch
+            catch (DatabaseException ex)
             {
-                throw new Exception("error");
+                _logger.LogError(ex, "Fout bij updaten van programma met ID {Id}", programma.Id);
+                throw new DatabaseException("Er is een fout opgetreden bij het updaten van het programma", ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Onverwachte fout bij updaten van programma met ID {Id}", programma.Id);
+                throw new Exception("Er is een fout opgetreden bij het updaten van het programma", ex);
             }
         }
 
@@ -75,21 +102,15 @@ namespace Core.Service
                 var programma = _programmaRepository.GetById(id);
                 return _programmaRepository.Delete(programma);
             }
-            catch
+            catch (DatabaseException ex)
             {
-                throw new Exception("error");
-            }
-        }
-
-        public List<Afstand> GetAfstandenByProgramma(int programmaId)
-        {
-            try
-            {
-                return _programmaRepository.GetAfstandenByProgramma(programmaId);
+                _logger.LogError(ex, "Fout bij verwijderen van programma met ID {Id}", id);
+                throw new DatabaseException("Er is een fout opgetreden bij het verwijderen van het programma", ex);
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}");
+                _logger.LogError(ex, "Onverwachte fout bij verwijderen van programma met ID {Id}", id);
+                throw new Exception("Er is een fout opgetreden bij het verwijderen van het programma", ex);
             }
         }
     }

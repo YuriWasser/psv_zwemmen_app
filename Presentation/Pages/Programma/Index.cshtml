@@ -1,5 +1,5 @@
 @page
-@model Presentation.Pages.Programma.ProgrammaModel;
+@model Presentation.Pages.Programma.ProgrammaModel
 
 @{
     ViewData["Title"] = "Programma";
@@ -8,12 +8,12 @@
 
 <main>
     <div>
-        <h1 class="text-3xl font-bold text-black-700 mb-6">Programma:</h1>
+        <h1 class="text-3xl font-bold text-black-700 mb-6">Programma</h1>
         
         @if (Model.Programma != null)
         {
             <div class="mb-4">
-                <h2 class="text-2xl font-bold text-black-700 mb-4">Programma:</h2>
+                <h2 class="text-2xl font-bold text-black-700 mb-4">Programma details</h2>
                 <p>@Model.Programma</p>
             </div>
         }
@@ -21,9 +21,5 @@
         {
             <p class="text-red-500">Geen programma beschikbaar.</p>
         }
-        {
-            
-        }
     </div>
 </main>
-

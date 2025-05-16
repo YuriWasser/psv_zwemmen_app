@@ -1,152 +1,202 @@
 using Core.Domain;
 using Core.Interface;
+using Core.Exceptions;
 using MySqlConnector;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccess.Repositories
 {
-    public class AfstandRepository : IAfstandRepository
+    public class AfstandRepository(string connectionString, ILogger<AfstandRepository> logger) : IAfstandRepository
     {
-        private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-
         public List<Afstand> GetAll()
         {
-            List<Afstand> afstanden = new List<Afstand>();
-
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM afstand";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                afstanden.Add(
-                    new Afstand(
-                        (int)reader["id"],
-                        (int)reader["meters"],
-                        (string)reader["beschrijving"]
-                    )
-                );
-            }
+                List<Afstand> afstanden = new List<Afstand>();
 
-            return afstanden;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT id, meters, beschrijving FROM afstand";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    afstanden.Add(
+                        new Afstand(
+                            reader.GetInt32(reader.GetOrdinal("id")),
+                            reader.GetInt32(reader.GetOrdinal("meters")),
+                            reader.GetString(reader.GetOrdinal("beschrijving"))
+                        )
+                    );
+                }
+
+                return afstanden;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching afstanden");
+                throw new DatabaseException("Error fetching afstanden", ex);
+            }
         }
 
         public Afstand GetByID(int afstandId)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM afstand WHERE id = @id";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", afstandId);
-
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            if (reader.Read())
+            try
             {
-                return new Afstand(
-                    (int)reader["id"],
-                    (int)reader["meters"],
-                    (string)reader["beschrijving"]
-                );
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return null;
+                string sql = "SELECT id, meters, beschrijving FROM afstand WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", afstandId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Afstand(
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("meters")),
+                        reader.GetString(reader.GetOrdinal("beschrijving"))
+                    );
+                }
+
+                throw new AfstandNotFoundException($"Afstand with ID {afstandId} not found");
+            }
+            catch (AfstandNotFoundException ex)
+            {
+                logger.LogWarning(ex, "Afstand not found");
+                throw;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching afstand by ID");
+                throw new DatabaseException("Error fetching afstand by ID", ex);
+            }
         }
 
         public int Add(Afstand afstand)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "INSERT INTO afstand (meters, beschrijving) VALUES (@meters, @beschrijving)";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@meters", afstand.Meters);
-            command.Parameters.AddWithValue("@beschrijving", afstand.Beschrijving);
-            
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            if (rowsAffected > 0)
+            try
             {
-                string selectIdSql = "SELECT LAST_INSERT_ID()";
-                using MySqlCommand selectIdCommand = new MySqlCommand(sql, connection);
-                int newId = Convert.ToInt32(selectIdCommand.ExecuteNonQuery());
-                return newId;
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return 0;
+                string sql = "INSERT INTO afstand (meters, beschrijving) VALUES (@meters, @beschrijving)";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@meters", afstand.Meters);
+                command.Parameters.AddWithValue("@beschrijving", afstand.Beschrijving);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    string selectIdSql = "SELECT LAST_INSERT_ID()";
+                    using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
+                    int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
+                    return newId;
+                }
+
+                return 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error adding afstand");
+                throw new DatabaseException("Error adding afstand", ex);
+            }
         }
 
         public bool Update(Afstand afstand)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "UPDATE afstand SET " +
-                         "meters = @meters, " +
-                         "beschrijving = @beschrijving " +
-                         "WHERE id = @id";
+                string sql = "UPDATE afstand SET meters = @meters, beschrijving = @beschrijving WHERE id = @id";
 
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@meters", afstand.Meters);
-            command.Parameters.AddWithValue("@beschrijving", afstand.Beschrijving);
-            command.Parameters.AddWithValue("@id", afstand.Id);
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@meters", afstand.Meters);
+                command.Parameters.AddWithValue("@beschrijving", afstand.Beschrijving);
+                command.Parameters.AddWithValue("@id", afstand.Id);
 
-            int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
 
-            return rowsAffected > 0;
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error updating afstand");
+                throw new DatabaseException("Error updating afstand", ex);
+            }
         }
 
         public bool Delete(Afstand afstand)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "DELETE FROM afstand WHERE id = @id";
+                string sql = "DELETE FROM afstand WHERE id = @id";
 
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", afstand.Id);
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", afstand.Id);
 
-            int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
 
-            return rowsAffected > 0;
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error deleting afstand");
+                throw new DatabaseException("Error deleting afstand", ex);
+            }
         }
 
-        public List<Afstand> GetByProgrammaId(int ProgrammaId)
+        public List<Afstand> GetByProgrammaId(int programmaId)
         {
-            List<Afstand> afstanden = new List<Afstand>();
-
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = @"
-                SELECT a.id, a.meters, a.beschrijving
-                FROM programma_afstand pa
-                INNER JOIN afstand a ON pa.afstand_id = a.id
-                WHERE pa.programma_id = @programmaId";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@programmaId", ProgrammaId);
-
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                afstanden.Add(
-                    new Afstand(
-                        (int)reader["id"],
-                        (int)reader["meters"],
-                        (string)reader["beschrijving"]
-                    ));
-            }
+                List<Afstand> afstanden = new List<Afstand>();
 
-            return null;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = @"
+                    SELECT a.id, a.meters, a.beschrijving
+                    FROM programma_afstand pa
+                    INNER JOIN afstand a ON pa.afstand_id = a.id
+                    WHERE pa.programma_id = @programmaId";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@programmaId", programmaId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    afstanden.Add(
+                        new Afstand(
+                            reader.GetInt32(reader.GetOrdinal("id")),
+                            reader.GetInt32(reader.GetOrdinal("meters")),
+                            reader.GetString(reader.GetOrdinal("beschrijving"))
+                        )
+                    );
+                }
+
+                return afstanden;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching afstanden by programmaId");
+                throw new DatabaseException("Error fetching afstanden by programmaId", ex);
+            }
         }
     }
 }

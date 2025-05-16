@@ -1,141 +1,183 @@
 using Core.Domain;
+using Core.Exceptions;
 using Core.Interface;
 using MySqlConnector;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccess.Repositories
 {
-    // Repository die communicatie met de database regelt voor Competitie-objecten
-    public class CompetitieRepository : ICompetitieRepository
+    public class CompetitieRepository(string connectionString, ILogger<CompetitieRepository> logger) : ICompetitieRepository
     {
-        // Klasse die de databaseconnectie levert
-        private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-
-        // Haal alle competities op uit de database
         public List<Competitie> GetAll()
         {
-            List<Competitie> competities = new List<Competitie>();
-
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM competitie";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            // Lees alle records en zet ze om in Competitie-objecten
-            while (reader.Read())
+            try
             {
-                competities.Add(
-                    new Competitie(
-                        (int)reader["id"],
-                        (string)reader["naam"],
-                        DateOnly.FromDateTime(Convert.ToDateTime(reader["start_datum"])),
-                        DateOnly.FromDateTime(Convert.ToDateTime(reader["eind_datum"])),
-                        (int)reader["zwembad_id"]
-                    )
-                );
-            }
+                List<Competitie> competities = new List<Competitie>();
 
-            return competities;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT id, naam, start_datum, eind_datum, zwembad_id FROM competitie";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    competities.Add(
+                        new Competitie(
+                            reader.GetInt32(reader.GetOrdinal("id")),
+                            reader.GetString(reader.GetOrdinal("naam")),
+                            DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("start_datum"))),
+                            DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("eind_datum"))),
+                            reader.GetInt32(reader.GetOrdinal("zwembad_id"))
+                        )
+                    );
+                }
+                return competities;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching competities");
+                throw new DatabaseException("Error fetching competities", ex);
+            }
         }
 
-        // Haal één competitie op via het ID
         public Competitie GetById(int competitieId)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM competitie WHERE id = @id";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", competitieId);
-
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            // Return het object als er een record gevonden wordt
-            if (reader.Read())
+            try
             {
-                return new Competitie(
-                    (int)reader["id"],
-                    (string)reader["naam"],
-                    DateOnly.FromDateTime(Convert.ToDateTime(reader["start_datum"])),
-                    DateOnly.FromDateTime(Convert.ToDateTime(reader["eind_datum"])),
-                    (int)reader["zwembad_id"]
-                );
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return null;
+                string sql = "SELECT id, naam, start_datum, eind_datum, zwembad_id FROM competitie WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", competitieId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Competitie(
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetString(reader.GetOrdinal("naam")),
+                        DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("start_datum"))),
+                        DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("eind_datum"))),
+                        reader.GetInt32(reader.GetOrdinal("zwembad_id"))
+                    );
+                }
+
+                throw new CompetitieNotFoundException("Competitie not found");
+            }
+            catch (CompetitieNotFoundException ex)
+            {
+                logger.LogError(ex, "Error fetching competitie by id");
+                throw;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching competitie by id");
+                throw new DatabaseException("Error fetching competitie by id", ex);
+            }
         }
 
-        // Voeg een nieuwe competitie toe aan de database
         public int Add(Competitie competitie)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "INSERT INTO competitie (naam, start_datum, eind_datum, zwembad_id) " +
-                         "VALUES (@naam, @start_datum, @eind_datum, @zwembad_id)";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@naam", competitie.Naam);
-            command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
-            command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
-            command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            // Als het invoegen is gelukt, haal het gegenereerde ID op
-            if (rowsAffected > 0)
+            try
             {
-                string selectIdSql = "SELECT LAST_INSERT_ID()";
-                using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
-                int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                return newId;
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return 0;
+                string sql = "INSERT INTO competitie (naam, start_datum, eind_datum, zwembad_id) " +
+                             "VALUES (@naam, @start_datum, @eind_datum, @zwembad_id)";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@naam", competitie.Naam);
+                command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
+                command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
+                command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    string selectIdSql = "SELECT LAST_INSERT_ID()";
+                    using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
+                    int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
+                    return newId;
+                }
+
+                return 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error adding competitie");
+                throw new DatabaseException("Error adding competitie", ex);
+            }
         }
 
-        // Update een bestaande competitie in de database
         public bool Update(Competitie competitie)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "UPDATE competitie SET " +
-                         "naam = @naam, " +
-                         "start_datum = @start_datum, " +
-                         "eind_datum = @eind_datum, " +
-                         "zwembad_id = @zwembad_id " +
-                         "WHERE id = @id";
+                string sql = "UPDATE competitie SET " +
+                             "naam = @naam, " +
+                             "start_datum = @start_datum, " +
+                             "eind_datum = @eind_datum, " +
+                             "zwembad_id = @zwembad_id " +
+                             "WHERE id = @id";
 
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", competitie.Id);
-            command.Parameters.AddWithValue("@naam", competitie.Naam);
-            command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
-            command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
-            command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", competitie.Id);
+                command.Parameters.AddWithValue("@naam", competitie.Naam);
+                command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
+                command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
+                command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
 
-            int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
 
-            return rowsAffected > 0;
+                if (rowsAffected > 0)
+                {
+                    return true;   
+                }
+                throw new CompetitieNotFoundException("Competitie not found");
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error updating competitie");
+                throw new DatabaseException("Error updating competitie", ex);
+            }
         }
 
-        // Verwijder een competitie uit de database
         public bool Delete(Competitie competitie)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "DELETE FROM competitie WHERE id = @id";
+                string sql = "DELETE FROM competitie WHERE id = @id";
 
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", competitie.Id);
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", competitie.Id);
 
-            int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
 
-            return rowsAffected > 0;
+                if (rowsAffected > 0)
+                {
+                    return true;   
+                }
+                throw new CompetitieNotFoundException("Competitie not found");
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error deleting competitie");
+                throw new DatabaseException("Error deleting competitie", ex);
+            }
         }
     }
 }

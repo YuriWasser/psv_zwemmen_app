@@ -1,21 +1,42 @@
-using Microsoft.EntityFrameworkCore;
-using DataAccess;
-using Core.Interface;
+using Microsoft.Extensions.Logging;
 using DataAccess.Repositories;
+using Core.Interface;
 using Core.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Voeg Razor Pages toe aan de service container (voor weergave in de browser)
+// Voeg Razor Pages toe
 builder.Services.AddRazorPages();
 
+// Haal de connection string op uit appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Repositories met dependency injection van connection string en logger
+builder.Services.AddScoped<ICompetitieRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<CompetitieRepository>>();
+    return new CompetitieRepository(connectionString, logger);
+});
 
-// Voeg alle repositories toe aan de DI-container
-// Deze zorgen voor de communicatie met de database (DataAccess laag)
-builder.Services.AddScoped<ICompetitieRepository, CompetitieRepository>();
-builder.Services.AddScoped<IProgrammaRepository, ProgrammaRepository>();
-builder.Services.AddScoped<IAfstandRepository, AfstandRepository>();
+builder.Services.AddScoped<IProgrammaRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<ProgrammaRepository>>();
+    return new ProgrammaRepository(connectionString, logger);
+});
+
+builder.Services.AddScoped<IAfstandRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<AfstandRepository>>();
+    return new AfstandRepository(connectionString, logger);
+});
+
+builder.Services.AddScoped<IZwembadRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<ZwembadRepository>>();
+    return new ZwembadRepository(connectionString, logger);
+});
+
+// Voeg overige repositories toe (zonder connection string dependency)
 builder.Services.AddScoped<IGebruikerRepository, GebruikerRepository>();
 builder.Services.AddScoped<IWedstrijdInschrijvingRepository, WedstrijdInschrijvingRepository>();
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
@@ -24,37 +45,33 @@ builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IClubrecordRepository, ClubrecordRepository>();
 builder.Services.AddScoped<IFunctieRepository, FunctieRepository>();
 builder.Services.AddScoped<IResultaatRepository, ResultaatRepository>();
-builder.Services.AddScoped<IZwembadRepository, ZwembadRepository>();
 
-// Voeg services toe aan de DI-container (Core laag)
-// Deze voeren de logica uit en maken gebruik van repositories
+// Voeg services toe
 builder.Services.AddScoped<CompetitieService>();
 builder.Services.AddScoped<ProgrammaService>();
 builder.Services.AddScoped<AfstandService>();
-//builder.Services.AddScoped<GebruikerService>();
-//builder.Services.AddScoped<WedstrijdInschrijvingService>();
-//builder.Services.AddScoped<TrainingService>();
-//builder.Services.AddScoped<TrainingAfmeldingService>();
-//builder.Services.AddScoped<FeedbackService>();
-//builder.Services.AddScoped<ClubrecordService>();
-//builder.Services.AddScoped<FunctieService>();
-//builder.Services.AddScoped<ResultaatService>();
 builder.Services.AddScoped<ZwembadService>();
+// builder.Services.AddScoped<GebruikerService>();
+// builder.Services.AddScoped<WedstrijdInschrijvingService>();
+// builder.Services.AddScoped<TrainingService>();
+// builder.Services.AddScoped<TrainingAfmeldingService>();
+// builder.Services.AddScoped<FeedbackService>();
+// builder.Services.AddScoped<ClubrecordService>();
+// builder.Services.AddScoped<FunctieService>();
+// builder.Services.AddScoped<ResultaatService>();
 
 var app = builder.Build();
 
 // Stel gedrag in voor productieomgeving
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error"); // Toon gebruikersvriendelijke foutpagina
-    app.UseHsts(); // Voeg security header toe voor HTTPS
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
-app.UseHttpsRedirection(); // Forceer HTTPS
-app.UseStaticFiles(); // Laad CSS, JS, afbeeldingen etc.
-app.UseRouting();     // Schakel routing in (nodig voor Razor Pages)
-app.UseAuthorization(); // Inschakelen van beveiliging (optioneel)
-
-app.MapRazorPages(); // Koppel Razor Pages aan de routes
-
-app.Run(); // Start de applicatie
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthorization();
+app.MapRazorPages();
+app.Run();

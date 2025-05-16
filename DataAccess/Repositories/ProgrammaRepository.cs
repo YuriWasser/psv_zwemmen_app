@@ -1,164 +1,174 @@
 using Core.Interface;
 using Core.Domain;
+using Core.Exceptions;
 using MySqlConnector;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccess.Repositories
 {
-    public class ProgrammaRepository : IProgrammaRepository
+    public class ProgrammaRepository(string connectionString, ILogger<ProgrammaRepository> logger) : IProgrammaRepository
     {
-        private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-
         public List<Programma> GetAll()
         {
-            List<Programma> programmas = new List<Programma>();
-
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM programma";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                programmas.Add(
-                    new Programma(
-                        (int)reader["id"],
-                        (int)reader["competitieId"],
-                        (string)reader["omschrijving"],
-                        (DateTime)reader["datum"],
-                        (TimeSpan)reader["starttijd"]
-                    )
-                );
-            }
+                List<Programma> programmas = new List<Programma>();
 
-            return programmas;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    programmas.Add(
+                        new Programma(
+                            reader.GetInt32(reader.GetOrdinal("id")),
+                            reader.GetInt32(reader.GetOrdinal("competitie_id")),
+                            reader.GetString(reader.GetOrdinal("omschrijving")),
+                            reader.GetDateTime(reader.GetOrdinal("datum")),
+                            reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
+                        )
+                    );
+                }
+
+                return programmas;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching programmas");
+                throw new DatabaseException("Error fetching programmas", ex);
+            }
         }
 
         public Programma GetById(int programmaId)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM programma WHERE id = @id";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", programmaId);
-
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            if (reader.Read())
+            try
             {
-                return new Programma(
-                    (int)reader["id"],
-                    (int)reader["competitieId"],
-                    (string)reader["omschrijving"],
-                    (DateTime)reader["datum"],
-                    (TimeSpan)reader["starttijd"]
-                );
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return null;
+                string sql =
+                    "SELECT id, competitie_id, omschrijving, datum, start_tijd competitie FROM programma WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", programmaId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Programma(
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("competitie_id")),
+                        reader.GetString(reader.GetOrdinal("omschrijving")),
+                        reader.GetDateTime(reader.GetOrdinal("datum")),
+                        reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
+                    );
+                }
+
+                throw new ProgrammaNotFoundException($"Programma with id {programmaId} not found");
+            }
+            catch (ProgrammaNotFoundException ex)
+            {
+                logger.LogError(ex, "Programma not found");
+                throw;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching programma by id");
+                throw new DatabaseException("Error fetching programma by id", ex);
+            }
         }
 
         public int Add(Programma programma)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql =
-                "INSERT INTO programma (competitieId, omschrijving, datum, starttijd) VALUES (@competitieId, @omschrijving, @datum, @starttijd)";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", programma.Id);
-            command.Parameters.AddWithValue("@competitieId", programma.CompetitieId);
-            command.Parameters.AddWithValue("@omschrijving", programma.Omschrijving);
-            command.Parameters.AddWithValue("@datum", programma.Datum);
-            command.Parameters.AddWithValue("starttijd", programma.StartTijd);
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            if (rowsAffected > 0)
+            try
             {
-                string selectIdSql = "SELECT LAST_INSERT_ID()";
-                using MySqlCommand selectIdCommand = new MySqlCommand(sql, connection);
-                int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                return newId;
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return 0;
+                string sql =
+                    "INSERT INTO programma (competitieId, omschrijving, datum, starttijd) VALUES (@competitieId, @omschrijving, @datum, @starttijd)";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@competitie_id", programma.CompetitieId);
+                command.Parameters.AddWithValue("@omschrijving", programma.Omschrijving);
+                command.Parameters.AddWithValue("@datum", programma.Datum);
+                command.Parameters.AddWithValue("@start_tijd", programma.StartTijd);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    string selectIdSql = "SELECT LAST_INSERT_ID()";
+                    using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
+                    int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
+                    return newId;
+                }
+
+                return 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error adding programma");
+                throw new DatabaseException("Error adding programma", ex);
+            }
         }
 
         public bool Update(Programma programma)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "UPDATE programma SET " +
-                         "competitieId = @competitieId," +
-                         "omschrijving = @omschrijving," +
-                         "datum = @datum," +
-                         "starttijd = @starttijd," +
-                         "WHERE id = @id";
+                string sql =
+                    "UPDATE programma SET competitieId = @competitieId, omschrijving = @omschrijving, datum = @datum, starttijd = @starttijd WHERE id = @id";
 
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", programma.Id);
-            command.Parameters.AddWithValue("@competitieId", programma.CompetitieId);
-            command.Parameters.AddWithValue("@omschrijving", programma.Omschrijving);
-            command.Parameters.AddWithValue("@datum", programma.Datum);
-            command.Parameters.AddWithValue("starttijd", programma.StartTijd);
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", programma.Id);
+                command.Parameters.AddWithValue("@competitie_id", programma.CompetitieId);
+                command.Parameters.AddWithValue("@omschrijving", programma.Omschrijving);
+                command.Parameters.AddWithValue("@datum", programma.Datum);
+                command.Parameters.AddWithValue("@start_tijd", programma.StartTijd);
 
-            int rowsAffected = command.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
 
-            return rowsAffected > 0;
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error updating programma");
+                throw new DatabaseException("Error updating programma", ex);
+            }
         }
 
         public bool Delete(Programma programma)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "DELETE FROM programma WHERE id = @id";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", programma.Id);
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            return rowsAffected > 0;
-        }
-
-        public List<Afstand> GetAfstandenByProgramma(int programmaId)
-        {
-            List<Afstand> afstanden = new List<Afstand>();
-
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = @"
-                SELECT a.id, a.meters, a.beschrijving
-                FROM programma_afstand pa
-                JOIN afstand a ON pa.afstandId = a.id
-                WHERE pa.programmaId = @programmaId";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@programmaId", programmaId);
-
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                afstanden.Add(
-                    new Afstand(
-                        (int)reader["id"],
-                        (int)reader["meters"],
-                        (string)reader["beschrijving"]
-                    )
-                );
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return afstanden;
+                string sql = "DELETE FROM programma WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", programma.Id);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error deleting programma");
+                throw new DatabaseException("Error deleting programma", ex);
+            }
         }
+
     }
 }

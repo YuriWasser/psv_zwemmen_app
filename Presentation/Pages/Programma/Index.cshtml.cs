@@ -3,6 +3,7 @@ using Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;
+using Core.Exceptions;
 
 namespace Presentation.Pages.Programma;
 
