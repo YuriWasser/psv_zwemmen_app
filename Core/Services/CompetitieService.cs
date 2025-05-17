@@ -7,6 +7,7 @@ namespace Core.Service
 {
     public class CompetitieService
     {
+        private readonly IProgrammaRepository _programmaRepository;
         private readonly ICompetitieRepository _competitieRepository;
         private readonly ILogger<CompetitieService> _logger;
 
@@ -56,7 +57,7 @@ namespace Core.Service
         {
             try
             {
-                var competitie = new Competitie(id, naam, startDatum, eindDatum, zwembadId);
+                var competitie = new Competitie(id, naam, startDatum, eindDatum, zwembadId, programmaId);
                 competitie.Id = _competitieRepository.Add(competitie);
                 return competitie;
             }
@@ -95,6 +96,36 @@ namespace Core.Service
             {
                 _logger.LogError(ex, "Fout bij verwijderen van competitie met ID {Id}", id);
                 throw new Exception("Er is een fout opgetreden bij het verwijderen van de competitie", ex);
+            }
+        }
+        
+        public List<Programma> GetProgrammaVoorCompetitie(int competitieId)
+        {
+            try
+            {
+                return _competitieRepository.GetProgrammaVoorCompetitie(competitieId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Fout bij ophalen programma's voor competitie {CompetitieId}", competitieId);
+                throw;
+            }
+        }
+
+        public Programma GetProgrammaById(int id)
+        {
+            try
+            {
+                var programma = _programmaRepository.GetById(id);
+                if (programma != null)
+                    return programma;
+
+                throw new Exception("Programma niet gevonden");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Fout bij ophalen programma met ID {Id}", id);
+                throw;
             }
         }
     }

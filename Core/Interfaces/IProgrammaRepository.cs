@@ -9,6 +9,7 @@ namespace Core.Interface
         public int Add(Programma programma);
         public bool Update(Programma programma);
         public bool Delete(Programma programma);
-        
+        public List<Programma> GetByCompetitieId(int competitieId);
+
     }
 }

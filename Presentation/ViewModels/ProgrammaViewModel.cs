@@ -9,12 +9,13 @@ public class ProgrammaViewModel
     public TimeSpan StartTijd { get; set; }
     public List<AfstandViewModel> Afstanden { get; set; } = new List<AfstandViewModel>();
     
-    public ProgrammaViewModel(int competitieId, string omschrijving, DateTime datum, TimeSpan starttijd, List<AfstandViewModel> afstanden)
+    public ProgrammaViewModel(int id, int competitieId, string omschrijving, DateTime datum, TimeSpan startTijd, List<AfstandViewModel> afstanden)
     {
+        Id = id;
         CompetitieId = competitieId;
         Omschrijving = omschrijving;
         Datum = datum;
-        StartTijd = starttijd;
+        StartTijd = startTijd;
         Afstanden = afstanden;
     }
 }

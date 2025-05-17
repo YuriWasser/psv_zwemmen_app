@@ -12,20 +12,8 @@ public class CompetitieViewModel
     public int ProgrammaId { get; set; }
 
 
-    // Constructor zonder zwembadadres
     public CompetitieViewModel(int id, string naam, DateOnly startDatum, DateOnly eindDatum,
-        int zwembadId)
-    {
-        Id = id;
-        Naam = naam;
-        StartDatum = startDatum;
-        EindDatum = eindDatum;
-        ZwembadId = zwembadId;
-    }
-
-    // Constructor met zwembadadres
-    public CompetitieViewModel(int id, string naam, DateOnly startDatum, DateOnly eindDatum,
-        int zwembadId, string zwembadAdres)
+        int zwembadId, string zwembadAdres, int programmaId)
     {
         Id = id;
         Naam = naam;
@@ -33,5 +21,6 @@ public class CompetitieViewModel
         EindDatum = eindDatum;
         ZwembadId = zwembadId;
         ZwembadAdres = zwembadAdres;
+        ProgrammaId = programmaId;
     }
 }

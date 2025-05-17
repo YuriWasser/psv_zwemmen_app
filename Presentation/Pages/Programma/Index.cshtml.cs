@@ -1,43 +1,54 @@
-using Core.Domain;
 using Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;
-using Core.Exceptions;
 
-namespace Presentation.Pages.Programma;
-
-public class ProgrammaModel : PageModel
+namespace Presentation.Pages.Programma
 {
-    private readonly ProgrammaService _programmaService;
-    private readonly AfstandService _afstandService;
-
-    public ProgrammaModel(ProgrammaService programmaService, AfstandService afstandService)
+    public class ProgrammaModel : PageModel
     {
-        _afstandService = afstandService;
-        _programmaService = programmaService;
-    }
+        private readonly ProgrammaService _programmaService;
+        private readonly AfstandService _afstandService;
 
-    public ProgrammaViewModel Programma { get; set; }
-    public List<AfstandViewModel> Afstanden { get; set; } = new List<AfstandViewModel>();
+        public ProgrammaViewModel? Programma { get; set; }
 
-    public IActionResult OnGet(int id)
-    {
-        Core.Domain.Programma prog = _programmaService.GetById(id);
-        var afstanden = _afstandService.GetByProgrammaId(prog.Id);
-        foreach (var afstand in afstanden)
+        public ProgrammaModel(ProgrammaService programmaService, AfstandService afstandService)
         {
-            Afstanden.Add(new AfstandViewModel(afstand.Id, afstand.Meters, afstand.Beschrijving));
+            _programmaService = programmaService;
+            _afstandService = afstandService;
         }
 
-        Programma = new ProgrammaViewModel
-        (
-            prog.CompetitieId,
-            prog.Omschrijving,
-            prog.Datum,
-            prog.StartTijd,
-            Afstanden
-        );
-        return Page();
+        public IActionResult OnGet(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Ongeldig programma ID");
+            }
+
+            try
+            {
+                var programma = _programmaService.GetById(id);
+                var afstandEntities = _afstandService.GetByProgrammaId(id);
+
+                var afstanden = afstandEntities
+                    .Select(a => new AfstandViewModel(a.Id, a.Meters, a.Beschrijving))
+                    .ToList();
+
+                Programma = new ProgrammaViewModel(
+                    programma.Id,
+                    programma.CompetitieId,
+                    programma.Omschrijving,
+                    programma.Datum,
+                    programma.StartTijd,
+                    afstanden
+                );
+
+                return Page();
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
     }
 }

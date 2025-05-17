@@ -164,21 +164,21 @@ namespace DataAccess.Repositories
             try
             {
                 List<Afstand> afstanden = new List<Afstand>();
-
+        
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
-
+        
                 string sql = @"
                     SELECT a.id, a.meters, a.beschrijving
-                    FROM programma_afstand pa
+                    FROM afstand_per_programma pa
                     INNER JOIN afstand a ON pa.afstand_id = a.id
                     WHERE pa.programma_id = @programmaId";
-
+        
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@programmaId", programmaId);
-
+        
                 using MySqlDataReader reader = command.ExecuteReader();
-
+        
                 while (reader.Read())
                 {
                     afstanden.Add(
@@ -189,7 +189,7 @@ namespace DataAccess.Repositories
                         )
                     );
                 }
-
+        
                 return afstanden;
             }
             catch (MySqlException ex)

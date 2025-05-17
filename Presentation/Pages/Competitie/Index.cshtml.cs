@@ -29,10 +29,8 @@ public class CompetitieModel : PageModel
     // Methode die wordt aangeroepen bij een GET-verzoek naar de pagina
     public IActionResult OnGet()
     {
-        // Haal alle competities op via de service
         List<Core.Domain.Competitie> competitites = _competitieService.GetAll();
 
-        // Zet elke competitie om naar een ViewModel, inclusief ophalen van het adres van het zwembad
         foreach (var competitie in competitites)
         {
             Competities.Add(new CompetitieViewModel
@@ -42,10 +40,11 @@ public class CompetitieModel : PageModel
                 competitie.StartDatum,
                 competitie.EindDatum,
                 competitie.ZwembadId,
-                _zwembadService.GetById(competitie.ZwembadId).Adres // Zwembadadres ophalen
+                _zwembadService.GetById(competitie.ZwembadId).Adres,
+                competitie.ProgrammaId // **Hier toevoegen**
             ));
         }
 
-        return Page(); // Rendert de bijbehorende Razor Page
+        return Page();
     }
 }
