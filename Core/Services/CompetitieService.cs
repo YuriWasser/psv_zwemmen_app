@@ -21,7 +21,13 @@ namespace Core.Service
         {
             try
             {
-                return _competitieRepository.GetAll();
+                var result = _competitieRepository.GetAll();
+                if (result == null)
+                {
+                    _logger.LogError("Repository returned null instead of list");
+                    throw new NullReferenceException("De repository retourneerde null");
+                }
+                return result;
             }
             catch (DatabaseException ex)
             {
@@ -128,5 +134,6 @@ namespace Core.Service
                 throw;
             }
         }
+        
     }
 }
