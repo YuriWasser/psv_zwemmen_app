@@ -183,78 +183,78 @@ namespace DataAccess.Repositories
         }
         
         public List<Programma> GetProgrammaVoorCompetitie(int competitieId)
-{
-    try
-    {
-        List<Programma> programmaLijst = new List<Programma>();
-
-        using MySqlConnection connection = new MySqlConnection(connectionString);
-        connection.Open();
-
-        string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE competitie_id = @competitieId";
-
-        using MySqlCommand command = new MySqlCommand(sql, connection);
-        command.Parameters.AddWithValue("@competitieId", competitieId);
-
-        using MySqlDataReader reader = command.ExecuteReader();
-
-        while (reader.Read())
         {
-            programmaLijst.Add(new Programma(
-                reader.GetInt32(reader.GetOrdinal("id")),
-                reader.GetInt32(reader.GetOrdinal("competitie_id")),
-                reader.GetString(reader.GetOrdinal("omschrijving")),
-                reader.GetDateTime(reader.GetOrdinal("datum")),
-                reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
-            ));
+            try
+            {
+                List<Programma> programmaLijst = new List<Programma>();
+    
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+    
+                string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE competitie_id = @competitieId";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@competitieId", competitieId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    programmaLijst.Add(new Programma(
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("competitie_id")),
+                        reader.GetString(reader.GetOrdinal("omschrijving")),
+                        reader.GetDateTime(reader.GetOrdinal("datum")),
+                        reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
+                    )); 
+                }
+
+                return programmaLijst; 
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error fetching programma for competitie with ID {CompetitieId}", competitieId);
+                throw new DatabaseException($"Error fetching programma for competitie with ID {competitieId}", ex);
+            } 
         }
 
-        return programmaLijst;
-    }
-    catch (MySqlException ex)
-    {
-        logger.LogError(ex, "Error fetching programma for competitie with ID {CompetitieId}", competitieId);
-        throw new DatabaseException($"Error fetching programma for competitie with ID {competitieId}", ex);
-    }
-}
-
-public Programma GetProgrammaById(int id)
-{
-    try
-    {
-        using MySqlConnection connection = new MySqlConnection(connectionString);
-        connection.Open();
-
-        string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE id = @id";
-
-        using MySqlCommand command = new MySqlCommand(sql, connection);
-        command.Parameters.AddWithValue("@id", id);
-
-        using MySqlDataReader reader = command.ExecuteReader();
-
-        if (reader.Read())
+        public Programma GetProgrammaById(int id)
         {
-            return new Programma(
-                reader.GetInt32(reader.GetOrdinal("id")),
-                reader.GetInt32(reader.GetOrdinal("competitie_id")),
-                reader.GetString(reader.GetOrdinal("omschrijving")),
-                reader.GetDateTime(reader.GetOrdinal("datum")),
-                reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
-            );
-        }
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-        throw new Exception("Programma niet gevonden");
-    }
-    catch (Exception ex) when (ex is not DatabaseException)
-    {
-        logger.LogError(ex, "Error fetching programma with ID {Id}", id);
-        throw;
-    }
-    catch (MySqlException ex)
-    {
-        logger.LogError(ex, "Database error fetching programma with ID {Id}", id);
-        throw new DatabaseException($"Database error fetching programma with ID {id}", ex);
-    }
-}
+                string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", id);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Programma(
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("competitie_id")),
+                        reader.GetString(reader.GetOrdinal("omschrijving")),
+                        reader.GetDateTime(reader.GetOrdinal("datum")),
+                        reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
+                    );
+                }
+
+                throw new Exception("Programma niet gevonden");
+            }
+            catch (Exception ex) when (ex is not DatabaseException)
+            {
+                logger.LogError(ex, "Error fetching programma with ID {Id}", id);
+                throw;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Database error fetching programma with ID {Id}", id);
+                throw new DatabaseException($"Database error fetching programma with ID {id}", ex);
+            }
+        }
     }
 }

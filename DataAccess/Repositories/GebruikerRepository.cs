@@ -1,140 +1,189 @@
 using Core.Domain;
 using Core.Interface;
+using Core.Exceptions;
+using Microsoft.Extensions.Logging;
 using MySqlConnector;
+
 namespace DataAccess.Repositories
 {
-    public class GebruikerRepository : IGebruikerRepository
+    public class GebruikerRepository(string connectionString, ILogger<GebruikerRepository> logger) : IGebruikerRepository
     {
-        private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-        
         public List<Gebruiker> GetAll()
         {
-            List<Gebruiker> gebruikers = new List<Gebruiker>();
-            
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM gebruiker";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                gebruikers.Add(
-                    new Gebruiker(
-                        (int)reader["id"],
-                        (string)reader["gebruikersnaam"],
-                        (string)reader["wachtwoord"],
-                        (string)reader["email"],
-                        (string)reader["voornaam"],
-                        (string)reader["achternaam"],
-                        (string)reader["functieCode"]
-                    )
-                );
-            }
+                List<Gebruiker> gebruikers = new List<Gebruiker>();
 
-            return gebruikers;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, FunctieCode FROM gebruiker";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    gebruikers.Add(
+                        new Gebruiker(
+                            reader.GetInt32(reader.GetOrdinal("Id")),
+                            reader.GetString(reader.GetOrdinal("Gebruikersnaam")),
+                            reader.GetString(reader.GetOrdinal("Wachtwoord")),
+                            reader.GetString(reader.GetOrdinal("Email")),
+                            reader.GetString(reader.GetOrdinal("Voornaam")),
+                            reader.GetString(reader.GetOrdinal("Achternaam")),
+                            reader.GetString(reader.GetOrdinal("FunctieCode"))
+                        )
+                    );
+                }
+
+                return gebruikers;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij het ophalen van gebruikers.");
+                throw new DatabaseException("Er is een databasefout opgetreden bij het ophalen van alle gebruikers.", ex);
+            }
+          
         }
 
         public Gebruiker GetById(int gebruikerId)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM gebruiker WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", gebruikerId);
-
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            if (reader.Read())
+            try
             {
-                return new Gebruiker(
-                    (int)reader["id"],
-                    (string)reader["gebruikersnaam"],
-                    (string)reader["wachtwoord"],
-                    (string)reader["email"],
-                    (string)reader["voornaam"],
-                    (string)reader["achternaam"],
-                    (string)reader["functieCode"]
-                );
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return null;
+                string sql =
+                    "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, FunctieCode FROM gebruiker WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", gebruikerId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Gebruiker(
+                        reader.GetInt32(reader.GetOrdinal("Id")),
+                        reader.GetString(reader.GetOrdinal("Gebruikersnaam")),
+                        reader.GetString(reader.GetOrdinal("Wachtwoord")),
+                        reader.GetString(reader.GetOrdinal("Email")),
+                        reader.GetString(reader.GetOrdinal("Voornaam")),
+                        reader.GetString(reader.GetOrdinal("Achternaam")),
+                        reader.GetString(reader.GetOrdinal("FunctieCode"))
+                    );
+                }
+
+                throw new CompetitieNotFoundException("Geen gebruiker gevonden met ID");
+            }
+            catch (CompetitieNotFoundException ex)
+            {
+                logger.LogError(ex, "Geen gebruiker gevonden met ID");
+                throw;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij het ophalen van de gebruiker met ID");
+                throw new DatabaseException("Er is een databasefout opgetreden bij het ophalen van de gebruiker met ID", ex);
+            }
         }
 
         public int Add(Gebruiker gebruiker)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "INSERT INTO gebruiker " +
-                         "(gebruikersnaam, wachtwoord, email, voornaam, achternaam, functieCode) " +
-                         "VALUES (@gebruikersnaam, @wachtwoord, @email, @voornaam, @achternaam, @functieCode)";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@gebruikersnaam", gebruiker.Gebruikersnaam);
-            command.Parameters.AddWithValue("@wachtwoord", gebruiker.Wachtwoord);
-            command.Parameters.AddWithValue("@email", gebruiker.Email);
-            command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
-            command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
-            command.Parameters.AddWithValue("@functieCode", gebruiker.FunctieCode);
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            if (rowsAffected > 0)
+            try
             {
-                string selectId = "SELECT LAST_INSERT_ID()";
-                using MySqlCommand selectIdCommand = new MySqlCommand(sql, connection);
-                int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar);
-                return newId;
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return 0;
+                string sql = "INSERT INTO gebruiker " + 
+                             "(gebruikersnaam, wachtwoord, email, voornaam, achternaam, functieCode) " + 
+                             "VALUES (@gebruikersnaam, @wachtwoord, @email, @voornaam, @achternaam, @functieCode)";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikersnaam", gebruiker.Gebruikersnaam);
+                command.Parameters.AddWithValue("@wachtwoord", gebruiker.Wachtwoord);
+                command.Parameters.AddWithValue("@email", gebruiker.Email);
+                command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
+                command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
+                command.Parameters.AddWithValue("@functieCode", gebruiker.FunctieCode);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                { 
+                    string selectId = "SELECT LAST_INSERT_ID()";
+                    using MySqlCommand selectIdCommand = new MySqlCommand(selectId, connection);
+                    int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
+                    return newId;
+                }
+
+                return 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij het toevoegen van een gebruiker.");
+                throw new DatabaseException("Er is een databasefout opgetreden bij het toevoegen van een gebruiker.", ex);
+            }
         }
 
         public bool Update(Gebruiker gebruiker)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "UPDATE gebruiker SET" +
-                         "gebruikersnaam = @gebruikersnaam," +
-                         "wachtwoord = @wachtwoord," +
-                         "email = @email," +
-                         "voornaam = @voornaam," +
-                         "achternaam = @achternaam," +
-                         "functieCode = @fucntieCode" +
-                         "WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@gebruikersnaam", gebruiker.Gebruikersnaam);
-            command.Parameters.AddWithValue("@wachtwoord", gebruiker.Wachtwoord);
-            command.Parameters.AddWithValue("@email", gebruiker.Email);
-            command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
-            command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
-            command.Parameters.AddWithValue("@functieCode", gebruiker.FunctieCode);
+                string sql = "UPDATE gebruiker SET " +
+                            "gebruikersnaam = @gebruikersnaam, " +
+                            "wachtwoord = @wachtwoord, " +
+                            "email = @email, " +
+                            "voornaam = @voornaam, " +
+                            "achternaam = @achternaam, " +
+                            "functieCode = @functieCode " +
+                            "WHERE id = @id";
 
-            int rowsAffected = command.ExecuteNonQuery();
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", gebruiker.Id);
+                command.Parameters.AddWithValue("@gebruikersnaam", gebruiker.Gebruikersnaam);
+                command.Parameters.AddWithValue("@wachtwoord", gebruiker.Wachtwoord);
+                command.Parameters.AddWithValue("@email", gebruiker.Email);
+                command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
+                command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
+                command.Parameters.AddWithValue("@functieCode", gebruiker.FunctieCode);
 
-            return rowsAffected > 0;
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij het bijwerken van gebruiker met ID");
+                throw new DatabaseException("Er is een databasefout opgetreden bij het bijwerken van gebruiker met ID", ex);
+            }
         }
 
         public bool Delete(Gebruiker gebruiker)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "DELETE FROM gebruiker WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", gebruiker.Id);
+                string sql = "DELETE FROM gebruiker WHERE id = @id";
 
-            int rowsAffected = command.ExecuteNonQuery();
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", gebruiker.Id);
 
-            return rowsAffected > 0;
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij het verwijderen van gebruiker met ID");
+                throw new DatabaseException($"Er is een databasefout opgetreden bij het verwijderen van gebruiker met ID", ex);
+            }
         }
     }
 }

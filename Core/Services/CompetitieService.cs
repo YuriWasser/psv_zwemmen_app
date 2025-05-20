@@ -27,6 +27,7 @@ namespace Core.Service
                     _logger.LogError("Repository returned null instead of list");
                     throw new NullReferenceException("De repository retourneerde null");
                 }
+
                 return result;
             }
             catch (DatabaseException ex)
@@ -50,6 +51,7 @@ namespace Core.Service
                 {
                     return competitie;
                 }
+
                 throw new Exception("Competitie niet gevonden");
             }
             catch (Exception ex)
@@ -59,7 +61,8 @@ namespace Core.Service
             }
         }
 
-        public Competitie Add(int id, string naam, DateOnly startDatum, DateOnly eindDatum, int zwembadId, int programmaId)
+        public Competitie Add(int id, string naam, DateOnly startDatum, DateOnly eindDatum, int zwembadId,
+            int programmaId)
         {
             try
             {
@@ -96,6 +99,7 @@ namespace Core.Service
                 {
                     throw new Exception("Competitie niet gevonden voor verwijderen");
                 }
+
                 return _competitieRepository.Delete(competitie);
             }
             catch (Exception ex)
@@ -104,17 +108,31 @@ namespace Core.Service
                 throw new Exception("Er is een fout opgetreden bij het verwijderen van de competitie", ex);
             }
         }
-        
+
         public List<Programma> GetProgrammaVoorCompetitie(int competitieId)
         {
             try
             {
-                return _competitieRepository.GetProgrammaVoorCompetitie(competitieId);
+                var result = _competitieRepository.GetProgrammaVoorCompetitie(competitieId);
+                if (result == null)
+                {
+                    _logger.LogError("Geen programma's gevonden voor competitie ID {CompetitieId}", competitieId);
+                    throw new Exception("Geen programma's gevonden voor deze competitie");
+                }
+
+                return result;
+            }
+            catch (DatabaseException ex)
+            {
+                _logger.LogError(ex, "Databasefout bij ophalen van programma's voor competitie {CompetitieId}",
+                    competitieId);
+                throw new DatabaseException(
+                    "Er is een databasefout opgetreden bij het ophalen van programma's voor de competitie", ex);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Fout bij ophalen programma's voor competitie {CompetitieId}", competitieId);
-                throw;
+                throw new Exception("Er is een fout opgetreden bij het ophalen van programma's voor de competitie", ex);
             }
         }
 
@@ -124,16 +142,23 @@ namespace Core.Service
             {
                 var programma = _programmaRepository.GetById(id);
                 if (programma != null)
+                {
                     return programma;
+                }
 
+                _logger.LogWarning("Programma met ID {Id} niet gevonden", id);
                 throw new Exception("Programma niet gevonden");
+            }
+            catch (DatabaseException ex)
+            {
+                _logger.LogError(ex, "Databasefout bij ophalen van programma met ID {Id}", id);
+                throw new DatabaseException("Er is een databasefout opgetreden bij het ophalen van het programma", ex);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Fout bij ophalen programma met ID {Id}", id);
-                throw;
+                throw new Exception("Er is een fout opgetreden bij het ophalen van het programma", ex);
             }
         }
-        
     }
 }

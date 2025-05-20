@@ -346,20 +346,20 @@ public class CompetitieTest
         Assert.AreEqual("Programma1", result[0].Omschrijving);
     }
 
-    // [TestMethod]    !!!!!!!Exception handling toepassen in de service, daarna kan ik verder.
-    // public void GetProgrammaVoorCompetitie_ThrowsException_WhenRepositoryThrows()
-    // {
-    //     //Arrange
-    //     var mockRepo = new Mock<ICompetitieRepository>();
-    //     var mockLogger = new Mock<ILogger<CompetitieService>>();
-    //     var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-    //     
-    //     var competitieId = 1;
-    //     mockRepo.Setup(repo => repo.GetProgrammaVoorCompetitie(competitieId)).Throws(new InvalidOperationException("Fout bij ophalen programma's voor competitie"));
-    //     
-    //     //Act & Assert
-    //     var exception = Assert.ThrowsException<Exception>(() => service.GetProgrammaVoorCompetitie(competitieId));
-    //     Assert.AreEqual("Fout bij ophalen programma's voor competitie", exception.Message);
-    // }
+    [TestMethod]    
+    public void GetProgrammaVoorCompetitie_ThrowsException_WhenRepositoryThrows()
+    {
+        //Arrange
+        var mockRepo = new Mock<ICompetitieRepository>();
+        var mockLogger = new Mock<ILogger<CompetitieService>>();
+        var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
+        
+        var competitieId = 1;
+        mockRepo.Setup(repo => repo.GetProgrammaVoorCompetitie(competitieId)).Throws(new InvalidOperationException("Fout bij ophalen programma's voor competitie"));
+        
+        //Act & Assert
+        var exception = Assert.ThrowsException<Exception>(() => service.GetProgrammaVoorCompetitie(competitieId));
+        Assert.AreEqual("Er is een fout opgetreden bij het ophalen van programma's voor de competitie", exception.Message);
+    }
 
 }
