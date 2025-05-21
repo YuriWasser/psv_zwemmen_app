@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets/Presentation.k1kcl344lb.bundle.scp.css"
     },
     {
+      "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/PSV_Zwemmen_Logo.png",
+      "PackagePath": "staticwebassets/Image/PSV_Zwemmen_Logo.png"
+    },
+    {
       "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/input.css",
       "PackagePath": "staticwebassets/css/input.css"
     },

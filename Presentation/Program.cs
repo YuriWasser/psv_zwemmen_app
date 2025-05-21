@@ -36,8 +36,14 @@ builder.Services.AddScoped<IZwembadRepository>(provider =>
     return new ZwembadRepository(connectionString, logger);
 });
 
+builder.Services.AddScoped<IGebruikerRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<GebruikerRepository>>();
+    return new GebruikerRepository(connectionString, logger);
+});
+
 // Voeg overige repositories toe (zonder connection string dependency)
-builder.Services.AddScoped<IGebruikerRepository, GebruikerRepository>();
+// builder.Services.AddScoped<IGebruikerRepository, GebruikerRepository>();
 builder.Services.AddScoped<IWedstrijdInschrijvingRepository, WedstrijdInschrijvingRepository>();
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingAfmeldenRepository, TrainingAfmeldenRepository>();
@@ -51,7 +57,7 @@ builder.Services.AddScoped<CompetitieService>();
 builder.Services.AddScoped<ProgrammaService>();
 builder.Services.AddScoped<AfstandService>();
 builder.Services.AddScoped<ZwembadService>();
-// builder.Services.AddScoped<GebruikerService>();
+//builder.Services.AddScoped<GebruikerService>();
 // builder.Services.AddScoped<WedstrijdInschrijvingService>();
 // builder.Services.AddScoped<TrainingService>();
 // builder.Services.AddScoped<TrainingAfmeldingService>();
