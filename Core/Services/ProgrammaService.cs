@@ -61,9 +61,9 @@ namespace Core.Service
         {
             try
             {
-                var programma = new Programma(id, competitieId, omschrijving, datum, starttijd);
-                programma.Id = _programmaRepository.Add(programma);
-                return programma;
+                var newProg = new Programma(id, competitieId, omschrijving, datum, starttijd);
+                var addedProg = _programmaRepository.Add(newProg);
+                return addedProg;
             }
             catch (DatabaseException ex)
             {

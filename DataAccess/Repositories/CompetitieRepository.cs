@@ -6,7 +6,8 @@ using Microsoft.Extensions.Logging;
 
 namespace DataAccess.Repositories
 {
-    public class CompetitieRepository(string connectionString, ILogger<CompetitieRepository> logger) : ICompetitieRepository
+    public class CompetitieRepository(string connectionString, ILogger<CompetitieRepository> logger)
+        : ICompetitieRepository
     {
         public List<Competitie> GetAll()
         {
@@ -35,6 +36,7 @@ namespace DataAccess.Repositories
                         )
                     );
                 }
+
                 return competities;
             }
             catch (MySqlException ex)
@@ -51,7 +53,8 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, naam, start_datum, eind_datum, zwembad_id, programma_id FROM competitie WHERE id = @id";
+                string sql =
+                    "SELECT id, naam, start_datum, eind_datum, zwembad_id, programma_id FROM competitie WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", competitieId);
@@ -84,7 +87,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public int Add(Competitie competitie)
+        public Competitie Add(Competitie competitie)
         {
             try
             {
@@ -107,10 +110,17 @@ namespace DataAccess.Repositories
                     string selectIdSql = "SELECT LAST_INSERT_ID()";
                     using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
                     int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                    return newId;
+                    return new Competitie(
+                        newId,
+                        competitie.Naam,
+                        competitie.StartDatum,
+                        competitie.EindDatum,
+                        competitie.ZwembadId,
+                        competitie.ProgrammaId
+                    );
                 }
 
-                return 0;
+                return null;
             }
             catch (MySqlException ex)
             {
@@ -144,8 +154,9 @@ namespace DataAccess.Repositories
 
                 if (rowsAffected > 0)
                 {
-                    return true;   
+                    return true;
                 }
+
                 throw new CompetitieNotFoundException("Competitie not found");
             }
             catch (MySqlException ex)
@@ -171,8 +182,9 @@ namespace DataAccess.Repositories
 
                 if (rowsAffected > 0)
                 {
-                    return true;   
+                    return true;
                 }
+
                 throw new CompetitieNotFoundException("Competitie not found");
             }
             catch (MySqlException ex)
@@ -181,17 +193,18 @@ namespace DataAccess.Repositories
                 throw new DatabaseException("Error deleting competitie", ex);
             }
         }
-        
+
         public List<Programma> GetProgrammaVoorCompetitie(int competitieId)
         {
             try
             {
                 List<Programma> programmaLijst = new List<Programma>();
-    
+
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
-    
-                string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE competitie_id = @competitieId";
+
+                string sql =
+                    "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE competitie_id = @competitieId";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@competitieId", competitieId);
@@ -206,16 +219,16 @@ namespace DataAccess.Repositories
                         reader.GetString(reader.GetOrdinal("omschrijving")),
                         reader.GetDateTime(reader.GetOrdinal("datum")),
                         reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
-                    )); 
+                    ));
                 }
 
-                return programmaLijst; 
+                return programmaLijst;
             }
             catch (MySqlException ex)
             {
                 logger.LogError(ex, "Error fetching programma for competitie with ID {CompetitieId}", competitieId);
                 throw new DatabaseException($"Error fetching programma for competitie with ID {competitieId}", ex);
-            } 
+            }
         }
 
         public Programma GetProgrammaById(int id)

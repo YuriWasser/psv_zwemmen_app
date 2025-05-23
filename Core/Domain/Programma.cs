@@ -6,11 +6,11 @@ namespace Core.Domain;
 
 public class Programma
 {
-    public int Id { get; set; }
-    public int CompetitieId { get; set; }
-    public string Omschrijving { get; set; }
-    public DateTime Datum { get; set; }
-    public TimeSpan StartTijd { get; set; }
+    public int Id { get; private set; }
+    public int CompetitieId { get; private set; }
+    public string Omschrijving { get; private set; }
+    public DateTime Datum { get; private set; }
+    public TimeSpan StartTijd { get; private set; }
 
 
     public Programma(int id, int competitieId, string omschrijving, DateTime datum, TimeSpan starttijd)

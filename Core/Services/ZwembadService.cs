@@ -62,9 +62,9 @@ public class ZwembadService
     {
         try
         {
-            var zwembad = new Zwembad(id, naam, adres);
-            zwembad.Id = _zwembadRepository.Add(zwembad);
-            return zwembad;
+            var newZwembad = new Zwembad(id, naam, adres);
+            var addedZwembad = _zwembadRepository.Add(newZwembad);
+            return addedZwembad;
         }
         catch (DatabaseException ex)
         {

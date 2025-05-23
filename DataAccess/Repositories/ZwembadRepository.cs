@@ -79,7 +79,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public int Add(Zwembad zwembad)
+        public Zwembad Add(Zwembad zwembad)
         {
             try
             {
@@ -99,10 +99,10 @@ namespace DataAccess.Repositories
                     string selectIdSql = "SELECT LAST_INSERT_ID()";
                     using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
                     int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                    return newId;
+                    return new Zwembad(newId, zwembad.Naam, zwembad.Adres);
                 }
 
-                return 0;
+                return null;
             }
             catch (MySqlException ex)
             {

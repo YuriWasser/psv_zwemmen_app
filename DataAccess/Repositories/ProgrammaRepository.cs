@@ -83,7 +83,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public int Add(Programma programma)
+        public Programma Add(Programma programma)
         {
             try
             {
@@ -106,10 +106,15 @@ namespace DataAccess.Repositories
                     string selectIdSql = "SELECT LAST_INSERT_ID()";
                     using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
                     int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                    return newId;
+                    return new Programma(
+                        newId,
+                        programma.CompetitieId,
+                        programma.Omschrijving,
+                        programma.Datum,
+                        programma.StartTijd
+                    );
                 }
-
-                return 0;
+                return null;
             }
             catch (MySqlException ex)
             {

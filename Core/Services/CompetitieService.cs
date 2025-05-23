@@ -66,9 +66,9 @@ namespace Core.Service
         {
             try
             {
-                var competitie = new Competitie(id, naam, startDatum, eindDatum, zwembadId, programmaId);
-                competitie.Id = _competitieRepository.Add(competitie);
-                return competitie;
+                var newComp = new Competitie(id, naam, startDatum, eindDatum, zwembadId, programmaId);
+                var addedComp = _competitieRepository.Add(newComp);
+                return addedComp;
             }
             catch (Exception ex)
             {

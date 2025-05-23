@@ -6,7 +6,7 @@ namespace Core.Interface
     {
         public List<Zwembad> GetAll();
         public Zwembad GetById(int zwembadId);
-        public int Add(Zwembad zwembad);
+        public Zwembad Add(Zwembad zwembad);
         public bool Update(Zwembad zwembad);
         public bool Delete(Zwembad zwembad);
     }

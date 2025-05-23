@@ -178,7 +178,7 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         
-        mockRepo.Setup(repo => repo.Add(It.IsAny<Competitie>())).Returns(1);
+        mockRepo.Setup(repo => repo.Add(It.IsAny<Competitie>())).Returns(new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1));
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
         
         //Act
@@ -216,7 +216,7 @@ public class CompetitieTest
         
         var competitie = new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
         
-        mockRepo.Setup(r => r.Add(It.IsAny<Competitie>())).Returns(1);
+        mockRepo.Setup(r => r.Add(It.IsAny<Competitie>())).Returns(competitie);
         
         // Act
         service.Add(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);

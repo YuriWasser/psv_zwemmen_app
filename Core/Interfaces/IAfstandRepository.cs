@@ -6,7 +6,7 @@ namespace Core.Interface
     {
         public List<Afstand> GetAll();
         public Afstand GetByID(int afstandId);
-        public int Add(Afstand afstand);
+        public Afstand Add(Afstand afstand);
         public bool Update(Afstand afstand);
         public bool Delete(Afstand afstand);
         public List<Afstand> GetByProgrammaId(int programmaId);

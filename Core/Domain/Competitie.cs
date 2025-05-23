@@ -2,7 +2,7 @@ namespace Core.Domain;
 
 public class Competitie
 {
-    public int Id { get; set; }
+    public int Id { get; private set; }
     public string Naam { get; private set; }
     public DateOnly StartDatum { get; private set; }
     public DateOnly EindDatum { get; private set; }

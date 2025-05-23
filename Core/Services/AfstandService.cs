@@ -62,9 +62,9 @@ public class AfstandService
     {
         try
         {
-            var afstand = new Afstand(id, meters, beschrijving);
-            afstand.Id = _afstandRepository.Add(afstand);
-            return afstand;
+            var newAfstand = new Afstand(id, meters, beschrijving);
+            var addedAfstand = _afstandRepository.Add(newAfstand);
+            return addedAfstand;
         }
         catch (DatabaseException ex)
         {

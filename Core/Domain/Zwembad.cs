@@ -6,9 +6,9 @@ namespace Core.Domain;
 
 public class Zwembad
 {
-    public int Id { get; set; }
-    public string Naam { get; set; } 
-    public string Adres { get; set; }
+    public int Id { get; private set; }
+    public string Naam { get; private set; } 
+    public string Adres { get; private set; }
 
     public Zwembad(int id, string naam, string adres)
     {

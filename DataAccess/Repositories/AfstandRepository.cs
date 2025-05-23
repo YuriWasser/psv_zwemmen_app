@@ -79,7 +79,7 @@ namespace DataAccess.Repositories
             }
         }
 
-        public int Add(Afstand afstand)
+        public Afstand Add(Afstand afstand)
         {
             try
             {
@@ -99,10 +99,10 @@ namespace DataAccess.Repositories
                     string selectIdSql = "SELECT LAST_INSERT_ID()";
                     using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
                     int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                    return newId;
+                    return new Afstand(newId, afstand.Meters, afstand.Beschrijving);
                 }
 
-                return 0;
+                return null;
             }
             catch (MySqlException ex)
             {

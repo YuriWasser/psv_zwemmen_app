@@ -6,7 +6,7 @@ namespace Core.Interface
     {
         public List<Programma> GetAll();
         public Programma GetById(int programmaId);
-        public int Add(Programma programma);
+        public Programma Add(Programma programma);
         public bool Update(Programma programma);
         public bool Delete(Programma programma);
         public List<Programma> GetByCompetitieId(int competitieId);

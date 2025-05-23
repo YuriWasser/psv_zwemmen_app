@@ -6,9 +6,9 @@ namespace Core.Domain
 {
     public class Afstand
     {
-        public int Id { get; set; }
-        public int Meters { get; set; }
-        public string Beschrijving { get; set; }
+        public int Id { get; private set; }
+        public int Meters { get; private set; }
+        public string Beschrijving { get; private set; }
         
 
         public Afstand(int id, int meters, string beschrijving)
