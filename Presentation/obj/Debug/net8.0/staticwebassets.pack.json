@@ -9,6 +9,14 @@
       "PackagePath": "staticwebassets/Image/PSV_Zwemmen_Logo.png"
     },
     {
+      "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Psv_Zwemmen_Actie_Foto.jpeg",
+      "PackagePath": "staticwebassets/Image/Psv_Zwemmen_Actie_Foto.jpeg"
+    },
+    {
+      "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Zwemstadion_PSV.jpg",
+      "PackagePath": "staticwebassets/Image/Zwemstadion_PSV.jpg"
+    },
+    {
       "Id": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/input.css",
       "PackagePath": "staticwebassets/css/input.css"
     },

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "/D0cboudxOAdwwgfME/dIhhi6MQMfHcuzB1Hi0pKumw=",
+  "Hash": "11YnVq2SRz7ZuVAkjM5PRnDUektwUyXrmrPdpZrED5U=",
   "Source": "Presentation",
   "BasePath": "_content/Presentation",
   "Mode": "Default",
@@ -94,8 +94,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "zz3svv5ze8",
-      "Integrity": "P26UL/Is3d1MTDk6t3U1aC3P6UillsLXNLiR22bTVZ0=",
+      "Fingerprint": "vf3013tz20",
+      "Integrity": "ldF8Twd4swTLVkxuv+FZjDhobvCJllS4wNpwJL7DQIo=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/output.css"
@@ -122,6 +122,27 @@
       "OriginalItemSpec": "wwwroot/favicon.ico"
     },
     {
+      "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Psv_Zwemmen_Actie_Foto.jpeg",
+      "SourceId": "Presentation",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/",
+      "BasePath": "_content/Presentation",
+      "RelativePath": "Image/Psv_Zwemmen_Actie_Foto#[.{fingerprint}]?.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yqd2x79ov0",
+      "Integrity": "Gn926YhpGEVv1W+y6qNwUPP/dG2Y3aUmhyxI6xXJsrk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Image/Psv_Zwemmen_Actie_Foto.jpeg"
+    },
+    {
       "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/PSV_Zwemmen_Logo.png",
       "SourceId": "Presentation",
       "SourceType": "Discovered",
@@ -141,6 +162,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Image/PSV_Zwemmen_Logo.png"
+    },
+    {
+      "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Zwemstadion_PSV.jpg",
+      "SourceId": "Presentation",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/",
+      "BasePath": "_content/Presentation",
+      "RelativePath": "Image/Zwemstadion_PSV#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "cwqfxznkk8",
+      "Integrity": "FC03Uc8qEXb982xuOFOJKlhnH6uhhScHEkxd3lzmVuU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Image/Zwemstadion_PSV.jpg"
     },
     {
       "Identity": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/js/site.js",
@@ -1455,7 +1497,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "10643"
+          "Value": "10837"
         },
         {
           "Name": "Content-Type",
@@ -1463,11 +1505,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"P26UL/Is3d1MTDk6t3U1aC3P6UillsLXNLiR22bTVZ0=\""
+          "Value": "\"ldF8Twd4swTLVkxuv+FZjDhobvCJllS4wNpwJL7DQIo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 22 May 2025 10:52:07 GMT"
+          "Value": "Fri, 23 May 2025 09:50:51 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1477,12 +1519,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-P26UL/Is3d1MTDk6t3U1aC3P6UillsLXNLiR22bTVZ0="
+          "Value": "sha256-ldF8Twd4swTLVkxuv+FZjDhobvCJllS4wNpwJL7DQIo="
         }
       ]
     },
     {
-      "Route": "css/output.zz3svv5ze8.css",
+      "Route": "css/output.vf3013tz20.css",
       "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1492,7 +1534,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "10643"
+          "Value": "10837"
         },
         {
           "Name": "Content-Type",
@@ -1500,11 +1542,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"P26UL/Is3d1MTDk6t3U1aC3P6UillsLXNLiR22bTVZ0=\""
+          "Value": "\"ldF8Twd4swTLVkxuv+FZjDhobvCJllS4wNpwJL7DQIo=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 22 May 2025 10:52:07 GMT"
+          "Value": "Fri, 23 May 2025 09:50:51 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1514,7 +1556,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "zz3svv5ze8"
+          "Value": "vf3013tz20"
         },
         {
           "Name": "label",
@@ -1522,7 +1564,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-P26UL/Is3d1MTDk6t3U1aC3P6UillsLXNLiR22bTVZ0="
+          "Value": "sha256-ldF8Twd4swTLVkxuv+FZjDhobvCJllS4wNpwJL7DQIo="
         }
       ]
     },
@@ -1609,6 +1651,88 @@
       ]
     },
     {
+      "Route": "Image/Psv_Zwemmen_Actie_Foto.jpeg",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Psv_Zwemmen_Actie_Foto.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17681"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gn926YhpGEVv1W+y6qNwUPP/dG2Y3aUmhyxI6xXJsrk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 09:48:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gn926YhpGEVv1W+y6qNwUPP/dG2Y3aUmhyxI6xXJsrk="
+        }
+      ]
+    },
+    {
+      "Route": "Image/Psv_Zwemmen_Actie_Foto.yqd2x79ov0.jpeg",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Psv_Zwemmen_Actie_Foto.jpeg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17681"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Gn926YhpGEVv1W+y6qNwUPP/dG2Y3aUmhyxI6xXJsrk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 09:48:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yqd2x79ov0"
+        },
+        {
+          "Name": "label",
+          "Value": "Image/Psv_Zwemmen_Actie_Foto.jpeg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Gn926YhpGEVv1W+y6qNwUPP/dG2Y3aUmhyxI6xXJsrk="
+        }
+      ]
+    },
+    {
       "Route": "Image/PSV_Zwemmen_Logo.8ni2ydwdto.png",
       "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/PSV_Zwemmen_Logo.png",
       "Selectors": [],
@@ -1687,6 +1811,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-HD/0u0aVhVzCxxYEfD0kx6MFWS2shENjEw13oWT7NAo="
+        }
+      ]
+    },
+    {
+      "Route": "Image/Zwemstadion_PSV.cwqfxznkk8.jpg",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Zwemstadion_PSV.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "82937"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"FC03Uc8qEXb982xuOFOJKlhnH6uhhScHEkxd3lzmVuU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 09:44:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "cwqfxznkk8"
+        },
+        {
+          "Name": "label",
+          "Value": "Image/Zwemstadion_PSV.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-FC03Uc8qEXb982xuOFOJKlhnH6uhhScHEkxd3lzmVuU="
+        }
+      ]
+    },
+    {
+      "Route": "Image/Zwemstadion_PSV.jpg",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/Image/Zwemstadion_PSV.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "82937"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"FC03Uc8qEXb982xuOFOJKlhnH6uhhScHEkxd3lzmVuU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 09:44:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-FC03Uc8qEXb982xuOFOJKlhnH6uhhScHEkxd3lzmVuU="
         }
       ]
     },
