@@ -97,8 +97,8 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql = "INSERT INTO gebruiker " + 
-                             "(gebruikersnaam, wachtwoord, email, voornaam, achternaam, functieCode) " + 
-                             "VALUES (@gebruikersnaam, @wachtwoord, @email, @voornaam, @achternaam, @functieCode)";
+                             "(gebruikersnaam, wachtwoord, email, voornaam, achternaam, functie_code) " + 
+                             "VALUES (@gebruikersnaam, @wachtwoord, @email, @voornaam, @achternaam, @functie_code)";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@gebruikersnaam", gebruiker.Gebruikersnaam);
@@ -106,7 +106,7 @@ namespace DataAccess.Repositories
                 command.Parameters.AddWithValue("@email", gebruiker.Email);
                 command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
                 command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
-                command.Parameters.AddWithValue("@functieCode", gebruiker.FunctieCode);
+                command.Parameters.AddWithValue("@functie_code", gebruiker.FunctieCode);
 
                 int rowsAffected = command.ExecuteNonQuery();
 

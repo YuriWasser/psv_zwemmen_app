@@ -1,115 +1,74 @@
 using Core.Domain;
 using Core.Interface;
+using Core.Exceptions;
+using Microsoft.Extensions.Logging;
 using MySqlConnector;
+using System.Collections.Generic;
+
 namespace DataAccess.Repositories
 {
-    public class FunctieRepository : IFunctieRepository
+    public class FunctieRepository(string connectionString, ILogger<FunctieRepository> logger) : IFunctieRepository
     {
-        private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-
         public List<Functie> GetAll()
         {
-            List<Functie> functies = new List<Functie>();
-            
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECT * FROM functie";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                functies.Add(
-                    new Functie(
-                        (string)reader["code"],
-                        (string)reader["beschrijving"]
-                    )
-                ); 
+                var functies = new List<Functie>();
+
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT code, beschrijving FROM functie";
+
+                using var command = new MySqlCommand(sql, connection);
+                using var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    functies.Add(new Functie(
+                        reader.GetString("code"),
+                        reader.GetString("beschrijving")
+                    ));
+                }
+
+                return functies;
             }
-
-            return functies;
-        }
-
-        public Functie GetById(int functieId)
-        {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "SELECTED * FROM functie WHERE id = @id";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", functieId);
-
-            using MySqlDataReader reader = command.ExecuteReader();
-            
-            if (reader.Read())
+            catch (MySqlException ex)
             {
-                return new Functie(
-                    (string)reader["code"],
-                    (string)reader["beschrijving"]
-                );
+                logger.LogError(ex, "Fout bij het ophalen van alle functies.");
+                throw new DatabaseException("Er is een databasefout opgetreden bij het ophalen van functies.", ex);
             }
-
-            return null;
         }
 
-        public int Add(Functie functie)
+        public Functie GetByCode(string code)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "ISNERT INTO functie (code, beschrijving) VALUES (@code, @beschrijving)";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@code", functie.Code);
-            command.Parameters.AddWithValue("@beschrijving", functie.Beschrijving);
-
-            int rowsAffected = command.ExecuteNonQuery();
-            if (rowsAffected > 0)
+            try
             {
-                string selectIdSql = "SELECT LAST_INSERT_ID()";
-                using MySqlCommand selectIdCommand = new MySqlCommand(sql, connection);
-                int newId= Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                return newId;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT code, beschrijving FROM functie WHERE code = @code";
+
+                using var command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@code", code);
+
+                using var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Functie(
+                        reader.GetString("code"),
+                        reader.GetString("beschrijving")
+                    );
+                }
+
+                return null; // Of gooi eventueel een NotFoundException als je wilt
             }
-
-            return 0;
-        }
-
-        public bool Update(Functie functie)
-        {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "UPDATE functie SET" +
-                         "code = @code," +
-                         "beschrijving = @beschrijving," +
-                         "WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@code", functie.Code);
-            command.Parameters.AddWithValue("@beschrijving", functie.Beschrijving);
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            return rowsAffected > 0;
-        }
-
-        public bool Delete(Functie functie)
-        {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "DELETE FROM functie WHERE id = @id";
-
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            //command.Parameters.AddWithValue("@id", functie.Id);
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            return rowsAffected > 0;
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, $"Fout bij het ophalen van functie met code {code}.");
+                throw new DatabaseException($"Er is een databasefout opgetreden bij het ophalen van functie met code {code}.", ex);
+            }
         }
     }
 }

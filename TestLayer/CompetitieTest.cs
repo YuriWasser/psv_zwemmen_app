@@ -17,24 +17,23 @@ public class CompetitieTest
     public void GetAll_ReturnListOfCompetities_WhenNoExceptionThrown()
     {
         //Arrange
-        var mockRepo = new Mock<ICompetitieRepository>();  //nepData, dit doen ik zodat ik niet de echte database aanroep
+        var mockRepo = new Mock<ICompetitieRepository>(); //nepData, dit doe ik zodat ik niet de echte database aanroep
         var mockLogger = new Mock<ILogger<CompetitieService>>(); //nepLogger
         var expected = new List<Competitie>
         {
-            new Competitie (1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1),
+            new Competitie(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1),
         };
-        
+
         mockRepo.Setup(repo => repo.GetAll()).Returns(expected); //Als je dit aanroept, dan krijg je de expected terug
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object); //echte service, neppe repo en logger
-        
+
         //Act
         var result = service.GetAll();
-        
+
         //Assert  //controleer of de expected gelijk is aan de result
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count);
         Assert.AreEqual("RegionaleCompetitie", result[0].Naam);
-
     }
 
     [TestMethod]
@@ -43,10 +42,10 @@ public class CompetitieTest
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        
+
         mockRepo.Setup(repo => repo.GetAll()).Throws(new DatabaseException("Fout bij ophalen competities"));
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act & Assert
         var exception = Assert.ThrowsException<DatabaseException>(() => service.GetAll());
         Assert.AreEqual("Er is een fout opgetreden bij het ophalen van competities", exception.Message);
@@ -57,7 +56,7 @@ public class CompetitieTest
                 It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Fout bij ophalen competities")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-            Times.Once);        
+            Times.Once);
     }
 
     [TestMethod]
@@ -66,15 +65,15 @@ public class CompetitieTest
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        
+
         mockRepo.Setup(repo => repo.GetAll()).Throws(new Exception("Onverwachte fout"));
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act & Assert
         var exception = Assert.ThrowsException<Exception>(() => service.GetAll());
         Assert.AreEqual("Er is een fout opgetreden bij het ophalen van competities", exception.Message);
         Assert.IsInstanceOfType(exception.InnerException, typeof(Exception));
-        
+
         mockLogger.Verify(
             l => l.Log(
                 LogLevel.Error,
@@ -91,17 +90,17 @@ public class CompetitieTest
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        var expected = new List<Competitie>(); 
-        
+        var expected = new List<Competitie>();
+
         mockRepo.Setup(repo => repo.GetAll()).Returns(expected);
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act
         var result = service.GetAll();
-        
+
         //Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(0, result.Count); 
+        Assert.AreEqual(0, result.Count);
     }
 
     [TestMethod]
@@ -110,30 +109,29 @@ public class CompetitieTest
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        
+
         mockRepo.Setup(repo => repo.GetAll()).Returns((List<Competitie>)null);
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act & Assert
         var ex = Assert.ThrowsException<Exception>(() => service.GetAll());
         Assert.AreEqual("Er is een fout opgetreden bij het ophalen van competities", ex.Message);
-        
     }
-    
+
     [TestMethod]
     public void GetById_ReturnsCompetitie_WhenCompetitieExists()
     {
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        var expected = new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
-        
+        var expected = new Competitie(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
         mockRepo.Setup(repo => repo.GetById(1)).Returns(expected);
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act
         var result = service.GetById(1);
-        
+
         //Assert
         Assert.IsNotNull(result);
         Assert.AreEqual("RegionaleCompetitie", result.Naam);
@@ -145,10 +143,10 @@ public class CompetitieTest
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        
+
         mockRepo.Setup(repo => repo.GetById(1)).Returns((Competitie)null);
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act & Assert
         var exception = Assert.ThrowsException<Exception>(() => service.GetById(1));
         Assert.AreEqual("Er is een fout opgetreden bij het ophalen van de competitie", exception.Message);
@@ -161,10 +159,10 @@ public class CompetitieTest
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        
+
         mockRepo.Setup(repo => repo.GetById(1)).Throws(new Exception("Fout bij ophalen competitie"));
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act & Assert
         var exception = Assert.ThrowsException<Exception>(() => service.GetById(1));
         Assert.AreEqual("Er is een fout opgetreden bij het ophalen van de competitie", exception.Message);
@@ -177,13 +175,14 @@ public class CompetitieTest
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        
-        mockRepo.Setup(repo => repo.Add(It.IsAny<Competitie>())).Returns(new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1));
+
+        mockRepo.Setup(repo => repo.Add(It.IsAny<Competitie>())).Returns(new Competitie(1, "RegionaleCompetitie",
+            new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1));
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         //Act
-        var result = service.Add(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
-        
+        var result = service.Add(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
         //Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Id);
@@ -196,12 +195,13 @@ public class CompetitieTest
         // Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
-        
+
         mockRepo.Setup(repo => repo.Add(It.IsAny<Competitie>())).Throws(new Exception("Fout bij toevoegen competitie"));
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         // Act & Assert
-        var exception = Assert.ThrowsException<Exception>(() => service.Add(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1));
+        var exception = Assert.ThrowsException<Exception>(() =>
+            service.Add(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1));
         Assert.AreEqual("Er is een fout opgetreden bij het toevoegen van de competitie", exception.Message);
         Assert.IsInstanceOfType(exception.InnerException, typeof(Exception));
     }
@@ -213,14 +213,14 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
-        var competitie = new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
-        
+
+        var competitie = new Competitie(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
         mockRepo.Setup(r => r.Add(It.IsAny<Competitie>())).Returns(competitie);
-        
+
         // Act
-        service.Add(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
-        
+        service.Add(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
         // Assert
         mockRepo.Verify(repo => repo.Add(It.Is<Competitie>(c =>
             c.Naam == competitie.Naam &&
@@ -237,13 +237,13 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
-        var competitie = new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
+        var competitie = new Competitie(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
         mockRepo.Setup(repo => repo.Update(competitie)).Returns(true);
-        
+
         //Act
         var result = service.Update(competitie);
-        
+
         //Assert
         Assert.IsTrue(result);
     }
@@ -255,10 +255,10 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
-        var competitie = new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
+        var competitie = new Competitie(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
         mockRepo.Setup(repo => repo.Update(competitie)).Throws(new Exception("Fout bij updaten competitie"));
-        
+
         //Act & Assert
         var exception = Assert.ThrowsException<Exception>(() => service.Update(competitie));
         Assert.AreEqual("Er is een fout opgetreden bij het bijwerken van de competitie", exception.Message);
@@ -271,15 +271,15 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
-        var competitie = new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
-        
+
+        var competitie = new Competitie(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
         mockRepo.Setup(repo => repo.GetById(1)).Returns(competitie);
         mockRepo.Setup(repo => repo.Delete(competitie)).Returns(true);
-        
+
         //Act
         var result = service.Delete(1);
-        
+
         //Assert
         Assert.IsTrue(result);
     }
@@ -291,9 +291,9 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         mockRepo.Setup(repo => repo.GetById(1)).Returns((Competitie)null);
-        
+
         //Act & Assert
         var exception = Assert.ThrowsException<Exception>(() => service.Delete(1));
         Assert.AreEqual("Er is een fout opgetreden bij het verwijderen van de competitie", exception.Message);
@@ -308,12 +308,13 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
-        var competitie = new Competitie(1, "RegionaleCompetitie", new (2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
-        
+
+        var competitie = new Competitie(1, "RegionaleCompetitie", new(2023, 1, 1), new DateOnly(2023, 12, 31), 1, 1);
+
         mockRepo.Setup(repo => repo.GetById(1)).Returns(competitie);
-        mockRepo.Setup(repo => repo.Delete(competitie)).Throws(new InvalidOperationException("Fout bij verwijderen competitie"));
-        
+        mockRepo.Setup(repo => repo.Delete(competitie))
+            .Throws(new InvalidOperationException("Fout bij verwijderen competitie"));
+
         //Act & Assert
         var exception = Assert.ThrowsException<Exception>(() => service.Delete(1));
         Assert.AreEqual("Er is een fout opgetreden bij het verwijderen van de competitie", exception.Message);
@@ -327,39 +328,40 @@ public class CompetitieTest
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         var competitieId = 1;
         var expected = new List<Programma>
         {
-            new Programma(1, 1,"Programma1", new DateTime(2023, 3, 25), new TimeSpan(10,0, 0)),
-            new Programma(2, 2,"Programma2", new DateTime(2023, 3, 25), new TimeSpan(10, 0, 0))
+            new Programma(1, 1, "Programma1", new DateTime(2023, 3, 25), new TimeSpan(10, 0, 0)),
+            new Programma(2, 2, "Programma2", new DateTime(2023, 3, 25), new TimeSpan(10, 0, 0))
         };
-        
+
         mockRepo.Setup(repo => repo.GetProgrammaVoorCompetitie(competitieId)).Returns(expected);
-        
+
         //Act
         var result = service.GetProgrammaVoorCompetitie(competitieId);
-        
+
         //Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count);
         Assert.AreEqual("Programma1", result[0].Omschrijving);
     }
 
-    [TestMethod]    
+    [TestMethod]
     public void GetProgrammaVoorCompetitie_ThrowsException_WhenRepositoryThrows()
     {
         //Arrange
         var mockRepo = new Mock<ICompetitieRepository>();
         var mockLogger = new Mock<ILogger<CompetitieService>>();
         var service = new CompetitieService(mockRepo.Object, mockLogger.Object);
-        
+
         var competitieId = 1;
-        mockRepo.Setup(repo => repo.GetProgrammaVoorCompetitie(competitieId)).Throws(new InvalidOperationException("Fout bij ophalen programma's voor competitie"));
-        
+        mockRepo.Setup(repo => repo.GetProgrammaVoorCompetitie(competitieId))
+            .Throws(new InvalidOperationException("Fout bij ophalen programma's voor competitie"));
+
         //Act & Assert
         var exception = Assert.ThrowsException<Exception>(() => service.GetProgrammaVoorCompetitie(competitieId));
-        Assert.AreEqual("Er is een fout opgetreden bij het ophalen van programma's voor de competitie", exception.Message);
+        Assert.AreEqual("Er is een fout opgetreden bij het ophalen van programma's voor de competitie",
+            exception.Message);
     }
-
 }

@@ -1,0 +1,35 @@
+@page
+@model Presentation.Pages.Gebruiker.LogInModel
+@{
+    ViewData["Title"] = "Inloggen";
+    Layout = "_Layout";
+}
+
+<main class="flex items-center justify-center min-h-screen bg-white">
+    <div class="bg-gray-100 p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 class="text-3xl font-bold text-center text-red-600 mb-6">Inloggen bij PSV Zwemmen</h2>
+        <form method="post" class="space-y-4">
+            <div>
+                <label asp-for="Gebruikersnaam" class="block mb-1 font-medium text-gray-700">Gebruikersnaam</label>
+                <input asp-for="Gebruikersnaam" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <span asp-validation-for="Gebruikersnaam" class="text-red-500 text-sm"></span>
+            </div>
+
+            <div>
+                <label asp-for="Wachtwoord" class="block mb-1 font-medium text-gray-700">Wachtwoord</label>
+                <input asp-for="Wachtwoord" type="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <span asp-validation-for="Wachtwoord" class="text-red-500 text-sm"></span>
+            </div>
+
+            <button type="submit" class="w-full bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200">
+                Inloggen
+            </button>
+        </form>
+
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-700">Heb je nog geen account?
+                <a asp-page="/Gebruiker/AccountMaken" class="text-red-600 hover:underline">Maak er een aan</a>
+            </p>
+        </div>
+    </div>
+</main>

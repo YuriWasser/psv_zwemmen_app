@@ -59,18 +59,27 @@ public class GebruikerService
         }
     }
 
-    public Gebruiker Add(int id, string gebruikersnaam, string wachtwoord, string email, string voornaam, string achternaam,
-        string functieCode)
+    public Gebruiker Add(int id, string gebruikersnaam, string wachtwoord, string email, string voornaam, string achternaam, string functieCode)
     {
         try
         {
+            _logger.LogInformation("Proberen nieuwe gebruiker toe te voegen: {Gebruikersnaam}, {Email}", gebruikersnaam, email);
+
             var newGebruiker = new Gebruiker(id, gebruikersnaam, wachtwoord, email, voornaam, achternaam, functieCode);
             var addedGebruiker = _gebruikerRepository.Add(newGebruiker);
+
+            if (addedGebruiker == null)
+            {
+                _logger.LogWarning("Toevoegen van gebruiker is mislukt. Repository gaf null terug.");
+                throw new Exception("Toevoegen van gebruiker is mislukt. Probeer het opnieuw.");
+            }
+
+            _logger.LogInformation("Gebruiker succesvol toegevoegd met ID: {Id}", addedGebruiker.Id);
             return addedGebruiker;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Fout bij toevoegen gebruiker");
+            _logger.LogError(ex, "Fout bij toevoegen gebruiker: {Gebruikersnaam}", gebruikersnaam);
             throw new Exception("Er is een fout opgetreden bij het toevoegen van de gebruiker", ex);
         }
     }
