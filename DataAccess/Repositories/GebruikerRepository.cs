@@ -75,9 +75,9 @@ namespace DataAccess.Repositories
                     );
                 }
 
-                throw new CompetitieNotFoundException("Geen gebruiker gevonden met ID");
+                throw new GebruikerNotFoundException("Geen gebruiker gevonden met ID");
             }
-            catch (CompetitieNotFoundException ex)
+            catch (GebruikerNotFoundException ex)
             {
                 logger.LogError(ex, "Geen gebruiker gevonden met ID");
                 throw;
@@ -190,6 +190,47 @@ namespace DataAccess.Repositories
             {
                 logger.LogError(ex, "Fout bij het verwijderen van gebruiker met ID");
                 throw new DatabaseException($"Er is een databasefout opgetreden bij het verwijderen van gebruiker met ID", ex);
+            }
+        }
+        
+        public Gebruiker GetByGebruikersnaam(string gebruikersnaam)
+        {
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, FunctieCode FROM gebruiker WHERE gebruikersnaam = @gebruikersnaam";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikersnaam", gebruikersnaam);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Gebruiker(
+                        reader.GetInt32(reader.GetOrdinal("Id")),
+                        reader.GetString(reader.GetOrdinal("Gebruikersnaam")),
+                        reader.GetString(reader.GetOrdinal("Wachtwoord")),
+                        reader.GetString(reader.GetOrdinal("Email")),
+                        reader.GetString(reader.GetOrdinal("Voornaam")),
+                        reader.GetString(reader.GetOrdinal("Achternaam")),
+                        reader.GetString(reader.GetOrdinal("FunctieCode"))
+                    );
+                }
+
+                throw new GebruikerNotFoundException($"Geen gebruiker gevonden met gebruikersnaam {gebruikersnaam}");
+            }
+            catch( GebruikerNotFoundException ex)
+            {
+                logger.LogError(ex, "Geen gebruiker gevonden met gebruikersnaam");
+                throw;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij het ophalen van gebruiker met gebruikersnaam");
+                throw new DatabaseException($"Er is een databasefout opgetreden bij het ophalen van gebruiker met gebruikersnaam {gebruikersnaam}", ex);
             }
         }
     }

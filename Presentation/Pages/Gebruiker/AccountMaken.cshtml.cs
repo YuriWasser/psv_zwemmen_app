@@ -1,17 +1,21 @@
 using Core.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Presentation.Pages.Gebruiker
 {
     public class AccountMaken : PageModel
     {
         private readonly GebruikerService _gebruikerService;
+        private readonly FunctieService _functieService;
 
-        public AccountMaken(GebruikerService gebruikerService)
+        public AccountMaken(GebruikerService gebruikerService, FunctieService functieService)
         {
             _gebruikerService = gebruikerService;
+            _functieService = functieService;
         }
 
         [BindProperty, Required]
@@ -32,14 +36,25 @@ namespace Presentation.Pages.Gebruiker
         [BindProperty, Required]
         public string Functie { get; set; }
 
+        // Hier de SelectList voor dropdown
+        public SelectList FunctiesSelectList { get; set; }
+
         public void OnGet()
         {
+            // Functies ophalen uit de service
+            var functies = _functieService.GetAll();
+            FunctiesSelectList = new SelectList(functies, "Code", "Beschrijving");
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
-            // if (!ModelState.IsValid)
-            //     return Page();
+            if (!ModelState.IsValid)
+            {
+                // Bij fout opnieuw functies ophalen voor dropdown
+                var functies = _functieService.GetAll();
+                FunctiesSelectList = new SelectList(functies, "Code", "Beschrijving");
+                return Page();
+            }
 
             try
             {
@@ -53,11 +68,13 @@ namespace Presentation.Pages.Gebruiker
                     Functie
                 );
 
-                return RedirectToPage("/Gebruiker/LogIn");
+                return RedirectToPage("/Gebruiker/Index");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Fout bij registreren: " + ex.Message);
+                var functies = _functieService.GetAll();
+                FunctiesSelectList = new SelectList(functies, "Code", "Beschrijving");
                 return Page();
             }
         }

@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT code, beschrijving FROM functie";
+                string sql = "SELECT code, beschrijving FROM lookup_functie";
 
                 using var command = new MySqlCommand(sql, connection);
                 using var reader = command.ExecuteReader();
@@ -47,7 +47,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT code, beschrijving FROM functie WHERE code = @code";
+                string sql = "SELECT code, beschrijving FROM lookup_functie WHERE code = @code";
 
                 using var command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@code", code);
@@ -62,7 +62,12 @@ namespace DataAccess.Repositories
                     );
                 }
 
-                return null; // Of gooi eventueel een NotFoundException als je wilt
+                throw new FunctieNotFoundException($"Functie met code {code} niet gevonden.");
+            }
+            catch(FunctieNotFoundException)
+            {
+                logger.LogWarning($"Functie met code {code} niet gevonden.");
+                throw; // Hergooi de exceptie
             }
             catch (MySqlException ex)
             {

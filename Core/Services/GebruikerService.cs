@@ -114,5 +114,24 @@ public class GebruikerService
             throw new Exception("Er is een fout opgetreden bij het verwijderen van de gebruiker", ex);
         }
     }
+    
+    public Gebruiker GetByGebruikersnaam(string gebruikersnaam)
+    {
+        try
+        {
+            var gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
+            if (gebruiker != null)
+            {
+                return gebruiker;
+            }
+
+            throw new Exception("Gebruiker niet gevonden");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Fout bij ophalen gebruiker met gebruikersnaam {Gebruikersnaam}", gebruikersnaam);
+            throw new Exception("Er is een fout opgetreden bij het ophalen van de gebruiker", ex);
+        }
+    }
      
 }

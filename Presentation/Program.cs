@@ -54,7 +54,6 @@ builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingAfmeldenRepository, TrainingAfmeldenRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IClubrecordRepository, ClubrecordRepository>();
-builder.Services.AddScoped<IFunctieRepository, FunctieRepository>();
 builder.Services.AddScoped<IResultaatRepository, ResultaatRepository>();
 
 // Voeg services toe

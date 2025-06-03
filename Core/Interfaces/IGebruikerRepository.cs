@@ -9,5 +9,6 @@ namespace Core.Interface
         public Gebruiker Add(Gebruiker gebruiker);
         public bool Update(Gebruiker gebruiker);
         public bool Delete(Gebruiker gebruiker);
+        public Gebruiker GetByGebruikersnaam(string gebruikersnaam);
     }
 }
