@@ -20,6 +20,10 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
+[/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/Pages/Beveiligd/BeveiligdePagina's.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQmV2ZWlsaWdkL0JldmVpbGlnZGVQYWdpbmEncy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/Pages/Competitie/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcGV0aXRpZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -34,6 +38,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/Pages/Gebruiker/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2VicnVpa2VyL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/Pages/Gebruiker/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvR2VicnVpa2VyL0xvZ291dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/Pages/Index.cshtml]
