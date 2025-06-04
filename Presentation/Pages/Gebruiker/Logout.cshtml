@@ -1,0 +1,16 @@
+@page
+@model Presentation.Pages.Gebruiker.LogOutModel
+
+@{
+    ViewData["Title"] = "Uitloggen";
+    Layout = "_Layout";
+}
+
+<main>
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <form method="get" asp-page="/Gebruiker/LogOut">
+            <button type="submit" class="text-red-600 hover:underline">Log uit</button>
+        </form>
+    }
+</main>

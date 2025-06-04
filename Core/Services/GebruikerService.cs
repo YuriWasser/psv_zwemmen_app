@@ -2,6 +2,11 @@ using Core.Domain;
 using Core.Interface;
 using Core.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Core.Service;
 
@@ -9,11 +14,14 @@ public class GebruikerService
 {
     private readonly IGebruikerRepository _gebruikerRepository;
     private readonly ILogger<GebruikerService> _logger;
+    private readonly IConfiguration _config;
     
-    public GebruikerService(IGebruikerRepository gebruikerRepository, ILogger<GebruikerService> logger)
+    public GebruikerService(IGebruikerRepository gebruikerRepository, ILogger<GebruikerService> logger, IConfiguration config)
     {
         _gebruikerRepository = gebruikerRepository;
         _logger = logger;
+        _config = config;
+        
     }
     
     public List<Gebruiker> GetAll()
@@ -132,6 +140,52 @@ public class GebruikerService
             _logger.LogError(ex, "Fout bij ophalen gebruiker met gebruikersnaam {Gebruikersnaam}", gebruikersnaam);
             throw new Exception("Er is een fout opgetreden bij het ophalen van de gebruiker", ex);
         }
+    }
+    
+    public string Login(string gebruikersnaam, string wachtwoord)
+    {
+        try
+        {
+            var gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
+
+            if (gebruiker == null || gebruiker.Wachtwoord != wachtwoord)
+            {
+                throw new UnauthorizedAccessException("Ongeldige inloggegevens.");
+            }
+
+            // JWT token maken
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_config["JwtSettings:Key"]);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, gebruiker.Id.ToString()),
+                    new Claim(ClaimTypes.Name, gebruiker.Gebruikersnaam),
+                    new Claim(ClaimTypes.Email, gebruiker.Email),
+                    new Claim(ClaimTypes.Role, gebruiker.FunctieCode ?? "Gebruiker")
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(int.Parse(_config["JwtSettings:ExpiresInMinutes"])),
+                Issuer = _config["JwtSettings:Issuer"],
+                Audience = _config["JwtSettings:Audience"],
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Fout bij inloggen gebruiker {Gebruikersnaam}", gebruikersnaam);
+            throw new Exception("Inloggen mislukt", ex);
+        }
+    }
+    
+    public void Logout()
+    {
+        _logger.LogInformation("Gebruiker uitgelogd (JWT-token moet client-side verwijderd worden)");
     }
      
 }

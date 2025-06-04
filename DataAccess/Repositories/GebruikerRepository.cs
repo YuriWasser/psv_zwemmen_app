@@ -17,7 +17,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, FunctieCode FROM gebruiker";
+                string sql = "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, Functie_Code FROM gebruiker";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 using MySqlDataReader reader = command.ExecuteReader();
@@ -32,7 +32,7 @@ namespace DataAccess.Repositories
                             reader.GetString(reader.GetOrdinal("Email")),
                             reader.GetString(reader.GetOrdinal("Voornaam")),
                             reader.GetString(reader.GetOrdinal("Achternaam")),
-                            reader.GetString(reader.GetOrdinal("FunctieCode"))
+                            reader.GetString(reader.GetOrdinal("Functie_Code"))
                         )
                     );
                 }
@@ -55,7 +55,7 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql =
-                    "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, FunctieCode FROM gebruiker WHERE id = @id";
+                    "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, Functie_Code FROM gebruiker WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", gebruikerId);
@@ -71,7 +71,7 @@ namespace DataAccess.Repositories
                         reader.GetString(reader.GetOrdinal("Email")),
                         reader.GetString(reader.GetOrdinal("Voornaam")),
                         reader.GetString(reader.GetOrdinal("Achternaam")),
-                        reader.GetString(reader.GetOrdinal("FunctieCode"))
+                        reader.GetString(reader.GetOrdinal("Functie_Code"))
                     );
                 }
 
@@ -147,7 +147,7 @@ namespace DataAccess.Repositories
                             "email = @email, " +
                             "voornaam = @voornaam, " +
                             "achternaam = @achternaam, " +
-                            "functieCode = @functieCode " +
+                            "functie_Code = @functie_Code " +
                             "WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
@@ -157,7 +157,7 @@ namespace DataAccess.Repositories
                 command.Parameters.AddWithValue("@email", gebruiker.Email);
                 command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
                 command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
-                command.Parameters.AddWithValue("@functieCode", gebruiker.FunctieCode);
+                command.Parameters.AddWithValue("@functie_Code", gebruiker.FunctieCode);
 
                 int rowsAffected = command.ExecuteNonQuery();
 
@@ -200,7 +200,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, FunctieCode FROM gebruiker WHERE gebruikersnaam = @gebruikersnaam";
+                string sql = "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, Functie_Code FROM gebruiker WHERE gebruikersnaam = @gebruikersnaam";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@gebruikersnaam", gebruikersnaam);
@@ -216,7 +216,7 @@ namespace DataAccess.Repositories
                         reader.GetString(reader.GetOrdinal("Email")),
                         reader.GetString(reader.GetOrdinal("Voornaam")),
                         reader.GetString(reader.GetOrdinal("Achternaam")),
-                        reader.GetString(reader.GetOrdinal("FunctieCode"))
+                        reader.GetString(reader.GetOrdinal("Functie_Code"))
                     );
                 }
 

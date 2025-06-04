@@ -1,10 +1,12 @@
 using Core.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;
 
 namespace Presentation.Pages.Programma
 {
+[Authorize]
     public class ProgrammaModel : PageModel
     {
         private readonly ProgrammaService _programmaService;

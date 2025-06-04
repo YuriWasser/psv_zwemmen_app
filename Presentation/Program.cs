@@ -1,17 +1,23 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using DataAccess.Repositories;
 using Core.Interface;
 using Core.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Voeg Razor Pages toe
+// ✅ Razor Pages toevoegen
 builder.Services.AddRazorPages();
 
-// Haal de connection string op uit appsettings.json
+// ✅ Configuration beschikbaar maken voor JWT Settings
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+// ✅ Connection string ophalen
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Repositories met dependency injection van connection string en logger
+// ✅ Repositories met connection string en logging
 builder.Services.AddScoped<ICompetitieRepository>(provider =>
 {
     var logger = provider.GetRequiredService<ILogger<CompetitieRepository>>();
@@ -48,7 +54,7 @@ builder.Services.AddScoped<IFunctieRepository>(provider =>
     return new FunctieRepository(connectionString, logger);
 });
 
-// Voeg overige repositories toe (zonder connection string dependency)
+// ✅ Overige repositories zonder connection string
 builder.Services.AddScoped<IWedstrijdInschrijvingRepository, WedstrijdInschrijvingRepository>();
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingAfmeldenRepository, TrainingAfmeldenRepository>();
@@ -56,32 +62,45 @@ builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IClubrecordRepository, ClubrecordRepository>();
 builder.Services.AddScoped<IResultaatRepository, ResultaatRepository>();
 
-// Voeg services toe
+// ✅ Services
 builder.Services.AddScoped<CompetitieService>();
 builder.Services.AddScoped<ProgrammaService>();
 builder.Services.AddScoped<AfstandService>();
 builder.Services.AddScoped<ZwembadService>();
 builder.Services.AddScoped<GebruikerService>();
-// builder.Services.AddScoped<WedstrijdInschrijvingService>();
-// builder.Services.AddScoped<TrainingService>();
-// builder.Services.AddScoped<TrainingAfmeldingService>();
-// builder.Services.AddScoped<FeedbackService>();
-// builder.Services.AddScoped<ClubrecordService>();
 builder.Services.AddScoped<FunctieService>();
-// builder.Services.AddScoped<ResultaatService>();
+
+// ✅ AUTHENTICATIE MET COOKIES
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Gebruiker/LogIn";
+        options.LogoutPath = "/Gebruiker/LogOut";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.SlidingExpiration = true;
+    });
 
 var app = builder.Build();
 
-// Stel gedrag in voor productieomgeving
+// ✅ Exception handling en HSTS voor productie
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
+// ✅ Middleware pipeline
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
+// 👉 Authenticatie en autorisatie inschakelen
+app.UseAuthentication();
 app.UseAuthorization();
+
+// ✅ Razor Pages activeren
 app.MapRazorPages();
+
+// ✅ Applicatie starten
 app.Run();

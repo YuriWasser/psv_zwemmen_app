@@ -1,12 +1,13 @@
 using Core.Domain;
 using Core.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;
 
 namespace Presentation.Pages.Competitie;
 
-// Razor Page model voor het tonen van een lijst competities
+[Authorize]
 public class CompetitieModel : PageModel
 {
     private readonly CompetitieService _competitieService;
