@@ -17,6 +17,12 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 // ✅ Connection string ophalen
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("TrainOnly", policy =>
+        policy.RequireRole("Train"));
+});
+
 // ✅ Repositories met connection string en logging
 builder.Services.AddScoped<ICompetitieRepository>(provider =>
 {

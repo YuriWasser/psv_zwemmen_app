@@ -24,15 +24,6 @@
 .sticky {
   position: sticky;
 }
-.z-40 {
-  z-index: 40;
-}
-.z-50 {
-  z-index: 50;
-}
-.z-1050 {
-  z-index: 1050;
-}
 .order-0 {
   order: 0;
 }
@@ -216,10 +207,6 @@
 .border-collapse {
   border-collapse: collapse;
 }
-.translate-x-full {
-  --tw-translate-x: 100%;
-  translate: var(--tw-translate-x) var(--tw-translate-y);
-}
 .transform {
   transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
 }
@@ -231,9 +218,6 @@
 }
 .list-decimal {
   list-style-type: decimal;
-}
-.list-disc {
-  list-style-type: disc;
 }
 .flex-row {
   flex-direction: row;
@@ -252,9 +236,6 @@
 }
 .items-center {
   align-items: center;
-}
-.justify-between {
-  justify-content: space-between;
 }
 .justify-center {
   justify-content: center;
@@ -306,10 +287,6 @@
 .border-5 {
   border-style: var(--tw-border-style);
   border-width: 5px;
-}
-.border-b {
-  border-bottom-style: var(--tw-border-style);
-  border-bottom-width: 1px;
 }
 .bg-transparent {
   background-color: transparent;
@@ -414,11 +391,6 @@
   transition-timing-function: var(--tw-ease, ease);
   transition-duration: var(--tw-duration, 0s);
 }
-.transition-transform {
-  transition-property: transform, translate, scale, rotate;
-  transition-timing-function: var(--tw-ease, ease);
-  transition-duration: var(--tw-duration, 0s);
-}
 .duration-200 {
   --tw-duration: 200ms;
   transition-duration: 200ms;
@@ -455,21 +427,6 @@
     --tw-outline-style: none;
     outline-style: none;
   }
-}
-@property --tw-translate-x {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
-}
-@property --tw-translate-y {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
-}
-@property --tw-translate-z {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
 }
 @property --tw-rotate-x {
   syntax: "*";
@@ -641,9 +598,6 @@
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
-      --tw-translate-x: 0;
-      --tw-translate-y: 0;
-      --tw-translate-z: 0;
       --tw-rotate-x: initial;
       --tw-rotate-y: initial;
       --tw-rotate-z: initial;

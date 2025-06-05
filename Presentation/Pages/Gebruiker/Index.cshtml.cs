@@ -1,10 +1,10 @@
 using Core.Service;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Presentation.Pages.Gebruiker
 {
@@ -35,19 +35,32 @@ namespace Presentation.Pages.Gebruiker
 
             try
             {
-                // 🔐 Vraag token op via service
+                // 🔐 Token opvragen via service
                 string jwtToken = _gebruikerService.Login(Gebruikersnaam, Wachtwoord);
 
-                // ✅ Decodeer het token om claims eruit te halen
+                // ✅ Decodeer JWT-token
                 var handler = new JwtSecurityTokenHandler();
                 var token = handler.ReadJwtToken(jwtToken);
 
-                var claims = token.Claims.ToList();
+                // 🕵️‍♂️ Optioneel: claims loggen voor debug
+                foreach (var claim in token.Claims)
+                {
+                    Console.WriteLine($"Claim: {claim.Type} - {claim.Value}");
+                }
+
+                // 📋 Claims extraheren
+                var claims = token.Claims.Where(c => c.Type != ClaimTypes.Role).ToList();
+                var roles = token.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
+
+                foreach(var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                // 💾 Cookie aanmaken
+                // 🍪 Cookie aanmaken
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 return RedirectToPage("/Index");

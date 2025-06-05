@@ -7,9 +7,20 @@
 }
 
 <main>
-    <div>
-        <h1 class="text-3xl font-bold text-black-700 mb-6">Komende Competities:</h1>
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-black-700 mb-4">Komende Competities:</h1>
+        
+        @if (User.IsInRole("Train"))
+        {
+            <a asp-page="/Competitie/Toevoegen"
+               class="fixed bottom-6 right-6 bg-green-600 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-3xl hover:bg-green-700 transition duration-300"
+               title="Competitie toevoegen">
+                +
+            </a>
+        }
+    </div>
 
+    <div>
         @if (Model.Competities != null && Model.Competities.Any())
         {
             @foreach (var competitie in Model.Competities)
@@ -21,17 +32,16 @@
                             class="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6 hover:scale-105 hover:shadow-xl transform transition-all duration-300 mb-6">
                             <h2 class="text-2xl font-bold text-gray-800 mb-2">@competitie.Naam</h2>
                             <p class="text-gray-600">
-                                Startdatum: @(competitie.StartDatum.ToString("dd-MM-yyyy") ?? "Niet bekend")<br/>
-                                Einddatum: @(competitie.EindDatum.ToString("dd-MM-yyyy") ?? "Niet bekend")<br/>
-                                Locatie: @competitie.ZwembadAdres,<br/>
+                                Startdatum: @(competitie.StartDatum.ToString("dd-MM-yyyy") ?? "Niet bekend")<br />
+                                Einddatum: @(competitie.EindDatum.ToString("dd-MM-yyyy") ?? "Niet bekend")<br />
+                                Locatie: @competitie.ZwembadAdres
                             </p>
                         </div>
                     </a>
                 }
                 else
                 {
-                    <div
-                        class="max-w-6xl mx-auto bg-gray-100 rounded-2xl p-6 mb-6">
+                    <div class="max-w-6xl mx-auto bg-gray-100 rounded-2xl p-6 mb-6">
                         <h2 class="text-2xl font-bold text-gray-400 mb-2">@competitie.Naam</h2>
                         <p class="text-gray-400">Geen programma beschikbaar</p>
                     </div>

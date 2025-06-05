@@ -143,45 +143,62 @@ public class GebruikerService
     }
     
     public string Login(string gebruikersnaam, string wachtwoord)
+{
+    try
     {
-        try
+        var gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
+
+        if (gebruiker == null || gebruiker.Wachtwoord != wachtwoord)
         {
-            var gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
-
-            if (gebruiker == null || gebruiker.Wachtwoord != wachtwoord)
-            {
-                throw new UnauthorizedAccessException("Ongeldige inloggegevens.");
-            }
-
-            // JWT token maken
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config["JwtSettings:Key"]);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, gebruiker.Id.ToString()),
-                    new Claim(ClaimTypes.Name, gebruiker.Gebruikersnaam),
-                    new Claim(ClaimTypes.Email, gebruiker.Email),
-                    new Claim(ClaimTypes.Role, gebruiker.FunctieCode ?? "Gebruiker")
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(int.Parse(_config["JwtSettings:ExpiresInMinutes"])),
-                Issuer = _config["JwtSettings:Issuer"],
-                Audience = _config["JwtSettings:Audience"],
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            throw new UnauthorizedAccessException("Ongeldige inloggegevens.");
         }
-        catch (Exception ex)
+
+        // Normaliseer functiecode naar rolnaam
+        string rol = NormalizeFunctieCode(gebruiker.FunctieCode);
+
+        // JWT token maken
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_config["JwtSettings:Key"]);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            _logger.LogError(ex, "Fout bij inloggen gebruiker {Gebruikersnaam}", gebruikersnaam);
-            throw new Exception("Inloggen mislukt", ex);
-        }
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, gebruiker.Id.ToString()),
+                new Claim(ClaimTypes.Name, gebruiker.Gebruikersnaam),
+                new Claim(ClaimTypes.Email, gebruiker.Email),
+                new Claim(ClaimTypes.Role, rol)
+            }),
+            Expires = DateTime.UtcNow.AddMinutes(int.Parse(_config["JwtSettings:ExpiresInMinutes"])),
+            Issuer = _config["JwtSettings:Issuer"],
+            Audience = _config["JwtSettings:Audience"],
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
     }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Fout bij inloggen gebruiker {Gebruikersnaam}", gebruikersnaam);
+        throw new Exception("Inloggen mislukt", ex);
+    }
+}
+    
+private string NormalizeFunctieCode(string functieCode)
+{
+    if (string.IsNullOrWhiteSpace(functieCode))
+        return "Gebruiker";
+
+    return functieCode.ToUpper() switch
+    { 
+        "TRAIN" => "Train",   // Indien al goed
+        "ZWM" => "Zwemmer",
+        "OZWM" => "OudZwemmer",
+        _ => "Gebruiker"
+    };
+}
     
     public void Logout()
     {

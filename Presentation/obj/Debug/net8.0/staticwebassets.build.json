@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ubIgGa979k7hCsprp2OSgxTGRVuHdzjrMwaq+wjwS48=",
+  "Hash": "nJ3esQVusBpM/JQIHk+pQlvxRXvY0EMka6nhsnj0UbM=",
   "Source": "Presentation",
   "BasePath": "_content/Presentation",
   "Mode": "Default",
@@ -94,8 +94,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "f0mhacoxz3",
-      "Integrity": "UbyEtcfxiJ32FiWBC2gT3yPvrR8CojDZh6zbIyd32Uw=",
+      "Fingerprint": "1fnt73aave",
+      "Integrity": "M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/output.css"
@@ -1487,6 +1487,51 @@
       ]
     },
     {
+      "Route": "css/output.1fnt73aave.css",
+      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11402"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 05 Jun 2025 11:40:04 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "1fnt73aave"
+        },
+        {
+          "Name": "label",
+          "Value": "css/output.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU="
+        }
+      ]
+    },
+    {
       "Route": "css/output.css",
       "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
       "Selectors": [],
@@ -1497,7 +1542,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "12292"
+          "Value": "11402"
         },
         {
           "Name": "Content-Type",
@@ -1505,11 +1550,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"UbyEtcfxiJ32FiWBC2gT3yPvrR8CojDZh6zbIyd32Uw=\""
+          "Value": "\"M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 09:26:41 GMT"
+          "Value": "Thu, 05 Jun 2025 11:40:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1519,52 +1564,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-UbyEtcfxiJ32FiWBC2gT3yPvrR8CojDZh6zbIyd32Uw="
-        }
-      ]
-    },
-    {
-      "Route": "css/output.f0mhacoxz3.css",
-      "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "12292"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"UbyEtcfxiJ32FiWBC2gT3yPvrR8CojDZh6zbIyd32Uw=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 04 Jun 2025 09:26:41 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "f0mhacoxz3"
-        },
-        {
-          "Name": "label",
-          "Value": "css/output.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-UbyEtcfxiJ32FiWBC2gT3yPvrR8CojDZh6zbIyd32Uw="
+          "Value": "sha256-M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU="
         }
       ]
     },
