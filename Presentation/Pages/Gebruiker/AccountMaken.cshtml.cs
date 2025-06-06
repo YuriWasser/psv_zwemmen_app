@@ -1,9 +1,11 @@
+using Core.Domain;
 using Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace Presentation.Pages.Gebruiker
 {
@@ -50,7 +52,6 @@ namespace Presentation.Pages.Gebruiker
         {
             if (!ModelState.IsValid)
             {
-                // Bij fout opnieuw functies ophalen voor dropdown
                 var functies = _functieService.GetAll();
                 FunctiesSelectList = new SelectList(functies, "Code", "Beschrijving");
                 return Page();
@@ -58,10 +59,14 @@ namespace Presentation.Pages.Gebruiker
 
             try
             {
+                // Maak dummy gebruiker aan voor hashing
+                var hasher = new PasswordHasher<object>();
+                string hashedPassword = hasher.HashPassword(null, Wachtwoord);
+
                 _gebruikerService.Add(
                     0, // ID is auto increment
                     Gebruikersnaam,
-                    Wachtwoord,
+                    hashedPassword, // sla hashed password op!
                     Email,
                     Voornaam,
                     Achternaam,

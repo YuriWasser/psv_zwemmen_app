@@ -57,7 +57,12 @@ namespace Presentation.Pages.Gebruiker
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
 
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var identity = new ClaimsIdentity(
+                    claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    ClaimTypes.Name,
+                    ClaimTypes.Role
+                );
                 var principal = new ClaimsPrincipal(identity);
 
                 // 🍪 Cookie aanmaken

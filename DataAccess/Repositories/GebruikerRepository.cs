@@ -106,7 +106,7 @@ namespace DataAccess.Repositories
                 command.Parameters.AddWithValue("@email", gebruiker.Email);
                 command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
                 command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
-                command.Parameters.AddWithValue("@functie_code", gebruiker.FunctieCode);
+                command.Parameters.AddWithValue("@functie_code", gebruiker.Functie_Code);
 
                 int rowsAffected = command.ExecuteNonQuery();
 
@@ -122,7 +122,7 @@ namespace DataAccess.Repositories
                         gebruiker.Email,
                         gebruiker.Voornaam,
                         gebruiker.Achternaam,
-                        gebruiker.FunctieCode
+                        gebruiker.Functie_Code
                     );
                 }
                 return null;
@@ -157,7 +157,7 @@ namespace DataAccess.Repositories
                 command.Parameters.AddWithValue("@email", gebruiker.Email);
                 command.Parameters.AddWithValue("@voornaam", gebruiker.Voornaam);
                 command.Parameters.AddWithValue("@achternaam", gebruiker.Achternaam);
-                command.Parameters.AddWithValue("@functie_Code", gebruiker.FunctieCode);
+                command.Parameters.AddWithValue("@functie_Code", gebruiker.Functie_Code);
 
                 int rowsAffected = command.ExecuteNonQuery();
 
@@ -233,5 +233,6 @@ namespace DataAccess.Repositories
                 throw new DatabaseException($"Er is een databasefout opgetreden bij het ophalen van gebruiker met gebruikersnaam {gebruikersnaam}", ex);
             }
         }
+        
     }
 }

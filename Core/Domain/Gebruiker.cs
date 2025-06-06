@@ -11,7 +11,7 @@ public class Gebruiker
     public string Email { get; private set; } 
     public string Voornaam { get; private set; }
     public string Achternaam { get; private set; }
-    public string FunctieCode { get; private set; }
+    public string Functie_Code { get; private set; }
 
 
     public Gebruiker(int id, string gebruikersnaam, string wachtwoord, string email, string voornaam, string achternaam,
@@ -23,6 +23,6 @@ public class Gebruiker
         Email = email;
         Voornaam = voornaam;
         Achternaam = achternaam;
-        FunctieCode = functieCode;
+        Functie_Code = functieCode;
     }
 }

@@ -94,14 +94,15 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "INSERT INTO competitie (naam, start_datum, eind_datum, zwembad_id) " +
-                             "VALUES (@naam, @start_datum, @eind_datum, @zwembad_id)";
+                string sql = "INSERT INTO competitie (naam, start_datum, eind_datum, zwembad_id, programma_id) " +
+                             "VALUES (@naam, @start_datum, @eind_datum, @zwembad_id, @programma_id)";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@naam", competitie.Naam);
                 command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
                 command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
                 command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
+                command.Parameters.AddWithValue("@programma_id", competitie.ProgrammaId);
 
                 int rowsAffected = command.ExecuteNonQuery();
 

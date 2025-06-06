@@ -6,7 +6,7 @@ using Core.Domain;
 
 namespace Presentation.Pages.Competitie
 {
-    [Authorize(Roles = "TrainOnly")]
+    [Authorize(Roles = "Trainer")]
     public class ToevoegenModel : PageModel
     {
         private readonly CompetitieService _competitieService;

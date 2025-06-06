@@ -5,6 +5,8 @@ using System.Text;
 using DataAccess.Repositories;
 using Core.Interface;
 using Core.Service;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +86,24 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/Gebruiker/LogOut";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
+
+        // 👇 HIER DIT TOEVOEGEN
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnSigningIn = context =>
+            {
+                var identity = (ClaimsIdentity)context.Principal.Identity;
+
+                // Zorg dat de 'role' claim wordt gezien als rol
+                var roleClaims = identity.FindAll("role").ToList();
+                foreach (var claim in roleClaims)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, claim.Value));
+                }
+
+                return Task.CompletedTask;
+            }
+        };
     });
 
 var app = builder.Build();
