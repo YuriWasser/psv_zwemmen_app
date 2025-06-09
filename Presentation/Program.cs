@@ -8,6 +8,10 @@ using Core.Service;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 
+using Microsoft.AspNetCore.Identity; // 👈 Bovenaan je bestand zetten als dat nog niet is toegevoegd
+using Core.Domain;                   // 👈 Voor toegang tot Gebruiker
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ✅ Razor Pages toevoegen
@@ -61,14 +65,6 @@ builder.Services.AddScoped<IFunctieRepository>(provider =>
     var logger = provider.GetRequiredService<ILogger<FunctieRepository>>();
     return new FunctieRepository(connectionString, logger);
 });
-
-// ✅ Overige repositories zonder connection string
-builder.Services.AddScoped<IWedstrijdInschrijvingRepository, WedstrijdInschrijvingRepository>();
-builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
-builder.Services.AddScoped<ITrainingAfmeldenRepository, TrainingAfmeldenRepository>();
-builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
-builder.Services.AddScoped<IClubrecordRepository, ClubrecordRepository>();
-builder.Services.AddScoped<IResultaatRepository, ResultaatRepository>();
 
 // ✅ Services
 builder.Services.AddScoped<CompetitieService>();

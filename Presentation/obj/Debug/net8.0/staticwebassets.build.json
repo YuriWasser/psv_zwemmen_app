@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Pn5Xte3cupsUZwmRhJVKz/wDzxvZqWvB11bms3FrkcQ=",
+  "Hash": "Hc0K15DO+lacRP2mob1+OanXIMUoDz0rMG6XZA+jqQ8=",
   "Source": "Presentation",
   "BasePath": "_content/Presentation",
   "Mode": "Default",
@@ -94,8 +94,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "6bf7o5r4h0",
-      "Integrity": "vrrt+1Y9DbyjH+nNl5Vyzt/zXjUMwfCLKpD+J1JdFbs=",
+      "Fingerprint": "1fnt73aave",
+      "Integrity": "M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/output.css"
@@ -1487,7 +1487,7 @@
       ]
     },
     {
-      "Route": "css/output.6bf7o5r4h0.css",
+      "Route": "css/output.1fnt73aave.css",
       "AssetFile": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/wwwroot/css/output.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1497,7 +1497,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "11442"
+          "Value": "11402"
         },
         {
           "Name": "Content-Type",
@@ -1505,11 +1505,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"vrrt+1Y9DbyjH+nNl5Vyzt/zXjUMwfCLKpD+J1JdFbs=\""
+          "Value": "\"M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 06 Jun 2025 07:37:59 GMT"
+          "Value": "Mon, 09 Jun 2025 08:39:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1519,7 +1519,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "6bf7o5r4h0"
+          "Value": "1fnt73aave"
         },
         {
           "Name": "label",
@@ -1527,7 +1527,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-vrrt+1Y9DbyjH+nNl5Vyzt/zXjUMwfCLKpD+J1JdFbs="
+          "Value": "sha256-M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU="
         }
       ]
     },
@@ -1542,7 +1542,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "11442"
+          "Value": "11402"
         },
         {
           "Name": "Content-Type",
@@ -1550,11 +1550,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"vrrt+1Y9DbyjH+nNl5Vyzt/zXjUMwfCLKpD+J1JdFbs=\""
+          "Value": "\"M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 06 Jun 2025 07:37:59 GMT"
+          "Value": "Mon, 09 Jun 2025 08:39:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1564,7 +1564,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-vrrt+1Y9DbyjH+nNl5Vyzt/zXjUMwfCLKpD+J1JdFbs="
+          "Value": "sha256-M3F7vV/vu7vEtgqY9b44dC/OC7LItVp/bitFnm8VKQU="
         }
       ]
     },

@@ -219,9 +219,6 @@
 .list-decimal {
   list-style-type: decimal;
 }
-.list-disc {
-  list-style-type: disc;
-}
 .flex-row {
   flex-direction: row;
 }

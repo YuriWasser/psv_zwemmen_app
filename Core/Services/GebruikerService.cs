@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
+using Core.Dto;
 
 namespace Core.Service;
 
@@ -73,10 +73,11 @@ public class GebruikerService
     {
         try
         {
-            _logger.LogInformation("Proberen nieuwe gebruiker toe te voegen: {Gebruikersnaam}, {Email}", gebruikersnaam,
-                email);
+            _logger.LogInformation("Proberen nieuwe gebruiker toe te voegen: {Gebruikersnaam}, {Email}", gebruikersnaam, email);
+            
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(wachtwoord);
 
-            var newGebruiker = new Gebruiker(id, gebruikersnaam, wachtwoord, email, voornaam, achternaam, functieCode);
+            var newGebruiker = new Gebruiker(id, gebruikersnaam, hashedPassword, email, voornaam, achternaam, functieCode);
             var addedGebruiker = _gebruikerRepository.Add(newGebruiker);
 
             if (addedGebruiker == null)
@@ -132,12 +133,12 @@ public class GebruikerService
         try
         {
             var gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
-            if (gebruiker != null)
+            if (gebruiker == null)
             {
-                return gebruiker;
+                throw new Exception("Gebruiker niet gevonden");
             }
 
-            throw new Exception("Gebruiker niet gevonden");
+            return gebruiker;
         }
         catch (Exception ex)
         {
@@ -146,60 +147,75 @@ public class GebruikerService
         }
     }
 
-    public string Login(string gebruikersnaam, string wachtwoord)
+    public LoginDto Login(string gebruikersnaam, string wachtwoord, string jwtKey, string jwtIssuer)
     {
         try
         {
-            var gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
+            if (string.IsNullOrWhiteSpace(gebruikersnaam))
+                throw new InvalidDataException($"Gebruikersnaam mag niet leeg zijn: {gebruikersnaam}");
+
+            if (string.IsNullOrWhiteSpace(wachtwoord))
+                throw new InvalidDataException($"Wachtwoord mag niet leeg zijn: {wachtwoord}");
+
+            if (string.IsNullOrWhiteSpace(jwtKey))
+                throw new InvalidDataException($"JWT Key mag niet leeg zijn: {jwtKey}");
+
+            if (string.IsNullOrWhiteSpace(jwtIssuer))
+                throw new InvalidDataException($"JWT Issuer mag niet leeg zijn: {jwtIssuer}");
+
+            Gebruiker? gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
 
             if (gebruiker == null)
+                throw new GebruikerNotFoundException("Ongeldige gebruikersnaam of wachtwoord");
+
+            if (!PasswordHasher.VerifyPassword(gebruiker.Wachtwoord, wachtwoord))
+                throw new GebruikerNotFoundException("Ongeldige gebruikersnaam of wachtwoord");
+
+            var claims = new[]
             {
-                throw new UnauthorizedAccessException("Ongeldige inloggegevens.");
-            }
-
-            var hasher = new PasswordHasher<Gebruiker>();
-
-            var result = hasher.VerifyHashedPassword(gebruiker, gebruiker.Wachtwoord, wachtwoord);
-
-            if (result != PasswordVerificationResult.Success)
-            {
-                throw new UnauthorizedAccessException("Ongeldige inloggegevens.");
-            }
-
-            // Normaliseer functiecode naar rolnaam
-            System.Console.WriteLine($"Functie code voor gebruiker {gebruikersnaam}: {gebruiker.Functie_Code}");
-
-            string rol = NormalizeFunctieCode(gebruiker.Functie_Code);
-
-            System.Console.WriteLine($"Rol voor gebruiker {gebruikersnaam}: {rol}");
-
-            // JWT token maken
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config["JwtSettings:Key"]);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, gebruiker.Id.ToString()),
-                    new Claim(ClaimTypes.Name, gebruiker.Gebruikersnaam),
-                    new Claim(ClaimTypes.Email, gebruiker.Email),
-                    new Claim(ClaimTypes.Role, rol)
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(int.Parse(_config["JwtSettings:ExpiresInMinutes"])),
-                Issuer = _config["JwtSettings:Issuer"],
-                Audience = _config["JwtSettings:Audience"],
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                new Claim(JwtRegisteredClaimNames.Sub, gebruiker.Gebruikersnaam),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("GebruikerId", gebruiker.Id.ToString()),
+                new Claim("Gebruikersnaam", gebruiker.Gebruikersnaam),
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: jwtIssuer,
+                audience: null,
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(7),
+                signingCredentials: creds
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            LoginDto dto = new LoginDto(
+                gebruiker.Id,
+                gebruiker.Gebruikersnaam,
+                gebruiker.Email,
+                gebruiker.Voornaam,
+                gebruiker.Achternaam,
+                NormalizeFunctieCode(gebruiker.Functie_Code),
+                tokenString
+            );
+            return dto;
+        }
+        catch (GebruikerNotFoundException ex)
+        {
+            _logger.LogWarning(ex, $"Login mislukt voor gebruiker: {gebruikersnaam}");
+            throw;
+        }
+        catch (InvalidDataException ex)
+        {
+            _logger.LogError(ex, $"Ongeldige argumenten bij inloggen gebruiker: {gebruikersnaam}");
+            throw;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Fout bij inloggen gebruiker {Gebruikersnaam}", gebruikersnaam);
-            throw new Exception("Inloggen mislukt", ex);
+            _logger.LogError(ex, $"Fout bij inloggen gebruiker: {gebruikersnaam}");
+            throw;
         }
     }
 

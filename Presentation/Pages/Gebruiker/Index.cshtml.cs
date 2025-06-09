@@ -1,20 +1,27 @@
 using Core.Service;
+using Core.Dto;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Linq;
+using System;
 
 namespace Presentation.Pages.Gebruiker
 {
     public class LogInModel : PageModel
     {
         private readonly GebruikerService _gebruikerService;
+        private readonly IConfiguration _config;
 
-        public LogInModel(GebruikerService gebruikerService)
+        public LogInModel(GebruikerService gebruikerService, IConfiguration config)
         {
             _gebruikerService = gebruikerService;
+            _config = config;
         }
 
         [BindProperty]
@@ -35,24 +42,27 @@ namespace Presentation.Pages.Gebruiker
 
             try
             {
-                // 🔐 Token opvragen via service
-                string jwtToken = _gebruikerService.Login(Gebruikersnaam, Wachtwoord);
+                string jwtKey = _config["JwtSettings:Key"];
+                string jwtIssuer = _config["JwtSettings:Issuer"];
 
-                // ✅ Decodeer JWT-token
+                // Roep service aan, krijg LoginDto terug
+                LoginDto loginDto = _gebruikerService.Login(Gebruikersnaam, Wachtwoord, jwtKey, jwtIssuer);
+                string jwtToken = loginDto.TokenString;
+
                 var handler = new JwtSecurityTokenHandler();
                 var token = handler.ReadJwtToken(jwtToken);
 
-                // 🕵️‍♂️ Optioneel: claims loggen voor debug
+                // Log claims (optioneel)
                 foreach (var claim in token.Claims)
                 {
                     Console.WriteLine($"Claim: {claim.Type} - {claim.Value}");
                 }
 
-                // 📋 Claims extraheren
+                // Claims extraheren
                 var claims = token.Claims.Where(c => c.Type != ClaimTypes.Role).ToList();
                 var roles = token.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
 
-                foreach(var role in roles)
+                foreach (var role in roles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
@@ -65,7 +75,7 @@ namespace Presentation.Pages.Gebruiker
                 );
                 var principal = new ClaimsPrincipal(identity);
 
-                // 🍪 Cookie aanmaken
+                // Cookie aanmaken
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 return RedirectToPage("/Index");
@@ -78,6 +88,7 @@ namespace Presentation.Pages.Gebruiker
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Er is een fout opgetreden tijdens het inloggen.");
+                // Optioneel: _logger.LogError(ex, "Inlogfout");
                 return Page();
             }
         }

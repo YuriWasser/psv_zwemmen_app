@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "RNzCYnQnW2Q=",
+  "dgSpecHash": "SUofXl8CUrE=",
   "success": true,
   "projectFilePath": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Core/Core.csproj",
   "expectedPackageFiles": [
     "/Users/yuriwasser/.nuget/packages/azure.core/1.25.0/azure.core.1.25.0.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/azure.identity/1.7.0/azure.identity.1.7.0.nupkg.sha512",
+    "/Users/yuriwasser/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/microsoft.aspnetcore.spaservices.extensions/6.0.1/microsoft.aspnetcore.spaservices.extensions.6.0.1.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",

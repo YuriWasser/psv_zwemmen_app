@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Domain;
+
 public class Gebruiker
 {
     public int Id { get; private set; }
-    public string Gebruikersnaam { get; private set; } 
+    public string Gebruikersnaam { get; private set; }
     public string Wachtwoord { get; private set; }
-    public string Email { get; private set; } 
+    public string Email { get; private set; }
     public string Voornaam { get; private set; }
     public string Achternaam { get; private set; }
     public string Functie_Code { get; private set; }
@@ -24,5 +25,10 @@ public class Gebruiker
         Voornaam = voornaam;
         Achternaam = achternaam;
         Functie_Code = functieCode;
+    }
+
+    public Gebruiker()
+    {
+        
     }
 }

@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "M0uNRvGa5bM=",
+  "dgSpecHash": "C8k8US25fN4=",
   "success": true,
   "projectFilePath": "/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/TestLayer/TestLayer.csproj",
   "expectedPackageFiles": [
     "/Users/yuriwasser/.nuget/packages/azure.core/1.25.0/azure.core.1.25.0.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/azure.identity/1.7.0/azure.identity.1.7.0.nupkg.sha512",
+    "/Users/yuriwasser/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/castle.core/5.1.1/castle.core.5.1.1.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/coverlet.collector/6.0.0/coverlet.collector.6.0.0.nupkg.sha512",
     "/Users/yuriwasser/.nuget/packages/microsoft.aspnetcore.spaservices.extensions/6.0.1/microsoft.aspnetcore.spaservices.extensions.6.0.1.nupkg.sha512",
