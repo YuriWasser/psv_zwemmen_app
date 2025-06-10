@@ -6,9 +6,9 @@ namespace Core.Domain
 {
     public class TrainingAfmelden
     {
-        public int Id { get; set; }
-        public int GebruikerId { get; set; }
-        public int TrainingId { get; set; }
+        public int Id { get; private set; }
+        public int GebruikerId { get; private set; }
+        public int TrainingId { get; private set; }
 
         public TrainingAfmelden(int id, int gebruikerId, int trainingId)
         {

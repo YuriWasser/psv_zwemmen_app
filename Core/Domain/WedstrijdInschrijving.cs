@@ -6,11 +6,11 @@ namespace Core.Domain;
 
 public class WedstrijdInschrijving
 {
-        public int Id { get; set; }
-        public int GebruikerId { get; set; }
-        public int ProgrammaId { get; set; }
-        public int AfstandId { get; set; }
-        public DateTime InschrijfDatum { get; set; }
+        public int Id { get; private set; }
+        public int GebruikerId { get; private set; }
+        public int ProgrammaId { get; private set; }
+        public int AfstandId { get; private set; }
+        public DateTime InschrijfDatum { get; private set; }
 
         public WedstrijdInschrijving(int id, int gebruikerId, int programmaId, int afstandId, DateTime inschrijfDatum)
         {

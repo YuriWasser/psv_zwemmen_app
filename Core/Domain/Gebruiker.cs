@@ -26,9 +26,4 @@ public class Gebruiker
         Achternaam = achternaam;
         Functie_Code = functieCode;
     }
-
-    public Gebruiker()
-    {
-        
-    }
 }

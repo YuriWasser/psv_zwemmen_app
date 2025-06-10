@@ -6,7 +6,7 @@ namespace Core.Interface
     {
         public List<WedstrijdInschrijving> GetAll();
         public WedstrijdInschrijving GetById(int wedstrijdInschrijvingId);
-        public int Add(WedstrijdInschrijving wedstrijdInschrijving);
+        public WedstrijdInschrijving Add(WedstrijdInschrijving wedstrijdInschrijving);
         public bool Update(WedstrijdInschrijving wedstrijdInschrijving);
         public bool Delete(WedstrijdInschrijving wedstrijdInschrijving);
     }

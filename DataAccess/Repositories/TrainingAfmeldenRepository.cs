@@ -1,119 +1,169 @@
 using Core.Domain;
 using Core.Interface;
 using MySqlConnector;
+using Microsoft.Extensions.Logging;
+using Core.Exceptions;
 
 namespace DataAccess.Repositories
 {
-    public class TrainingAfmeldenRepository : ITrainingAfmeldenRepository
+    public class TrainingAfmeldenRepository(string connectionString, ILogger<TrainingAfmeldenRepository> logger)
+        : ITrainingAfmeldenRepository
     {
-        private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-
         public List<TrainingAfmelden> GetAll()
         {
-            List<TrainingAfmelden> trainingAfmelden = new List<TrainingAfmelden>();
-            
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-            
-            string sql = "SELECT * FROM trainingAfmelden";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                trainingAfmelden.Add(
-                    new TrainingAfmelden(
-                        (int)reader["id"],
-                        (int)reader["gebruikerId"],
-                        (int)reader["trainingId"]
-                    )
-                );
-            }
+                List<TrainingAfmelden> trainingAfmelden = new List<TrainingAfmelden>();
 
-            return trainingAfmelden;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT id, gebruikerId, trainingId FROM trainingAfmelden";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    trainingAfmelden.Add(
+                        new TrainingAfmelden(
+                            reader.GetInt32(reader.GetOrdinal("id")),
+                            reader.GetInt32(reader.GetOrdinal("gebruikerId")),
+                            reader.GetInt32(reader.GetOrdinal("trainingId"))
+                        )
+                    );
+                }
+
+                return trainingAfmelden;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij ophalen van trainingAfmelden.");
+                throw new DatabaseException("Kon trainingAfmelden niet ophalen.", ex);
+            }
         }
 
         public TrainingAfmelden GetById(int trainingAfmeldenId)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open(); 
-            
-            string sql = "SELECT * FROM trainingAfmelden WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", trainingAfmeldenId);
-            
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            if (reader.Read())
+            try
             {
-                return new TrainingAfmelden(
-                    (int)reader["id"],
-                    (int)reader["gebruikerId"],
-                    (int)reader["trainingId"]
-                );
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return null;
+                string sql = "SELECT id, gebruikerId, trainingId FROM trainingAfmelden WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", trainingAfmeldenId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new TrainingAfmelden(
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("gebruikerId")),
+                        reader.GetInt32(reader.GetOrdinal("trainingId"))
+                    );
+                }
+                throw new TrainingAfmeldenNotFoundException("TrainingAfmelden niet gevonden.");
+            }
+            catch (TrainingAfmeldenNotFoundException ex)
+            {
+                logger.LogError(ex,"TrainingAfmelden fetching by id");
+                throw; 
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, $"Fout bij ophalen van trainingAfmelden met ID {trainingAfmeldenId}.");
+                throw new DatabaseException($"Kon trainingAfmelden met ID {trainingAfmeldenId} niet ophalen.", ex);
+            }
         }
 
-        public int Add(TrainingAfmelden trainingAfmelden)
+        public TrainingAfmelden Add(TrainingAfmelden trainingAfmelden)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "INSERT INTO trainingAfmelden (gebruikerId, trainingId) VALUES (@gebruikerId, @trainingId)";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@gebruikerId", trainingAfmelden.GebruikerId);
-            command.Parameters.AddWithValue("@trainingId", trainingAfmelden.TrainingId);
-            
-            int rowsAffected = command.ExecuteNonQuery();
-
-            if (rowsAffected > 0)
+            try
             {
-                string selectIdSql = "SELECT LAST_INSERT_ID()";
-                using MySqlCommand selectIdCommand = new MySqlCommand(sql, connection);
-                int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                return newId;
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return 0;
+                string sql = "INSERT INTO trainingAfmelden (gebruikerId, trainingId) VALUES (@gebruikerId, @trainingId)";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", trainingAfmelden.GebruikerId);
+                command.Parameters.AddWithValue("@trainingId", trainingAfmelden.TrainingId);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    string selectIdSql = "SELECT LAST_INSERT_ID()";
+                    using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
+                    int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
+
+                    return new TrainingAfmelden(
+                        newId, 
+                        trainingAfmelden.GebruikerId, 
+                        trainingAfmelden.TrainingId);
+                }
+
+                return null;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij toevoegen van trainingAfmelden.");
+                throw new DatabaseException("Kon trainingAfmelden niet toevoegen.", ex);
+            }
         }
 
         public bool Update(TrainingAfmelden trainingAfmelden)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "UPDATE trainingAfmelden SET" +
-                         "gebruikerId = @gebruikerId," +
-                         "trainingId = @trainingId" +
-                         "WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@gebruikerId", trainingAfmelden.GebruikerId);
-            command.Parameters.AddWithValue("@trainingId", trainingAfmelden.TrainingId);
-            
-            int rowsAffected = command.ExecuteNonQuery();
+                string sql = "UPDATE trainingAfmelden SET " +
+                             "gebruikerId = @gebruikerId, " +
+                             "trainingId = @trainingId " +
+                             "WHERE id = @id";
 
-            return rowsAffected > 0;
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", trainingAfmelden.GebruikerId);
+                command.Parameters.AddWithValue("@trainingId", trainingAfmelden.TrainingId);
+                command.Parameters.AddWithValue("@id", trainingAfmelden.Id);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, $"Fout bij updaten van trainingAfmelden met ID {trainingAfmelden.Id}.");
+                throw new DatabaseException($"Kon trainingAfmelden met ID {trainingAfmelden.Id} niet bijwerken.", ex);
+            }
         }
 
         public bool Delete(TrainingAfmelden trainingAfmelden)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "DELETE FROM trainingAfmelden WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", trainingAfmelden.Id);
-            
-            int rowsAffected = command.ExecuteNonQuery();
+                string sql = "DELETE FROM trainingAfmelden WHERE id = @id";
 
-            return rowsAffected > 0;
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", trainingAfmelden.Id);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, $"Fout bij verwijderen van trainingAfmelden met ID {trainingAfmelden.Id}.");
+                throw new DatabaseException($"Kon trainingAfmelden met ID {trainingAfmelden.Id} niet verwijderen.", ex);
+            }
         }
     }
 }

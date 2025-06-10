@@ -6,7 +6,7 @@ namespace Core.Interface
     {
         public List<Clubrecord> GetAll();
         public Clubrecord GetByID(int clubrecordId);
-        public int Add(Clubrecord clubrecord);
+        public Clubrecord Add(Clubrecord clubrecord);
         public bool Update(Clubrecord clubrecord);
         public bool Delete(Clubrecord clubrecord);
     }

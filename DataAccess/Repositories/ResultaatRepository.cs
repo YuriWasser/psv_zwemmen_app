@@ -1,135 +1,189 @@
 using Core.Domain;
 using Core.Interface;
 using MySqlConnector;
+using Microsoft.Extensions.Logging;
+using Core.Exceptions;
 
 namespace DataAccess.Repositories
 {
-    public class ResultaatRepository : IResultaatRepository
+    public class ResultaatRepository(string connectionString, ILogger<ResultaatRepository> logger)
+        : IResultaatRepository
     {
-        private readonly DatabaseConnection _dbConnection = new DatabaseConnection();
-
         public List<Resultaat> GetAll()
         {
-            List<Resultaat> resultaten = new List<Resultaat>();
-            
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-            
-            string sql = "SELECT * FROM resultaat";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                resultaten.Add(
-                    new Resultaat(
-                        (int)reader["id"],
-                        (int)reader["gebruikerId"],
-                        (int)reader["programmaId"],
-                        (int)reader["afstandId"],
-                        (TimeSpan)reader["tijd"],
-                        (DateTime)reader["datum"]
-                    )
-                );
-            }
+                List<Resultaat> resultaten = new List<Resultaat>();
 
-            return resultaten;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "SELECT id, gebruikerId, programmaId, afstandId, tijd, datum FROM resultaat";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    resultaten.Add(
+                        new Resultaat(
+                            reader.GetInt32(reader.GetOrdinal("id")),
+                            reader.GetInt32(reader.GetOrdinal("gebruikerId")),
+                            reader.GetInt32(reader.GetOrdinal("programmaId")),
+                            reader.GetInt32(reader.GetOrdinal("afstandId")),
+                            reader.GetTimeSpan(reader.GetOrdinal("tijd")),
+                            reader.GetDateTime(reader.GetOrdinal("datum"))
+                        )
+                    );
+                }
+
+                return resultaten;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij ophalen van resultaten.");
+                throw new DatabaseException("Kon resultaten niet ophalen.", ex);
+            }
         }
 
         public Resultaat GetById(int resultaatId)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-            
-            string sql = "SELECT * FROM resultaat WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", resultaatId);
-            
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            if (reader.Read())
+            try
             {
-                return new Resultaat(
-                    (int)reader["id"],
-                    (int)reader["gebruikerId"],
-                    (int)reader["programmaId"],
-                    (int)reader["afstandId"],
-                    (TimeSpan)reader["tijd"],
-                    (DateTime)reader["datum"]
-                );
-            }
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return null;
+                string sql = "SELECT id, gebruikerId, programmaId, afstandId, tijd, datum FROM resultaat WHERE id = @id";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", resultaatId);
+
+                using MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Resultaat(
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("gebruikerId")),
+                        reader.GetInt32(reader.GetOrdinal("programmaId")),
+                        reader.GetInt32(reader.GetOrdinal("afstandId")),
+                        reader.GetTimeSpan(reader.GetOrdinal("tijd")),
+                        reader.GetDateTime(reader.GetOrdinal("datum"))
+                    );
+                }
+
+                throw new ResultaatNotFoundException("Resultaat niet gevonden.");
+            }
+            catch (ResultaatNotFoundException ex)
+            {
+                logger.LogError(ex, $"Resultaat met ID {resultaatId} niet gevonden.");
+                throw;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, $"Fout bij ophalen van resultaat met ID {resultaatId}.");
+                throw new DatabaseException($"Kon resultaat met ID {resultaatId} niet ophalen.", ex);
+            }
         }
 
-        public int Add(Resultaat resultaat)
+        public Resultaat Add(Resultaat resultaat)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
-
-            string sql = "INSERT INTO resultaat (gebruikerId, programmaId, afstandId, tijd, datum) VALUES (@gebruikerId, @programmaId, @AfstandId, @tijd, @datum)";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@gebruikerId", resultaat.GebruikerId);
-            command.Parameters.AddWithValue("@programmaId", resultaat.ProgrammaId);
-            command.Parameters.AddWithValue("@afstandId", resultaat.AfstandId);
-            command.Parameters.AddWithValue("@tijd", resultaat.Tijd);
-            command.Parameters.AddWithValue("@datum", resultaat.Datum);
-            
-            int rowsAffected = command.ExecuteNonQuery();
-
-            if (rowsAffected > 0)
+            try
             {
-                string selectIdSql = "SELECT LAST_INSERT_ID()";
-                using MySqlCommand selectIdCommand = new MySqlCommand(sql, connection);
-                int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
-                return newId;
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql =
+                    "INSERT INTO resultaat (gebruikerId, programmaId, afstandId, tijd, datum) " +
+                    "VALUES (@gebruikerId, @programmaId, @afstandId, @tijd, @datum)";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", resultaat.GebruikerId);
+                command.Parameters.AddWithValue("@programmaId", resultaat.ProgrammaId);
+                command.Parameters.AddWithValue("@afstandId", resultaat.AfstandId);
+                command.Parameters.AddWithValue("@tijd", resultaat.Tijd);
+                command.Parameters.AddWithValue("@datum", resultaat.Datum);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                if (rowsAffected > 0)
+                {
+                    string selectIdSql = "SELECT LAST_INSERT_ID()";
+                    using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
+                    int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
+                    return new Resultaat(
+                        newId, 
+                        resultaat.GebruikerId, 
+                        resultaat.ProgrammaId, 
+                        resultaat.AfstandId, 
+                        resultaat.Tijd, 
+                        resultaat.Datum);
+                }
+
+                return null;
             }
-
-            return 0;
-
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij toevoegen van resultaat.");
+                throw new DatabaseException("Kon resultaat niet toevoegen.", ex);
+            }
         }
 
         public bool Update(Resultaat resultaat)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "UPDATE resultaat SET" +
-                         "gebruikerId = @gebruikerId," +
-                         "programmaId = @programmaId," +
-                         "afstandId = @afstandId," +
-                         "tijd = @tijd," +
-                         "datum = @datum" +
-                         "WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@gebruikerId", resultaat.GebruikerId);
-            command.Parameters.AddWithValue("@programmaId", resultaat.ProgrammaId);
-            command.Parameters.AddWithValue("@afstandId", resultaat.AfstandId);
-            command.Parameters.AddWithValue("@tijd", resultaat.Tijd);
-            command.Parameters.AddWithValue("@datum", resultaat.Datum);
-            
-            int rowsAffected = command.ExecuteNonQuery();
+                string sql = "UPDATE resultaat SET " +
+                             "gebruikerId = @gebruikerId, " +
+                             "programmaId = @programmaId, " +
+                             "afstandId = @afstandId, " +
+                             "tijd = @tijd, " +
+                             "datum = @datum " +
+                             "WHERE id = @id";
 
-            return rowsAffected > 0;
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", resultaat.GebruikerId);
+                command.Parameters.AddWithValue("@programmaId", resultaat.ProgrammaId);
+                command.Parameters.AddWithValue("@afstandId", resultaat.AfstandId);
+                command.Parameters.AddWithValue("@tijd", resultaat.Tijd);
+                command.Parameters.AddWithValue("@datum", resultaat.Datum);
+                command.Parameters.AddWithValue("@id", resultaat.Id);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, $"Fout bij bijwerken van resultaat met ID {resultaat.Id}.");
+                throw new DatabaseException($"Kon resultaat met ID {resultaat.Id} niet bijwerken.", ex);
+            }
         }
 
         public bool Delete(Resultaat resultaat)
         {
-            using MySqlConnection connection = _dbConnection.GetConnection();
-            connection.Open();
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            string sql = "DELETE FROM resultaat WHERE id = @id";
-            
-            using MySqlCommand command = new MySqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", resultaat.Id);
-            
-            int rowsAffected = command.ExecuteNonQuery();
+                string sql = "DELETE FROM resultaat WHERE id = @id";
 
-            return rowsAffected > 0;
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@id", resultaat.Id);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, $"Fout bij verwijderen van resultaat met ID {resultaat.Id}.");
+                throw new DatabaseException($"Kon resultaat met ID {resultaat.Id} niet verwijderen.", ex);
+            }
         }
     }
 }

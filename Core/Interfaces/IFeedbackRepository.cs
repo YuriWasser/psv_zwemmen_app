@@ -6,7 +6,7 @@ namespace Core.Interface
     {
         public List<Feedback> GetAll();
         public Feedback GetById(int feedbackId);
-        public int Add(Feedback feedback);
+        public Feedback Add(Feedback feedback);
         public bool Update(Feedback feedback);
         public bool Delete(Feedback feedback);
 

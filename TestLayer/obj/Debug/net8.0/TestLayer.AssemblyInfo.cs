@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TestLayer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2eb6ac776611183feb7f3c63e4422789021b2cb4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a1fd426278c0ccfdc0c176ae3f4b6a2628650431")]
 [assembly: System.Reflection.AssemblyProductAttribute("TestLayer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TestLayer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

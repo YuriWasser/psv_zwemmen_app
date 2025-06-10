@@ -6,11 +6,11 @@ namespace Core.Domain;
 
 public class Feedback
 {
-    public int Id { get; set; }
-    public int ZwemmerId { get; set; }
-    public int TrainerId { get; set; }
-    public int ProgrammaId { get; set; }
-    public string FeedbackText { get; set; }
+    public int Id { get; private set; }
+    public int ZwemmerId { get; private set; }
+    public int TrainerId { get; private set; }
+    public int ProgrammaId { get; private set; }
+    public string FeedbackText { get; private set; }
 
     public Feedback(int id, int zwemmerId, int trainerId, int programmaId, string feedbackText)
     {

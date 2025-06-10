@@ -137,7 +137,7 @@ public class GebruikerService
             {
                 throw new Exception("Gebruiker niet gevonden");
             }
-
+    
             return gebruiker;
         }
         catch (Exception ex)

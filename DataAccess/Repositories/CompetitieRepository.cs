@@ -6,8 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DataAccess.Repositories
 {
-    public class CompetitieRepository(string connectionString, ILogger<CompetitieRepository> logger)
-        : ICompetitieRepository
+    public class CompetitieRepository(string connectionString, ILogger<CompetitieRepository> logger) : ICompetitieRepository
     {
         public List<Competitie> GetAll()
         {

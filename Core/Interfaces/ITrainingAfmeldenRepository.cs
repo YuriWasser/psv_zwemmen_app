@@ -6,7 +6,7 @@ namespace Core.Interface
     {
         public List<TrainingAfmelden> GetAll();
         public TrainingAfmelden GetById(int trainingafmeldenId);
-        public int Add(TrainingAfmelden trainingAfmelden);
+        public TrainingAfmelden Add(TrainingAfmelden trainingAfmelden);
         public bool Update(TrainingAfmelden trainingAfmelden);
         public bool Delete(TrainingAfmelden trainingAfmelden);
     }

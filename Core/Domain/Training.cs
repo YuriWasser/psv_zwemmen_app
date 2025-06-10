@@ -6,10 +6,10 @@ namespace Core.Domain;
 
 public class Training
 {
-    public int Id { get; set; }
-    public int ZwembadId { get; set; }
-    public DateTime Datum { get; set; }
-    public TimeSpan StartTijd { get; set; }
+    public int Id { get; private set; }
+    public int ZwembadId { get; private set; }
+    public DateTime Datum { get; private set; }
+    public TimeSpan StartTijd { get; private set; }
 
     public Training(int id, int zwembadId, DateTime datum, TimeSpan startTijd)
     {
