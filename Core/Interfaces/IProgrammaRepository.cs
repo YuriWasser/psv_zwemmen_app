@@ -4,7 +4,6 @@ namespace Core.Interface
 {
     public interface IProgrammaRepository
     {
-        public List<Programma> GetAll();
         public Programma GetById(int programmaId);
         public Programma Add(Programma programma);
         public bool Update(Programma programma);

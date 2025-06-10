@@ -8,45 +8,6 @@ namespace DataAccess.Repositories
 {
     public class GebruikerRepository(string connectionString, ILogger<GebruikerRepository> logger) : IGebruikerRepository
     {
-        public List<Gebruiker> GetAll()
-        {
-            try
-            {
-                List<Gebruiker> gebruikers = new List<Gebruiker>();
-
-                using MySqlConnection connection = new MySqlConnection(connectionString);
-                connection.Open();
-
-                string sql = "SELECT Id, Gebruikersnaam, Wachtwoord, Email, Voornaam, Achternaam, Functie_Code FROM gebruiker";
-
-                using MySqlCommand command = new MySqlCommand(sql, connection);
-                using MySqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    gebruikers.Add(
-                        new Gebruiker(
-                            reader.GetInt32(reader.GetOrdinal("Id")),
-                            reader.GetString(reader.GetOrdinal("Gebruikersnaam")),
-                            reader.GetString(reader.GetOrdinal("Wachtwoord")),
-                            reader.GetString(reader.GetOrdinal("Email")),
-                            reader.GetString(reader.GetOrdinal("Voornaam")),
-                            reader.GetString(reader.GetOrdinal("Achternaam")),
-                            reader.GetString(reader.GetOrdinal("Functie_Code"))
-                        )
-                    );
-                }
-
-                return gebruikers;
-            }
-            catch (MySqlException ex)
-            {
-                logger.LogError(ex, "Fout bij het ophalen van gebruikers.");
-                throw new DatabaseException("Er is een databasefout opgetreden bij het ophalen van alle gebruikers.", ex);
-            }
-          
-        }
-
         public Gebruiker GetById(int gebruikerId)
         {
             try

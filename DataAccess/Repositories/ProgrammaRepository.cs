@@ -8,42 +8,6 @@ namespace DataAccess.Repositories
 {
     public class ProgrammaRepository(string connectionString, ILogger<ProgrammaRepository> logger) : IProgrammaRepository
     {
-        public List<Programma> GetAll()
-        {
-            try
-            {
-                List<Programma> programmas = new List<Programma>();
-
-                using MySqlConnection connection = new MySqlConnection(connectionString);
-                connection.Open();
-
-                string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma";
-
-                using MySqlCommand command = new MySqlCommand(sql, connection);
-                using MySqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    programmas.Add(
-                        new Programma(
-                            reader.GetInt32(reader.GetOrdinal("id")),
-                            reader.GetInt32(reader.GetOrdinal("competitie_id")),
-                            reader.GetString(reader.GetOrdinal("omschrijving")),
-                            reader.GetDateTime(reader.GetOrdinal("datum")),
-                            reader.GetTimeSpan(reader.GetOrdinal("start_tijd"))
-                        )
-                    );
-                }
-
-                return programmas;
-            }
-            catch (MySqlException ex)
-            {
-                logger.LogError(ex, "Error fetching programmas");
-                throw new DatabaseException("Error fetching programmas", ex);
-            }
-        }
-
         public Programma GetById(int programmaId)
         {
             try

@@ -9,7 +9,7 @@ namespace DataAccess.Repositories
     public class TrainingAfmeldenRepository(string connectionString, ILogger<TrainingAfmeldenRepository> logger)
         : ITrainingAfmeldenRepository
     {
-        public List<TrainingAfmelden> GetAll()
+        public List<TrainingAfmelden> GetByGebruikerId(int gebruikerId)
         {
             try
             {
@@ -18,9 +18,11 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, gebruikerId, trainingId FROM trainingAfmelden";
+                string sql = "SELECT id, gebruikerId, trainingId FROM trainingAfmelden WHERE gebruikerId = @gebruikerId";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", gebruikerId);
+
                 using MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -38,8 +40,8 @@ namespace DataAccess.Repositories
             }
             catch (MySqlException ex)
             {
-                logger.LogError(ex, "Fout bij ophalen van trainingAfmelden.");
-                throw new DatabaseException("Kon trainingAfmelden niet ophalen.", ex);
+                logger.LogError(ex, "Fout bij ophalen van trainingafmeldingen voor gebruiker.");
+                throw new DatabaseException("Kon trainingafmeldingen niet ophalen voor gebruiker.", ex);
             }
         }
 

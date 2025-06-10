@@ -17,11 +17,11 @@ namespace Core.Service
             _logger = logger;
         }
 
-        public List<Competitie> GetAll()
+        public List<Competitie> GetActieveCompetities()
         {
             try
             {
-                var result = _competitieRepository.GetAll();
+                var result = _competitieRepository.GetActieveCompetities();
                 if (result == null)
                 {
                     _logger.LogError("Repository returned null instead of list");
@@ -32,13 +32,13 @@ namespace Core.Service
             }
             catch (DatabaseException ex)
             {
-                _logger.LogError(ex, "Fout bij ophalen competities");
-                throw new DatabaseException("Er is een fout opgetreden bij het ophalen van competities", ex);
+                _logger.LogError(ex, "Fout bij ophalen van actieve competities");
+                throw new DatabaseException("Er is een fout opgetreden bij het ophalen van actieve competities", ex);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Fout bij ophalen competities");
-                throw new Exception("Er is een fout opgetreden bij het ophalen van competities", ex);
+                _logger.LogError(ex, "Onverwachte fout bij ophalen van actieve competities");
+                throw new Exception("Er is een onverwachte fout opgetreden bij het ophalen van actieve competities", ex);
             }
         }
 

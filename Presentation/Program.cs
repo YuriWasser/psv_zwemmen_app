@@ -82,8 +82,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/Gebruiker/LogOut";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
-
-        // 👇 HIER DIT TOEVOEGEN
+        
         options.Events = new CookieAuthenticationEvents
         {
             OnSigningIn = context =>

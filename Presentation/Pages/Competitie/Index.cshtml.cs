@@ -22,7 +22,7 @@ public class CompetitieModel : PageModel
     public List<Zwembad> Zwembaden { get; set; } = new List<Zwembad>();
     public IActionResult OnGet()
     {
-        List<Core.Domain.Competitie> competitites = _competitieService.GetAll();
+        List<Core.Domain.Competitie> competitites = _competitieService.GetActieveCompetities();
 
         foreach (var competitie in competitites)
         {
@@ -34,7 +34,7 @@ public class CompetitieModel : PageModel
                 competitie.EindDatum,
                 competitie.ZwembadId,
                 _zwembadService.GetById(competitie.ZwembadId).Adres,
-                competitie.ProgrammaId // **Hier toevoegen**
+                competitie.ProgrammaId
             ));
         }
 

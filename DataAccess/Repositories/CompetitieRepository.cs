@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
 {
     public class CompetitieRepository(string connectionString, ILogger<CompetitieRepository> logger) : ICompetitieRepository
     {
-        public List<Competitie> GetAll()
+        public List<Competitie> GetActieveCompetities()
         {
             try
             {
@@ -17,7 +17,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, naam, start_datum, eind_datum, zwembad_id, programma_id FROM competitie";
+                string sql = "SELECT id, naam, start_datum, eind_datum, zwembad_id, programma_id FROM competitie WHERE eind_datum >= CURDATE()";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 using MySqlDataReader reader = command.ExecuteReader();
@@ -26,12 +26,12 @@ namespace DataAccess.Repositories
                 {
                     competities.Add(
                         new Competitie(
-                            reader.GetInt32(reader.GetOrdinal("id")),
-                            reader.GetString(reader.GetOrdinal("naam")),
-                            DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("start_datum"))),
-                            DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("eind_datum"))),
-                            reader.GetInt32(reader.GetOrdinal("zwembad_id")),
-                            reader.GetInt32(reader.GetOrdinal("programma_id"))
+                            reader.GetInt32("id"),
+                            reader.GetString("naam"),
+                            DateOnly.FromDateTime(reader.GetDateTime("start_datum")),
+                            DateOnly.FromDateTime(reader.GetDateTime("eind_datum")),
+                            reader.GetInt32("zwembad_id"),
+                            reader.GetInt32("programma_id")
                         )
                     );
                 }
@@ -40,8 +40,8 @@ namespace DataAccess.Repositories
             }
             catch (MySqlException ex)
             {
-                logger.LogError(ex, "Error fetching competities");
-                throw new DatabaseException("Error fetching competities", ex);
+                logger.LogError(ex, "Error fetching active competities");
+                throw new DatabaseException("Error fetching active competities", ex);
             }
         }
 

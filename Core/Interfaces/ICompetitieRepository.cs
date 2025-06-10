@@ -5,7 +5,7 @@ namespace Core.Interface
     
     public interface ICompetitieRepository
     {
-        public List<Competitie> GetAll();
+        public List<Competitie> GetActieveCompetities();
         public Competitie GetById(int competitieId);
         public Competitie Add(Competitie competitie);
         public bool Update(Competitie competitie);

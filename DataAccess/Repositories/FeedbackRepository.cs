@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
 {
     public class FeedbackRepository(string connectionString, ILogger<FeedbackRepository> logger) : IFeedbackRepository
     {
-        public List<Feedback> GetAll()
+        public List<Feedback> GetByZwemmerId(int zwemmerId)
         {
             try
             {
@@ -17,9 +17,11 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, zwemmerId, trainerId, programmaId, feedbackText FROM feedback";
+                string sql = "SELECT id, zwemmerId, trainerId, programmaId, feedbackText FROM feedback WHERE zwemmerId = @zwemmerId";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@zwemmerId", zwemmerId);
+
                 using MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -39,8 +41,8 @@ namespace DataAccess.Repositories
             }
             catch (MySqlException ex)
             {
-                logger.LogError(ex, "Fout bij ophalen van alle feedback");
-                throw new DatabaseException("Kon feedback niet ophalen", ex);
+                logger.LogError(ex, "Fout bij ophalen van feedback voor zwemmer met ID {ZwemmerId}", zwemmerId);
+                throw new DatabaseException($"Kon feedback niet ophalen voor zwemmer met ID {zwemmerId}", ex);
             }
         }
 

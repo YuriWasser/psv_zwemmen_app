@@ -9,7 +9,7 @@ namespace DataAccess.Repositories
     public class ResultaatRepository(string connectionString, ILogger<ResultaatRepository> logger)
         : IResultaatRepository
     {
-        public List<Resultaat> GetAll()
+        public List<Resultaat> GetByGebruikerId(int gebruikerId)
         {
             try
             {
@@ -18,9 +18,11 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, gebruikerId, programmaId, afstandId, tijd, datum FROM resultaat";
+                string sql = "SELECT id, gebruikerId, programmaId, afstandId, tijd, datum FROM resultaat WHERE gebruikerId = @gebruikerId";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", gebruikerId);
+
                 using MySqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -41,8 +43,8 @@ namespace DataAccess.Repositories
             }
             catch (MySqlException ex)
             {
-                logger.LogError(ex, "Fout bij ophalen van resultaten.");
-                throw new DatabaseException("Kon resultaten niet ophalen.", ex);
+                logger.LogError(ex, "Fout bij ophalen van resultaten voor gebruiker.");
+                throw new DatabaseException("Kon resultaten niet ophalen voor gebruiker.", ex);
             }
         }
 

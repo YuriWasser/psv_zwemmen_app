@@ -8,40 +8,38 @@ namespace DataAccess.Repositories
 {
     public class WedstrijdInschrijvingRepository(string connectionString, ILogger<WedstrijdInschrijvingRepository> logger) : IWedstrijdInschrijvingRepository
     {
-        public List<WedstrijdInschrijving> GetAll()
+        public List<WedstrijdInschrijving> GetByGebruikerId(int gebruikerId)
         {
             try
             {
-                List<WedstrijdInschrijving> wedstrijdInschrijving = new List<WedstrijdInschrijving>();
+                List<WedstrijdInschrijving> inschrijvingen = new();
 
-                using MySqlConnection connection = new MySqlConnection(connectionString);
+                using MySqlConnection connection = new(connectionString);
                 connection.Open();
 
-                string sql =
-                    "SELECT id, gebruikerId, programmaId, afstandId, inschrijfDatum FROM wedstrijdInschrijving";
+                string sql = "SELECT id, gebruikerId, programmaId, afstandId, inschrijfDatum FROM wedstrijdInschrijving WHERE gebruikerId = @gebruikerId";
 
-                using MySqlCommand command = new MySqlCommand(sql, connection);
+                using MySqlCommand command = new(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", gebruikerId);
+
                 using MySqlDataReader reader = command.ExecuteReader();
-
                 while (reader.Read())
                 {
-                    wedstrijdInschrijving.Add(
-                        new WedstrijdInschrijving(
-                            reader.GetInt32(reader.GetOrdinal("id")),
-                            reader.GetInt32(reader.GetOrdinal("gebruikerId")),
-                            reader.GetInt32(reader.GetOrdinal("programmaId")),
-                            reader.GetInt32(reader.GetOrdinal("afstandId")),
-                            reader.GetDateTime(reader.GetOrdinal("inschrijfDatum"))
-                        )
-                    );
+                    inschrijvingen.Add(new WedstrijdInschrijving(
+                        reader.GetInt32("id"),
+                        reader.GetInt32("gebruikerId"),
+                        reader.GetInt32("programmaId"),
+                        reader.GetInt32("afstandId"),
+                        reader.GetDateTime("inschrijfDatum")
+                    ));
                 }
 
-                return wedstrijdInschrijving;
+                return inschrijvingen;
             }
             catch (MySqlException ex)
             {
-                logger.LogError(ex, "Database error occurred while retrieving wedstrijd inschrijvingen.");
-                throw new DatabaseException("Er is een fout opgetreden bij het ophalen van wedstrijd inschrijvingen.", ex);
+                logger.LogError(ex, "Fout bij ophalen van inschrijvingen van gebruiker.");
+                throw new DatabaseException("Kon inschrijvingen van gebruiker niet ophalen.", ex);
             }
         }
 

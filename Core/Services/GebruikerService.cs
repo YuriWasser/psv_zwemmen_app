@@ -24,31 +24,7 @@ public class GebruikerService
         _logger = logger;
         _config = config;
     }
-
-    public List<Gebruiker> GetAll()
-    {
-        try
-        {
-            var result = _gebruikerRepository.GetAll();
-            if (result == null)
-            {
-                throw new NullReferenceException("De repository retourneerde null");
-            }
-
-            return result;
-        }
-        catch (DatabaseException ex)
-        {
-            _logger.LogError(ex, "Fout bij ophalen gebruikers");
-            throw new DatabaseException("Er is een fout opgetreden bij het ophalen van gebruikers", ex);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Fout bij ophalen gebruikers");
-            throw new Exception("Er is een fout opgetreden bij het ophalen van gebruikers", ex);
-        }
-    }
-
+    
     public Gebruiker GetById(int id)
     {
         try

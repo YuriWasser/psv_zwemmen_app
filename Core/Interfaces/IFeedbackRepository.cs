@@ -4,7 +4,7 @@ namespace Core.Interface
 {
     public interface IFeedbackRepository
     {
-        public List<Feedback> GetAll();
+        public List<Feedback> GetByZwemmerId(int zwemmerId);
         public Feedback GetById(int feedbackId);
         public Feedback Add(Feedback feedback);
         public bool Update(Feedback feedback);

@@ -15,24 +15,7 @@ namespace Core.Service
             _programmaRepository = programmaRepository;
             _logger = logger;
         }
-
-        public List<Programma> GetAll()
-        {
-            try
-            {
-                return _programmaRepository.GetAll();
-            }
-            catch (DatabaseException ex)
-            {
-                _logger.LogError(ex, "Fout bij ophalen van alle programma's");
-                throw new DatabaseException("Er is een fout opgetreden bij het ophalen van programma's", ex);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Onverwachte fout bij ophalen van programma's");
-                throw new Exception("Er is een fout opgetreden bij het ophalen van programma's", ex);
-            }
-        }
+        
 
         public Programma GetById(int id)
         {
