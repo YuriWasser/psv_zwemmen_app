@@ -20,23 +20,18 @@ namespace Presentation.Pages.Gebruiker
             _functieService = functieService;
         }
 
-        [BindProperty, Required]
-        public string Voornaam { get; set; }
+        [BindProperty, Required] public string Voornaam { get; set; }
 
-        [BindProperty, Required]
-        public string Achternaam { get; set; }
+        [BindProperty, Required] public string Achternaam { get; set; }
 
-        [BindProperty, Required]
-        public string Gebruikersnaam { get; set; }
+        [BindProperty, Required] public string Gebruikersnaam { get; set; }
 
-        [BindProperty, Required, EmailAddress]
-        public string Email { get; set; }
+        [BindProperty, Required, EmailAddress] public string Email { get; set; }
 
         [BindProperty, Required, DataType(DataType.Password)]
         public string Wachtwoord { get; set; }
 
-        [BindProperty, Required]
-        public string Functie { get; set; }
+        [BindProperty, Required] public string Functie { get; set; }
 
         // Hier de SelectList voor dropdown
         public SelectList FunctiesSelectList { get; set; }
@@ -59,14 +54,10 @@ namespace Presentation.Pages.Gebruiker
 
             try
             {
-                // Maak dummy gebruiker aan voor hashing
-                var hasher = new PasswordHasher<object>();
-                string hashedPassword = hasher.HashPassword(null, Wachtwoord);
-
                 _gebruikerService.Add(
                     0, // ID is auto increment
                     Gebruikersnaam,
-                    hashedPassword, // sla hashed password op!
+                    Wachtwoord, // sla hashed password op!
                     Email,
                     Voornaam,
                     Achternaam,

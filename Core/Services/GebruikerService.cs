@@ -24,7 +24,7 @@ public class GebruikerService
         _logger = logger;
         _config = config;
     }
-    
+
     public Gebruiker GetById(int id)
     {
         try
@@ -49,11 +49,13 @@ public class GebruikerService
     {
         try
         {
-            _logger.LogInformation("Proberen nieuwe gebruiker toe te voegen: {Gebruikersnaam}, {Email}", gebruikersnaam, email);
-            
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(wachtwoord);
+            _logger.LogInformation("Proberen nieuwe gebruiker toe te voegen: {Gebruikersnaam}, {Email}", gebruikersnaam,
+                email);
 
-            var newGebruiker = new Gebruiker(id, gebruikersnaam, hashedPassword, email, voornaam, achternaam, functieCode);
+            var hashedPassword = PasswordHasher.HashPassword(wachtwoord);
+
+            var newGebruiker = new Gebruiker(id, gebruikersnaam, hashedPassword, email, voornaam, achternaam,
+                functieCode);
             var addedGebruiker = _gebruikerRepository.Add(newGebruiker);
 
             if (addedGebruiker == null)
@@ -113,7 +115,7 @@ public class GebruikerService
             {
                 throw new Exception("Gebruiker niet gevonden");
             }
-    
+
             return gebruiker;
         }
         catch (Exception ex)
@@ -145,7 +147,7 @@ public class GebruikerService
                 throw new GebruikerNotFoundException("Ongeldige gebruikersnaam of wachtwoord");
 
             if (!PasswordHasher.VerifyPassword(gebruiker.Wachtwoord, wachtwoord))
-                throw new GebruikerNotFoundException("Ongeldige gebruikersnaam of wachtwoord");
+                throw new GebruikerNotFoundException("Ongeldige wachtwoord");
 
             var claims = new[]
             {

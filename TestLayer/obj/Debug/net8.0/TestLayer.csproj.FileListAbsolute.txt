@@ -156,3 +156,4 @@
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/TestLayer/obj/Debug/net8.0/TestLayer.pdb
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/TestLayer/obj/Debug/net8.0/TestLayer.genruntimeconfig.cache
 /Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/TestLayer/obj/Debug/net8.0/ref/TestLayer.dll
+/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/TestLayer/bin/Debug/net8.0/BCrypt.Net-Next.dll
