@@ -11,9 +11,12 @@ namespace Core.Service
         private readonly ICompetitieRepository _competitieRepository;
         private readonly ILogger<CompetitieService> _logger;
 
-        public CompetitieService(ICompetitieRepository competitieRepository, ILogger<CompetitieService> logger)
+        public CompetitieService(ICompetitieRepository competitieRepository, ILogger<CompetitieService> logger, 
+            IProgrammaRepository programmaRepository)
+        
         {
             _competitieRepository = competitieRepository;
+            _programmaRepository = programmaRepository;
             _logger = logger;
         }
 
@@ -79,6 +82,11 @@ namespace Core.Service
                 var addedComp = _competitieRepository.Add(newComp);
                 return addedComp;
             }
+            catch (ArgumentException ex)
+            {
+                throw; 
+            }
+           
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Fout bij toevoegen van competitie");
