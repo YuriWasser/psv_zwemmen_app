@@ -15,7 +15,7 @@ namespace Core.Service
             _programmaRepository = programmaRepository;
             _logger = logger;
         }
-        
+
 
         public Programma GetById(int id)
         {
@@ -25,7 +25,7 @@ namespace Core.Service
             }
             catch (ProgrammaNotFoundException ex)
             {
-                _logger.LogWarning(ex, "Programma met ID {Id} niet gevonden", id);
+                _logger.LogError(ex, "Programma met ID {Id} niet gevonden", id);
                 throw new Exception("Het gevraagde programma kon niet worden gevonden.", ex);
             }
             catch (DatabaseException ex)
@@ -44,6 +44,15 @@ namespace Core.Service
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(omschrijving))
+                    throw new ArgumentException("Omschrijving mag niet leeg zijn", nameof(omschrijving));
+                if (datum == default)
+                    throw new ArgumentException("Datum mag niet de standaardwaarde zijn", nameof(datum));
+                if (starttijd == default)
+                    throw new ArgumentException("Starttijd mag niet de standaardwaarde zijn", nameof(starttijd));
+                if (competitieId <= 0)
+                    throw new ArgumentException("Competitie ID moet groter zijn dan 0", nameof(competitieId));
+                
                 var newProg = new Programma(id, competitieId, omschrijving, datum, starttijd);
                 var addedProg = _programmaRepository.Add(newProg);
                 return addedProg;

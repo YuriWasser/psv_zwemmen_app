@@ -32,6 +32,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcGV0aXRpZS9Ub2V2b2VnZW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/Pages/Competitie/WedstrijdInschrijving.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ29tcGV0aXRpZS9XZWRzdHJpamRJbnNjaHJpanZpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/yuriwasser/Documents/Fontys/RiderProjects/PSVZwemmenwebapp/Presentation/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

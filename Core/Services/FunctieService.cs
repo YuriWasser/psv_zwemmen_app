@@ -45,6 +45,9 @@ namespace Core.Service
         {
             try
             {
+                if (string.IsNullOrEmpty(code))
+                    throw new ArgumentException("Code mag niet null of leeg zijn", nameof(code));
+                
                 var functie = _functieRepository.GetByCode(code);
                 if (functie == null)
                 {

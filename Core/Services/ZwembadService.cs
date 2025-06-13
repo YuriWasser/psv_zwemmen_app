@@ -62,6 +62,11 @@ public class ZwembadService
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(naam))
+                throw new ArgumentException("Naam mag niet leeg zijn", nameof(naam));
+            if (string.IsNullOrWhiteSpace(adres))
+                throw new ArgumentException("Adres mag niet leeg zijn", nameof(adres));
+            
             var newZwembad = new Zwembad(id, naam, adres);
             var addedZwembad = _zwembadRepository.Add(newZwembad);
             return addedZwembad;

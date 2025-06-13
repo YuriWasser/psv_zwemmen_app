@@ -104,9 +104,11 @@ namespace DataAccess.Repositories
                 command.Parameters.AddWithValue("@programma_id", competitie.ProgrammaId);
 
                 int rowsAffected = command.ExecuteNonQuery();
-
-                if (rowsAffected > 0)
+                if (rowsAffected == 0)
                 {
+                    throw new DatabaseException("No rows affected while adding competitie");
+                }
+            
                     string selectIdSql = "SELECT LAST_INSERT_ID()";
                     using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
                     int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
@@ -118,9 +120,7 @@ namespace DataAccess.Repositories
                         competitie.ZwembadId,
                         competitie.ProgrammaId
                     );
-                }
-
-                return null;
+                
             }
             catch (MySqlException ex)
             {

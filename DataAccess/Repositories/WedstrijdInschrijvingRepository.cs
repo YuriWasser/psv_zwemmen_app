@@ -17,7 +17,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, gebruikerId, programmaId, afstandId, inschrijfDatum FROM wedstrijdInschrijving WHERE gebruikerId = @gebruikerId";
+                string sql = "SELECT id, gebruiker_id, programma_id, afstand_id, inschrijfdatum FROM inschrijving WHERE gebruikerId = @gebruikerId";
 
                 using MySqlCommand command = new(sql, connection);
                 command.Parameters.AddWithValue("@gebruikerId", gebruikerId);
@@ -50,7 +50,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
                 
-                string sql = "SELECT id, gebruikerId, programmaId, afstandId, inschrijfDatum FROM wedstrijdInschrijving WHERE id = @id";
+                string sql = "SELECT id, gebruiker_id, programma_id, afstand_id, inschrijfdatum FROM inschrijving WHERE id = @id";
                 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", wedstrijdInschrijvingId);
@@ -89,7 +89,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "INSERT INTO wedstrijdinschrijving (gebruikerId, programmaId, afstandId, inschrijfDatum) VALUES (@gebruikerId, @programmaId, @afstandId, @inschrijfDatum)";
+                string sql = "INSERT INTO inschrijving (gebruiker_id, programma_id, afstand_id, inschrijfdatum) VALUES (@gebruikerId, @programmaId, @afstandId, @inschrijfDatum)";
                 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@gebruikerId", wedstrijdInschrijving.GebruikerId);
@@ -130,11 +130,11 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "UPDATE wedstrijdInschrijving SET " +
-                             "gebruikerId = @gebruikerId, " +
-                             "programmaId = @programmaId, " +
-                             "afstandId = @afstandId, " +
-                             "inschrijfDatum = @inschrijfDatum " +
+                string sql = "UPDATE inschrijving SET " +
+                             "gebruiker_id = @gebruikerId, " +
+                             "programma_id = @programmaId, " +
+                             "afstand_id = @afstandId, " +
+                             "inschrijfdatum = @inschrijfDatum " +
                              "WHERE id = @id";
                 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
@@ -162,7 +162,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "DELETE FROM wedstrijdInschrijving WHERE id = @id";
+                string sql = "DELETE FROM inschrijving WHERE id = @id";
                 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", wedstrijdInschrijving.Id);
@@ -175,6 +175,60 @@ namespace DataAccess.Repositories
             {
                 logger.LogError(ex, $"Fout bij verwijderen van inschrijving met ID {wedstrijdInschrijving.Id}.");
                 throw new DatabaseException("Kon inschrijving niet verwijderen.", ex);
+            }
+        }
+
+        public bool Exists(int gebruikerId, int programmaId, int afstandId)
+        {
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql =
+                    "SELECT COUNT(*) FROM inschrijving WHERE gebruiker_id = @gebruikerId AND programma_id = @programmaId AND afstand_id = @afstandId";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@gebruikerId", gebruikerId);
+                command.Parameters.AddWithValue("@programmaId", programmaId);
+                command.Parameters.AddWithValue("@afstandId", afstandId);
+
+                long count = (long)command.ExecuteScalar();
+                return count > 0;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij controleren van inschrijving bestaan.");
+                throw new DatabaseException("Kon inschrijving niet controleren.", ex);
+            }
+        }
+
+        public List<int> GetAfstandenByGebruikerEnProgramma(int gebruikerId, int programmaId)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string query = "SELECT afstand_id FROM inschrijving WHERE gebruiker_id = @GebruikerId AND programma_id = @ProgrammaId";
+
+                using var command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@GebruikerId", gebruikerId);
+                command.Parameters.AddWithValue("@ProgrammaId", programmaId);
+
+                using var reader = command.ExecuteReader();
+
+                var afstanden = new List<int>();
+                while (reader.Read())
+                {
+                    afstanden.Add(reader.GetInt32(0)); 
+                }
+                return afstanden;
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Fout bij ophalen van afstanden voor gebruiker en programma.");
+                throw new DatabaseException("Kon afstanden niet ophalen.", ex);
             }
         }
     }

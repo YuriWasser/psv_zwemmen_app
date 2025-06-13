@@ -66,6 +66,15 @@ namespace Core.Service
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(naam))
+                    throw new ArgumentException("Naam mag niet leeg zijn", nameof(naam));
+                if (eindDatum < startDatum)
+                    throw new ArgumentException("Einddatum mag niet voor de startdatum liggen", nameof(eindDatum));
+                if (zwembadId <= 0)
+                    throw new ArgumentException("Zwembad ID moet groter zijn dan 0", nameof(zwembadId));
+                if (programmaId <= 0)
+                    throw new ArgumentException("Programma ID moet groter zijn dan 0", nameof(programmaId));
+                
                 var newComp = new Competitie(id, naam, startDatum, eindDatum, zwembadId, programmaId);
                 var addedComp = _competitieRepository.Add(newComp);
                 return addedComp;

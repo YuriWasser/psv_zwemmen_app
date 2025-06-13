@@ -8,8 +8,9 @@ public class ProgrammaViewModel
     public DateTime Datum { get; set; }
     public TimeSpan StartTijd { get; set; }
     public List<AfstandViewModel> Afstanden { get; set; } = new List<AfstandViewModel>();
+    public List<int> GeregistreerdeAfstanden { get; set; }
     
-    public ProgrammaViewModel(int id, int competitieId, string omschrijving, DateTime datum, TimeSpan startTijd, List<AfstandViewModel> afstanden)
+    public ProgrammaViewModel(int id, int competitieId, string omschrijving, DateTime datum, TimeSpan startTijd, List<AfstandViewModel> afstanden, List<int>? geregistreerdeAfstanden = null)
     {
         Id = id;
         CompetitieId = competitieId;
@@ -17,5 +18,6 @@ public class ProgrammaViewModel
         Datum = datum;
         StartTijd = startTijd;
         Afstanden = afstanden;
+        GeregistreerdeAfstanden = geregistreerdeAfstanden ?? new List<int>();
     }
 }

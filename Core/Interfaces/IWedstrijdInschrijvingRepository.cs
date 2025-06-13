@@ -9,5 +9,7 @@ namespace Core.Interface
         public WedstrijdInschrijving Add(WedstrijdInschrijving wedstrijdInschrijving);
         public bool Update(WedstrijdInschrijving wedstrijdInschrijving);
         public bool Delete(WedstrijdInschrijving wedstrijdInschrijving);
+        bool Exists(int gebruikerId, int programmaId, int afstandId);
+        public List<int> GetAfstandenByGebruikerEnProgramma(int gebruikerId, int programmaId);
     }
 }

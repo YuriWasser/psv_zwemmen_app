@@ -66,6 +66,12 @@ builder.Services.AddScoped<IFunctieRepository>(provider =>
     return new FunctieRepository(connectionString, logger);
 });
 
+builder.Services.AddScoped<IWedstrijdInschrijvingRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<WedstrijdInschrijvingRepository>>();
+    return new WedstrijdInschrijvingRepository(connectionString, logger);
+});
+
 // ✅ Services
 builder.Services.AddScoped<CompetitieService>();
 builder.Services.AddScoped<ProgrammaService>();
@@ -73,6 +79,7 @@ builder.Services.AddScoped<AfstandService>();
 builder.Services.AddScoped<ZwembadService>();
 builder.Services.AddScoped<GebruikerService>();
 builder.Services.AddScoped<FunctieService>();
+builder.Services.AddScoped<WedstrijdInschrijvingService>();
 
 // ✅ AUTHENTICATIE MET COOKIES
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

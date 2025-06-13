@@ -62,6 +62,11 @@ public class AfstandService
     {
         try
         {
+            if (meters <= 0)
+                throw new ArgumentException("Meters moet groter zijn dan 0");
+            if (string.IsNullOrWhiteSpace(beschrijving))
+                throw new ArgumentException("Beschrijving mag niet leeg zijn", nameof(beschrijving));
+            
             var newAfstand = new Afstand(id, meters, beschrijving);
             var addedAfstand = _afstandRepository.Add(newAfstand);
             return addedAfstand;
@@ -118,6 +123,9 @@ public class AfstandService
     {
         try
         {
+            if (programmaId <= 0)
+                throw new ArgumentException("Programma ID moet groter zijn dan 0", nameof(programmaId));
+            
             return _afstandRepository.GetByProgrammaId(programmaId);
         }
         catch (DatabaseException ex)

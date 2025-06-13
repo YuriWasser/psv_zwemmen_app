@@ -49,6 +49,19 @@ public class GebruikerService
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(gebruikersnaam))
+                throw new ArgumentException("Gebruikersnaam mag niet leeg zijn", nameof(gebruikersnaam));
+            if (string.IsNullOrWhiteSpace(wachtwoord))
+                throw new ArgumentException("Wachtwoord mag niet leeg zijn", nameof(wachtwoord));
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email mag niet leeg zijn", nameof(email));
+            if (string.IsNullOrWhiteSpace(voornaam))
+                throw new ArgumentException("Voornaam mag niet leeg zijn", nameof(voornaam));
+            if (string.IsNullOrWhiteSpace(achternaam))
+                throw new ArgumentException("Achternaam mag niet leeg zijn", nameof(achternaam));
+            if (string.IsNullOrWhiteSpace(functieCode))
+                throw new ArgumentException("FunctieCode mag niet leeg zijn", nameof(functieCode));
+            
             _logger.LogInformation("Proberen nieuwe gebruiker toe te voegen: {Gebruikersnaam}, {Email}", gebruikersnaam,
                 email);
 
@@ -110,6 +123,9 @@ public class GebruikerService
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(gebruikersnaam))
+                throw new ArgumentException("Gebruikersnaam mag niet leeg zijn", nameof(gebruikersnaam));
+            
             var gebruiker = _gebruikerRepository.GetByGebruikersnaam(gebruikersnaam);
             if (gebruiker == null)
             {
@@ -197,7 +213,7 @@ public class GebruikerService
         }
     }
 
-    private string NormalizeFunctieCode(string functieCode)
+    public string NormalizeFunctieCode(string functieCode)
     {
         if (string.IsNullOrWhiteSpace(functieCode))
             return "Gebruiker";
