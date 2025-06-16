@@ -28,31 +28,49 @@
 
                 @if (Model.Programma.Afstanden.Any())
                 {
-                    <form method="post">
-                        <input type="hidden" name="ProgrammaId" value="@Model.Programma.Id" />
+                    <h3 class="text-xl font-semibold mt-4 mb-2">Afstanden:</h3>
 
-                        <h3 class="text-xl font-semibold mt-4 mb-2">Kies afstanden om je in te schrijven:</h3>
+                    @if (User.IsInRole("Zwemmer"))
+                    {
+                        <form method="post">
+                            <input type="hidden" name="ProgrammaId" value="@Model.Programma.Id" />
+                            <ul class="list-none ml-2">
+                                @foreach (var afstand in Model.Programma.Afstanden)
+                                {
+                                    var isIngeschreven = Model.Programma.GeregistreerdeAfstanden.Contains(afstand.Id);
+                                    <li class="mb-2">
+                                        <label>
+                                            <input type="checkbox" name="GeselecteerdeAfstanden" value="@afstand.Id" @(isIngeschreven ? "checked" : "") />
+                                            @afstand.Beschrijving
+                                            @if (isIngeschreven)
+                                            {
+                                                <span class="text-green-600 ml-2">(Al ingeschreven)</span>
+                                            }
+                                        </label>
+                                    </li>
+                                }
+                            </ul>
+                            <button type="submit" class="mt-4 px-4 py-2 bg-red-600 text-white rounded">
+                                @(Model.Programma.GeregistreerdeAfstanden.Any() ? "Herinschrijven" : "Inschrijven")
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
                         <ul class="list-none ml-2">
                             @foreach (var afstand in Model.Programma.Afstanden)
                             {
                                 var isIngeschreven = Model.Programma.GeregistreerdeAfstanden.Contains(afstand.Id);
                                 <li class="mb-2">
-                                    <label>
-                                        <input type="checkbox" name="GeselecteerdeAfstanden" value="@afstand.Id" @(isIngeschreven ? "checked" : "") />
-                                        @afstand.Beschrijving
-                                        @if (isIngeschreven)
-                                        {
-                                            <span class="text-green-600 ml-2">(Al ingeschreven)</span>
-                                        }
-                                    </label>
+                                    <span>@afstand.Beschrijving</span>
+                                    @if (isIngeschreven)
+                                    {
+                                        <span class="text-green-600 ml-2">(Ingeschreven zwemmer)</span>
+                                    }
                                 </li>
                             }
                         </ul>
-
-                        <button type="submit" class="mt-4 px-4 py-2 bg-red-600 text-white rounded">
-                            @(Model.Programma.GeregistreerdeAfstanden.Any() ? "Herinschrijven" : "Inschrijven")
-                        </button>
-                    </form>
+                    }
                 }
                 else
                 {

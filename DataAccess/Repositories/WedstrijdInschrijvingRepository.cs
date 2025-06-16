@@ -26,11 +26,11 @@ namespace DataAccess.Repositories
                 while (reader.Read())
                 {
                     inschrijvingen.Add(new WedstrijdInschrijving(
-                        reader.GetInt32("id"),
-                        reader.GetInt32("gebruikerId"),
-                        reader.GetInt32("programmaId"),
-                        reader.GetInt32("afstandId"),
-                        reader.GetDateTime("inschrijfDatum")
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("gebruiker_Id")),
+                        reader.GetInt32(reader.GetOrdinal("programma_Id")),
+                        reader.GetInt32(reader.GetOrdinal("afstand_Id")),
+                        reader.GetDateTime(reader.GetOrdinal("inschrijfDatum"))
                     ));
                 }
 
@@ -61,9 +61,9 @@ namespace DataAccess.Repositories
                 {
                     return new WedstrijdInschrijving(
                         reader.GetInt32(reader.GetOrdinal("id")),
-                        reader.GetInt32(reader.GetOrdinal("gebruikerId")),
-                        reader.GetInt32(reader.GetOrdinal("programmaId")),
-                        reader.GetInt32(reader.GetOrdinal("afstandId")),
+                        reader.GetInt32(reader.GetOrdinal("gebruiker_Id")),
+                        reader.GetInt32(reader.GetOrdinal("programma_Id")),
+                        reader.GetInt32(reader.GetOrdinal("afstand_Id")),
                         reader.GetDateTime(reader.GetOrdinal("inschrijfDatum"))
                     );
                 }

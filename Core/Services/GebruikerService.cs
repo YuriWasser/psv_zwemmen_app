@@ -171,6 +171,7 @@ public class GebruikerService
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("GebruikerId", gebruiker.Id.ToString()),
                 new Claim("Gebruikersnaam", gebruiker.Gebruikersnaam),
+                new Claim(ClaimTypes.Role, NormalizeFunctieCode(gebruiker.Functie_Code)),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));

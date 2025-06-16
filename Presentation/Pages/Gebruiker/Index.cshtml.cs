@@ -59,14 +59,15 @@ namespace Presentation.Pages.Gebruiker
                 }
 
                 // Claims extraheren
-                var claims = token.Claims.Where(c => c.Type != ClaimTypes.Role).ToList();
+                //var claims = token.Claims.Where(c => c.Type != ClaimTypes.Role).ToList();
                 var roles = token.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
 
-                foreach (var role in roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role));
-                }
-
+                // foreach (var role in roles)
+                // {
+                //     claims.Add(new Claim(ClaimTypes.Role, role));
+                // }
+                
+                var claims = token.Claims.ToList();
                 var identity = new ClaimsIdentity(
                     claims,
                     CookieAuthenticationDefaults.AuthenticationScheme,
