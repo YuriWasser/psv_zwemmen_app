@@ -72,6 +72,30 @@ builder.Services.AddScoped<IWedstrijdInschrijvingRepository>(provider =>
     return new WedstrijdInschrijvingRepository(connectionString, logger);
 });
 
+builder.Services.AddScoped<ITrainingRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<TrainingRepository>>();
+    return new TrainingRepository(connectionString, logger);
+});
+
+builder.Services.AddScoped<IResultaatRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<ResultaatRepository>>();
+    return new ResultaatRepository(connectionString, logger);
+});
+
+builder.Services.AddScoped<IClubrecordRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<ClubrecordRepository>>();
+    return new ClubrecordRepository(connectionString, logger);
+});
+
+builder.Services.AddScoped<IFeedbackRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<FeedbackRepository>>();
+    return new FeedbackRepository(connectionString, logger);
+});
+
 // ✅ Services
 builder.Services.AddScoped<CompetitieService>();
 builder.Services.AddScoped<ProgrammaService>();
@@ -80,6 +104,10 @@ builder.Services.AddScoped<ZwembadService>();
 builder.Services.AddScoped<GebruikerService>();
 builder.Services.AddScoped<FunctieService>();
 builder.Services.AddScoped<WedstrijdInschrijvingService>();
+builder.Services.AddScoped<TrainingService>();
+builder.Services.AddScoped<ResultaatService>();
+builder.Services.AddScoped<ClubrecordService>();
+builder.Services.AddScoped<FeedbackService>();
 
 // ✅ AUTHENTICATIE MET COOKIES
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

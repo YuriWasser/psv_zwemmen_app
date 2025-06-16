@@ -1,0 +1,40 @@
+@page
+@model Presentation.Pages.Trainingen.IndexModel
+
+@{
+    ViewData["Title"] = "Trainingen";
+    Layout = "_Layout";
+}
+
+<main>
+    <h1 class="text-3xl font-bold mb-6">Trainingen</h1>
+
+    @if (Model.Trainingen != null && Model.Trainingen.Any())
+    {
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+            <tr>
+                <th class="px-4 py-2 border-b">ID</th>
+                <th class="px-4 py-2 border-b">Zwembad ID</th>
+                <th class="px-4 py-2 border-b">Datum</th>
+                <th class="px-4 py-2 border-b">Tijd</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var training in Model.Trainingen)
+            {
+                <tr>
+                    <td class="px-4 py-2 border-b">@training.Id</td>
+                    <td class="px-4 py-2 border-b">@training.ZwembadId</td>
+                    <td class="px-4 py-2 border-b">@training.Datum.ToString("dd-MM-yyyy")</td>
+                    <td class="px-4 py-2 border-b">@training.Tijd.ToString("hh\\:mm")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Er zijn geen trainingen gevonden.</p>
+    }
+</main>

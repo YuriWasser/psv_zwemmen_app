@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
 {
     public class FeedbackRepository(string connectionString, ILogger<FeedbackRepository> logger) : IFeedbackRepository
     {
-        public List<Feedback> GetByZwemmerId(int zwemmerId)
+        public List<Feedback> GetByZwemmerId(int gerbuikerId)
         {
             try
             {
@@ -17,10 +17,10 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, zwemmerId, trainerId, programmaId, feedbackText FROM feedback WHERE zwemmerId = @zwemmerId";
+                string sql = "SELECT id, gebruiker_id, programma_id, feedback_text FROM feedback WHERE gebruiker_id = @gebruikerId";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@zwemmerId", zwemmerId);
+                command.Parameters.AddWithValue("@gebruikerId", gerbuikerId);
 
                 using MySqlDataReader reader = command.ExecuteReader();
 
@@ -29,10 +29,9 @@ namespace DataAccess.Repositories
                     feedbacks.Add(
                         new Feedback(
                             reader.GetInt32(reader.GetOrdinal("id")),
-                            reader.GetInt32(reader.GetOrdinal("zwemmerId")),
-                            reader.GetInt32(reader.GetOrdinal("trainerId")),
-                            reader.GetInt32(reader.GetOrdinal("programmaId")),
-                            reader.GetString(reader.GetOrdinal("feedbackText"))
+                            reader.GetInt32(reader.GetOrdinal("gebruiker_id")),
+                            reader.GetInt32(reader.GetOrdinal("programma_id")),
+                            reader.GetString(reader.GetOrdinal("feedback_text"))
                         )
                     );
                 }
@@ -41,8 +40,8 @@ namespace DataAccess.Repositories
             }
             catch (MySqlException ex)
             {
-                logger.LogError(ex, "Fout bij ophalen van feedback voor zwemmer met ID {ZwemmerId}", zwemmerId);
-                throw new DatabaseException($"Kon feedback niet ophalen voor zwemmer met ID {zwemmerId}", ex);
+                logger.LogError(ex, $"Fout bij ophalen van feedback voor zwemmer met ID {gerbuikerId}");
+                throw new DatabaseException($"Kon feedback niet ophalen voor zwemmer met ID ", ex);
             }
         }
 
@@ -53,7 +52,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, zwemmerId, trainerId, programmaId, feedbackText FROM feedback WHERE id = @id";
+                string sql = "SELECT id, gebruik_id, programma_id, feedback_text FROM feedback WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", feedbackId);
@@ -64,8 +63,7 @@ namespace DataAccess.Repositories
                 {
                     return new Feedback(
                         reader.GetInt32(reader.GetOrdinal("id")),
-                        reader.GetInt32(reader.GetOrdinal("zwemmerId")),
-                        reader.GetInt32(reader.GetOrdinal("trainerId")),
+                        reader.GetInt32(reader.GetOrdinal("gebruik_id")),
                         reader.GetInt32(reader.GetOrdinal("programmaId")),
                         reader.GetString(reader.GetOrdinal("feedbackText"))
                     );
@@ -93,11 +91,10 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql =
-                    "INSERT INTO feedback (zwemmerId, trainerId, programmaId, feedbackText) VALUES (@zwemmerId, @trainerId, @programmaId, @feedbackText)";
+                    "INSERT INTO feedback (gebruiker_id, programma_id, feedback_text) VALUES (@gebruikerId, @programmaId, @feedbackText)";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@zwemmerId", feedback.ZwemmerId);
-                command.Parameters.AddWithValue("@trainerId", feedback.TrainerId);
+                command.Parameters.AddWithValue("@gebruikerId", feedback.GebruikerId);
                 command.Parameters.AddWithValue("@programmaId", feedback.ProgrammaId);
                 command.Parameters.AddWithValue("@feedbackText", feedback.FeedbackText);
 
@@ -110,8 +107,7 @@ namespace DataAccess.Repositories
                     int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
                     return new Feedback(
                         newId,
-                        feedback.ZwemmerId,
-                        feedback.TrainerId,
+                        feedback.GebruikerId,
                         feedback.ProgrammaId,
                         feedback.FeedbackText
                     );
@@ -133,15 +129,13 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql = "UPDATE feedback SET " +
-                             "zwemmerId = @zwemmerId, " +
-                             "trainerId = @trainerId, " +
-                             "programmaId = @programmaId, " +
-                             "feedbackText = @feedbackText " +
+                             "gebruiker_id = @zwemmerId, " + 
+                             "programma_id = @programmaId, " +
+                             "feedback_text = @feedbackText " +
                              "WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@zwemmerId", feedback.ZwemmerId);
-                command.Parameters.AddWithValue("@trainerId", feedback.TrainerId);
+                command.Parameters.AddWithValue("@gebruikerId", feedback.GebruikerId);
                 command.Parameters.AddWithValue("@programmaId", feedback.ProgrammaId);
                 command.Parameters.AddWithValue("@feedbackText", feedback.FeedbackText);
                 command.Parameters.AddWithValue("@id", feedback.Id);

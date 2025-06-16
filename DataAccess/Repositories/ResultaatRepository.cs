@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, gebruikerId, programmaId, afstandId, tijd, datum FROM resultaat WHERE gebruikerId = @gebruikerId";
+                string sql = "SELECT id, gebruiker_id, programma_id, afstand_id, tijd, datum FROM resultaat WHERE gebruiker_id = @gebruikerId";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@gebruikerId", gebruikerId);
@@ -30,9 +30,9 @@ namespace DataAccess.Repositories
                     resultaten.Add(
                         new Resultaat(
                             reader.GetInt32(reader.GetOrdinal("id")),
-                            reader.GetInt32(reader.GetOrdinal("gebruikerId")),
-                            reader.GetInt32(reader.GetOrdinal("programmaId")),
-                            reader.GetInt32(reader.GetOrdinal("afstandId")),
+                            reader.GetInt32(reader.GetOrdinal("gebruiker_id")),
+                            reader.GetInt32(reader.GetOrdinal("programma_id")),
+                            reader.GetInt32(reader.GetOrdinal("afstand_id")),
                             reader.GetTimeSpan(reader.GetOrdinal("tijd")),
                             reader.GetDateTime(reader.GetOrdinal("datum"))
                         )
@@ -55,7 +55,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, gebruikerId, programmaId, afstandId, tijd, datum FROM resultaat WHERE id = @id";
+                string sql = "SELECT id, gebruiker_id, programma_id, afstand_id, tijd, datum FROM resultaat WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", resultaatId);
@@ -66,9 +66,9 @@ namespace DataAccess.Repositories
                 {
                     return new Resultaat(
                         reader.GetInt32(reader.GetOrdinal("id")),
-                        reader.GetInt32(reader.GetOrdinal("gebruikerId")),
-                        reader.GetInt32(reader.GetOrdinal("programmaId")),
-                        reader.GetInt32(reader.GetOrdinal("afstandId")),
+                        reader.GetInt32(reader.GetOrdinal("gebruiker_id")),
+                        reader.GetInt32(reader.GetOrdinal("programma_id")),
+                        reader.GetInt32(reader.GetOrdinal("afstand_id")),
                         reader.GetTimeSpan(reader.GetOrdinal("tijd")),
                         reader.GetDateTime(reader.GetOrdinal("datum"))
                     );
@@ -96,7 +96,7 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql =
-                    "INSERT INTO resultaat (gebruikerId, programmaId, afstandId, tijd, datum) " +
+                    "INSERT INTO resultaat (gebruiker_id, programma_id, afstand_id, tijd, datum) " +
                     "VALUES (@gebruikerId, @programmaId, @afstandId, @tijd, @datum)";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
@@ -139,9 +139,9 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql = "UPDATE resultaat SET " +
-                             "gebruikerId = @gebruikerId, " +
-                             "programmaId = @programmaId, " +
-                             "afstandId = @afstandId, " +
+                             "gebruiker_id = @gebruikerId, " +
+                             "programma_id = @programmaId, " +
+                             "afstand_id = @afstandId, " +
                              "tijd = @tijd, " +
                              "datum = @datum " +
                              "WHERE id = @id";

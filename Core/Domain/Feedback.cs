@@ -7,16 +7,15 @@ namespace Core.Domain;
 public class Feedback
 {
     public int Id { get; private set; }
-    public int ZwemmerId { get; private set; }
-    public int TrainerId { get; private set; }
+    
+    public int GebruikerId { get; private set; }
     public int ProgrammaId { get; private set; }
     public string FeedbackText { get; private set; }
 
-    public Feedback(int id, int zwemmerId, int trainerId, int programmaId, string feedbackText)
+    public Feedback(int id, int gebruikerId, int programmaId, string feedbackText)
     {
         Id = id;
-        ZwemmerId = zwemmerId;
-        TrainerId = trainerId;
+        GebruikerId = gebruikerId; 
         ProgrammaId = programmaId;
         FeedbackText = feedbackText;
     }

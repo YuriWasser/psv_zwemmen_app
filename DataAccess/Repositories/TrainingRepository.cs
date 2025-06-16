@@ -8,7 +8,7 @@ namespace DataAccess.Repositories
 {
     public class TrainingRepository(string connectionString, ILogger<TrainingRepository> logger) : ITrainingRepository
     {
-        public List<Training> GetByGebruikerId(int gebruikerId)
+        public List<Training> GetActieveTrainingen(int gebruikerId)
         {
             try
             {
@@ -18,14 +18,14 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql = @"
-            SELECT t.id, t.zwembadId, t.datum, t.startTijd
+            SELECT t.id, t.zwembad_id, t.datum, t.tijd
             FROM training t
             WHERE NOT EXISTS (
-                SELECT 1 FROM trainingAfmelden ta 
-                WHERE ta.trainingId = t.id AND ta.gebruikerId = @gebruikerId
+                SELECT 1 FROM gebruiker_training ta 
+                WHERE ta.training_Id = t.id AND ta.gebruiker_id = @gebruikerId
             )
             AND t.datum >= CURDATE()
-            ORDER BY t.datum, t.startTijd
+            ORDER BY t.datum, t.tijd
         ";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
@@ -37,9 +37,9 @@ namespace DataAccess.Repositories
                     trainingen.Add(
                         new Training(
                             reader.GetInt32(reader.GetOrdinal("id")),
-                            reader.GetInt32(reader.GetOrdinal("zwembadId")),
+                            reader.GetInt32(reader.GetOrdinal("zwembad_Id")),
                             reader.GetDateTime(reader.GetOrdinal("datum")),
-                            reader.GetTimeSpan(reader.GetOrdinal("startTijd"))
+                            reader.GetTimeSpan(reader.GetOrdinal("Tijd"))
                         )
                     );
                 }
@@ -60,7 +60,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, zwembadId, datum, startTijd FROM training WHERE id = @id";
+                string sql = "SELECT id, zwembad_Id, datum, Tijd FROM training WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", trainingId);
@@ -71,9 +71,9 @@ namespace DataAccess.Repositories
                 {
                     return new Training(
                         reader.GetInt32(reader.GetOrdinal("id")),
-                        reader.GetInt32(reader.GetOrdinal("zwembadId")),
+                        reader.GetInt32(reader.GetOrdinal("zwembad_Id")),
                         reader.GetDateTime(reader.GetOrdinal("datum")),
-                        reader.GetTimeSpan(reader.GetOrdinal("startTijd"))
+                        reader.GetTimeSpan(reader.GetOrdinal("tijd"))
                     );
                 }
                 throw new TrainingNotFoundException($"Training met ID {trainingId} niet gevonden.");
@@ -97,12 +97,12 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "INSERT INTO training (zwembadId, datum, startTijd) VALUES (@zwembadId, @datum, @startTijd)";
+                string sql = "INSERT INTO training (zwembad_Id, datum, tijd) VALUES (@zwembadId, @datum, @tijd)";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@zwembadId", training.ZwembadId);
                 command.Parameters.AddWithValue("@datum", training.Datum);
-                command.Parameters.AddWithValue("@startTijd", training.StartTijd);
+                command.Parameters.AddWithValue("@tijd", training.Tijd);
 
                 int rowsAffected = command.ExecuteNonQuery();
 
@@ -115,7 +115,7 @@ namespace DataAccess.Repositories
                         newId, 
                         training.ZwembadId, 
                         training.Datum, 
-                        training.StartTijd);
+                        training.Tijd);
                 }
 
                 return null;
@@ -135,15 +135,15 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql = "UPDATE training SET " +
-                             "zwembadId = @zwembadId, " +
+                             "zwembad_Id = @zwembadId, " +
                              "datum = @datum, " +
-                             "startTijd = @startTijd " +
+                             "tijd = @tijd " +
                              "WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@zwembadId", training.ZwembadId);
+                command.Parameters.AddWithValue("@zwembad_Id", training.ZwembadId);
                 command.Parameters.AddWithValue("@datum", training.Datum);
-                command.Parameters.AddWithValue("@startTijd", training.StartTijd);
+                command.Parameters.AddWithValue("@tijd", training.Tijd);
                 command.Parameters.AddWithValue("@id", training.Id);
 
                 int rowsAffected = command.ExecuteNonQuery();

@@ -1,0 +1,36 @@
+@page
+@model Presentation.Pages.Feedback.IndexModel
+
+@{
+    ViewData["Title"] = "Feedback";
+    Layout = "_Layout";
+}
+
+<main>
+    <h1 class="text-3xl font-bold mb-6">Feedback van trainers</h1>
+
+    @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+    {
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+            <tr>
+                <th class="px-4 py-2 border-b">Programma ID</th>
+                <th class="px-4 py-2 border-b">Feedback</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var feedback in Model.Feedbacks)
+            {
+                <tr>
+                    <td class="px-4 py-2 border-b">@feedback.ProgrammaId</td>
+                    <td class="px-4 py-2 border-b">@feedback.FeedbackText</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Er is nog geen feedback gevonden.</p>
+    }
+</main>

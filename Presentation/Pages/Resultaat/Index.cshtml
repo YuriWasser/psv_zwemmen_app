@@ -1,0 +1,40 @@
+@page
+@model Presentation.Pages.Resultaat.IndexModel
+
+@{
+    ViewData["Title"] = "Mijn Resultaten";
+    Layout = "_Layout";
+}
+
+<main>
+    <h1 class="text-3xl font-bold mb-6">Mijn Resultaten</h1>
+
+    @if (Model.Resultaten != null && Model.Resultaten.Any())
+    {
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+            <tr>
+                <th class="px-4 py-2 border-b">Datum</th>
+                <th class="px-4 py-2 border-b">Programma ID</th>
+                <th class="px-4 py-2 border-b">Afstand ID</th>
+                <th class="px-4 py-2 border-b">Tijd</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var resultaat in Model.Resultaten)
+            {
+                <tr>
+                    <td class="px-4 py-2 border-b">@resultaat.Datum.ToString("dd-MM-yyyy")</td>
+                    <td class="px-4 py-2 border-b">@resultaat.ProgrammaId</td>
+                    <td class="px-4 py-2 border-b">@resultaat.AfstandId</td>
+                    <td class="px-4 py-2 border-b">@resultaat.Tijd.ToString(@"hh\:mm\:ss")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Er zijn nog geen resultaten gevonden.</p>
+    }
+</main>

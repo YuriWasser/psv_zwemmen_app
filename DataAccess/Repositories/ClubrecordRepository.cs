@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, gebruikerId, afstandId, tijd, datum FROM clubrecord";
+                string sql = "SELECT id, gebruiker_id, afstand_id, record, datum FROM clubrecord";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 using MySqlDataReader reader = command.ExecuteReader();
@@ -30,7 +30,7 @@ namespace DataAccess.Repositories
                             reader.GetInt32(reader.GetOrdinal("id")),
                             reader.GetInt32(reader.GetOrdinal("gebruikerId")),
                             reader.GetInt32(reader.GetOrdinal("afstandId")),
-                            reader.GetTimeSpan(reader.GetOrdinal("tijd")),
+                            reader.GetTimeSpan(reader.GetOrdinal("record")),
                             reader.GetDateTime(reader.GetOrdinal("datum"))
                         )
                     );
@@ -52,7 +52,7 @@ namespace DataAccess.Repositories
                 using MySqlConnection connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, gebruikerId, afstandId, tijd, datum FROM clubrecord WHERE id = @id";
+                string sql = "SELECT id, gebruiker_id, afstand_id, record, datum FROM clubrecord WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", clubrecordId);
@@ -62,11 +62,11 @@ namespace DataAccess.Repositories
                 if (reader.Read())
                 {
                     return new Clubrecord(
-                        (int)reader["id"],
-                        (int)reader["gebruikerId"],
-                        (int)reader["afstandId"],
-                        (TimeSpan)reader["tijd"],
-                        (DateTime)reader["datum"]
+                        reader.GetInt32(reader.GetOrdinal("id")),
+                        reader.GetInt32(reader.GetOrdinal("gebruikerId")),
+                        reader.GetInt32(reader.GetOrdinal("afstandId")),
+                        reader.GetTimeSpan(reader.GetOrdinal("record")),
+                        reader.GetDateTime(reader.GetOrdinal("datum"))
                     );
                 }
 
@@ -92,12 +92,12 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql =
-                    "INSERT INTO clubrecord (gebruikerId, afstandId, tijd, datum) VALUES (@gebruikerId, @afstandId, @tijd, @datum)";
+                    "INSERT INTO clubrecord (gebruiker_id, afstand_id, record, datum) VALUES (@gebruikerId, @afstandId, @record, @datum)";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@gebruikerId", clubrecord.GebruikerId);
                 command.Parameters.AddWithValue("@afstandId", clubrecord.AfstandId);
-                command.Parameters.AddWithValue("@tijd", clubrecord.Tijd);
+                command.Parameters.AddWithValue("@record", clubrecord.Tijd);
                 command.Parameters.AddWithValue("@datum", clubrecord.Datum);
 
                 int rowsAffected = command.ExecuteNonQuery();
@@ -133,16 +133,16 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql = "UPDATE clubrecord SET " +
-                             "gebruikerId = @gebruikerId, " +
-                             "afstandId = @afstandId, " +
-                             "tijd = @tijd, " +
+                             "gebruiker_id = @gebruikerId, " +
+                             "afstand_id = @afstandId, " +
+                             "record = @record, " +
                              "datum = @datum " +
                              "WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@gebruikerId", clubrecord.GebruikerId);
                 command.Parameters.AddWithValue("@afstandId", clubrecord.AfstandId);
-                command.Parameters.AddWithValue("@tijd", clubrecord.Tijd);
+                command.Parameters.AddWithValue("@record", clubrecord.Tijd);
                 command.Parameters.AddWithValue("@datum", clubrecord.Datum);
                 command.Parameters.AddWithValue("@id", clubrecord.Id);
 

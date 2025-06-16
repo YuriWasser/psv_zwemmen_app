@@ -177,6 +177,9 @@
 .w-full {
   width: 100%;
 }
+.min-w-full {
+  min-width: 100%;
+}
 .flex-shrink {
   flex-shrink: 1;
 }
@@ -284,6 +287,10 @@
 .border-5 {
   border-style: var(--tw-border-style);
   border-width: 5px;
+}
+.border-b {
+  border-bottom-style: var(--tw-border-style);
+  border-bottom-width: 1px;
 }
 .bg-transparent {
   background-color: transparent;

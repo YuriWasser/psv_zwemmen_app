@@ -1,0 +1,41 @@
+@page
+@model Presentation.Pages.Clubrecord.IndexModel
+
+@{
+    ViewData["Title"]  = "Clubrecord";
+    Layout = "_Layout";
+}
+
+<main>
+    <h1 class="text-3xl font-bold mb-6">Clubrecords</h1>
+
+    @if (Model.Clubrecords != null && Model.Clubrecords.Any())
+    {
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+            <tr>
+                <th class="px-4 py-2 border-b">Afstand ID</th>
+                <th class="px-4 py-2 border-b">Gebruiker ID</th>
+                <th class="px-4 py-2 border-b">Recordtijd</th>
+                <th class="px-4 py-2 border-b">Datum</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var record in Model.Clubrecords)
+            {
+                <tr>
+                    <td class="px-4 py-2 border-b">@record.AfstandId</td>
+                    <td class="px-4 py-2 border-b">@record.GebruikerId</td>
+                    <td class="px-4 py-2 border-b">@record.Record.ToString(@"hh\:mm\:ss")</td>
+                    <td class="px-4 py-2 border-b">@record.Datum.ToString("dd-MM-yyyy")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Er zijn nog geen clubrecords gevonden.</p>
+    }
+  
+</main>

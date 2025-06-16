@@ -30,8 +30,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>1dhtzz5r8p</Fingerprint>
-      <Integrity>24OdiPHe2Lv2EHorT71d4eY8yXiwbrshDwugXaUZX6k=</Integrity>
+      <Fingerprint>3ra6qy8icp</Fingerprint>
+      <Integrity>752RAnZ6qxofAZeRPbPUZkL9ZTCrKoMbGsNNEl+wOsg=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\output.css'))</OriginalItemSpec>
