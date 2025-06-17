@@ -7,7 +7,7 @@ public class ClubrecordViewModel
     public int AfstandId { get; set; }
     public TimeSpan Record { get; set; }
     public DateTime Datum { get; set; }
-    
+
     public ClubrecordViewModel(int id, int gebruikerId, int afstandId, TimeSpan record, DateTime datum)
     {
         Id = id;

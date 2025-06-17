@@ -6,6 +6,5 @@ public class BeveiligdePagina_s : PageModel
 {
     public void OnGet()
     {
-        
     }
 }

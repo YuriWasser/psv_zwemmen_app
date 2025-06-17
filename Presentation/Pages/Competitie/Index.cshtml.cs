@@ -18,8 +18,10 @@ public class CompetitieModel : PageModel
         _zwembadService = zwembadService;
         _competitieService = competitieService;
     }
+
     public List<CompetitieViewModel> Competities { get; set; } = new List<CompetitieViewModel>();
     public List<Zwembad> Zwembaden { get; set; } = new List<Zwembad>();
+
     public IActionResult OnGet()
     {
         List<Core.Domain.Competitie> competitites = _competitieService.GetActieveCompetities();

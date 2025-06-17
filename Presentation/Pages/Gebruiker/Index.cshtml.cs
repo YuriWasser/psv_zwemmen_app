@@ -24,11 +24,9 @@ namespace Presentation.Pages.Gebruiker
             _config = config;
         }
 
-        [BindProperty]
-        public string Gebruikersnaam { get; set; }
+        [BindProperty] public string Gebruikersnaam { get; set; }
 
-        [BindProperty]
-        public string Wachtwoord { get; set; }
+        [BindProperty] public string Wachtwoord { get; set; }
 
         public void OnGet()
         {
@@ -66,7 +64,7 @@ namespace Presentation.Pages.Gebruiker
                 // {
                 //     claims.Add(new Claim(ClaimTypes.Role, role));
                 // }
-                
+
                 var claims = token.Claims.ToList();
                 var identity = new ClaimsIdentity(
                     claims,

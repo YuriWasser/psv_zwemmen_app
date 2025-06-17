@@ -6,7 +6,7 @@ public class FeedbackViewModel
     public int GebruikerId { get; set; }
     public int ProgrammaId { get; set; }
     public string FeedbackText { get; set; }
-    
+
     public FeedbackViewModel(int id, int gebruikerId, int programmaId, string feedbackText)
     {
         Id = id;

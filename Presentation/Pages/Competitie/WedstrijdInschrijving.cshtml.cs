@@ -8,6 +8,5 @@ public class WedstrijdInschrijvingModel : PageModel
 {
     public void OnGet()
     {
-        
     }
 }

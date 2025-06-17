@@ -2,7 +2,6 @@ using Core.Service;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;
 using System.Collections.Generic;
-
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Presentation.Pages.Clubrecord;
@@ -14,8 +13,8 @@ public class IndexModel : PageModel
     public IndexModel(ClubrecordService clubrecordService)
     {
         _clubrecordService = clubrecordService;
-        
     }
+
     public List<ClubrecordViewModel> Clubrecords { get; set; } = new();
 
     public void OnGet()
@@ -33,5 +32,4 @@ public class IndexModel : PageModel
             ));
         }
     }
-
 }

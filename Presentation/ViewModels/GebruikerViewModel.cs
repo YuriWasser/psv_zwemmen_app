@@ -9,8 +9,9 @@ public class GebruikerViewModel
     public string Email { get; set; }
     public string wachtwoord { get; set; }
     public string Functie { get; set; }
-    
-    public GebruikerViewModel(int id, string voornaam, string achternaam, string gebruikersnaam, string email, string wachtwoord, string functieCode)
+
+    public GebruikerViewModel(int id, string voornaam, string achternaam, string gebruikersnaam, string email,
+        string wachtwoord, string functieCode)
     {
         Id = id;
         Voornaam = voornaam;

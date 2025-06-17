@@ -8,7 +8,7 @@ public class ResultaatViewModel
     public int AfstandId { get; set; }
     public TimeSpan Tijd { get; set; }
     public DateTime Datum { get; set; }
-    
+
     public ResultaatViewModel(int id, int gebruikerId, int programmaId, int afstandId, TimeSpan tijd, DateTime datum)
     {
         Id = id;

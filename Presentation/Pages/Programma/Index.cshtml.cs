@@ -54,7 +54,8 @@ namespace Presentation.Pages.Programma
                     var idClaim = User.FindFirstValue("GebruikerId");
                     if (int.TryParse(idClaim, out int gebruikerId))
                     {
-                        geregistreerdeAfstanden = _inschrijvingService.GetAfstandenByGebruikerEnProgramma(gebruikerId, id);
+                        geregistreerdeAfstanden =
+                            _inschrijvingService.GetAfstandenByGebruikerEnProgramma(gebruikerId, id);
                     }
                 }
 
@@ -75,8 +76,8 @@ namespace Presentation.Pages.Programma
                 return NotFound();
             }
         }
-        
-        
+
+
         public IActionResult OnPost()
         {
             if (!User.Identity!.IsAuthenticated)

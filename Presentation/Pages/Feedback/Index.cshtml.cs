@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;
 using System.Collections.Generic;
 using System.Security.Claims;
-
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Presentation.Pages.Feedback;
@@ -42,5 +41,4 @@ public class IndexModel : PageModel
             Feedbacks = new List<FeedbackViewModel>();
         }
     }
-
 }

@@ -1,4 +1,5 @@
 // Pages/Resultaat/Index.cshtml.cs
+
 using Core.Service;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;

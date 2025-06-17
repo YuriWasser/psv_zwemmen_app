@@ -7,9 +7,8 @@ using Core.Interface;
 using Core.Service;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-
 using Microsoft.AspNetCore.Identity; // 👈 Bovenaan je bestand zetten als dat nog niet is toegevoegd
-using Core.Domain;                   // 👈 Voor toegang tot Gebruiker
+using Core.Domain; // 👈 Voor toegang tot Gebruiker
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -117,7 +116,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/Gebruiker/LogOut";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
-        
+
         options.Events = new CookieAuthenticationEvents
         {
             OnSigningIn = context =>
