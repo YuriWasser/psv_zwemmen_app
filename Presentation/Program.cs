@@ -95,6 +95,12 @@ builder.Services.AddScoped<IFeedbackRepository>(provider =>
     return new FeedbackRepository(connectionString, logger);
 });
 
+builder.Services.AddScoped<IAfstandPerProgrammaRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<AfstandPerProgrammaRepository>>();
+    return new AfstandPerProgrammaRepository(connectionString, logger);
+});
+
 // ✅ Services
 builder.Services.AddScoped<CompetitieService>();
 builder.Services.AddScoped<ProgrammaService>();
@@ -107,6 +113,7 @@ builder.Services.AddScoped<TrainingService>();
 builder.Services.AddScoped<ResultaatService>();
 builder.Services.AddScoped<ClubrecordService>();
 builder.Services.AddScoped<FeedbackService>();
+builder.Services.AddScoped<AfstandPerProgrammaService>();
 
 // ✅ AUTHENTICATIE MET COOKIES
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

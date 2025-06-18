@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.ViewModels;
 using System.Security.Claims;
 
-namespace Presentation.Pages.Programma
+namespace Presentation.Pages.Programmas
 {
     public class ProgrammaModel : PageModel
     {

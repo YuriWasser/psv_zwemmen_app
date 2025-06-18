@@ -1,4 +1,6 @@
 @page
+@using Core.Domain
+@using Presentation.ViewModels
 @model Presentation.Pages.Competitie.ToevoegenModel;
 
 @{
@@ -12,26 +14,37 @@
     <form method="post" class="space-y-4">
         <div>
             <label asp-for="Naam" class="block font-medium">Naam:</label>
-            <input asp-for="Naam" class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200" />
+            <input asp-for="Naam"
+                   class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200"/>
         </div>
 
         <div>
             <label asp-for="StartDatum" class="block font-medium">Startdatum:</label>
-            <input asp-for="StartDatum" type="date" class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200" />
+            <input asp-for="StartDatum" type="date"
+                   class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200"/>
         </div>
 
         <div>
             <label asp-for="EindDatum" class="block font-medium">Einddatum:</label>
-            <input asp-for="EindDatum" type="date" class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200" />
+            <input asp-for="EindDatum" type="date"
+                   class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200"/>
         </div>
 
         <div>
             <label asp-for="ZwembadId" class="block font-medium">Zwembad:</label>
-            <select asp-for="ZwembadId" asp-items="Model.Zwembaden" class="form-select w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200"></select>
+            <select asp-for="ZwembadId" asp-items="Model.Zwembaden"
+                    class="form-select w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200"></select>
         </div>
 
         <div class="mt-4 p-4 border border-gray-200 rounded bg-gray-50">
             <p class="font-medium mb-2">Nieuw programma aanmaken:</p>
+
+            <div class="mb-4">
+                <label asp-for="ProgrammaOmschrijving" class="block font-medium">Omschrijving:</label>
+                <textarea asp-for="ProgrammaOmschrijving" rows="2"
+                          class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200"></textarea>
+            </div>
+
             <div class="mt-4 p-4 border border-gray-200 rounded bg-gray-50">
                 <p class="font-medium mb-2">Kies afstanden en bepaal de volgorde:</p>
                 <div class="grid grid-cols-1 gap-2">
@@ -39,23 +52,31 @@
                     {
                         <div class="flex items-center space-x-4">
                             <input type="checkbox"
-                                   asp-for="Afstanden[@i].Geselecteerd"
-                                   class="form-checkbox text-red-600 rounded border-gray-300" />
-                            <input type="hidden" asp-for="Afstanden[@i].AfstandId" />
+                                   asp-for="@Model.Afstanden[@i].Geselecteerd"
+                                   class="form-checkbox text-red-600 rounded border-gray-300"/>
+                            <input type="hidden" asp-for="@Model.Afstanden[@i].AfstandNaam"/>
+                            <input type="hidden" asp-for="@Model.Afstanden[@i].AfstandId"/>
                             <span class="w-48">@Model.Afstanden[i].AfstandNaam</span>
                             <label class="ml-2">Volgorde:</label>
-                            <input asp-for="Afstanden[@i].Volgorde"
+                            <input asp-for="@Model.Afstanden[@i].Volgorde"
                                    type="number"
                                    min="1"
-                                   class="form-input w-20 rounded border border-gray-300 bg-white" />
+                                   class="form-input w-20 rounded border border-gray-300 bg-white"/>
                         </div>
                     }
                 </div>
             </div>
 
             <div class="mt-2">
+                <label asp-for="ProgrammaDatum" class="block font-medium">Programmadatum:</label>
+                <input asp-for="ProgrammaDatum" type="date"
+                       class="form-input w-full rounded border border-gray-300 bg-white"/>
+            </div>
+
+            <div class="mt-2">
                 <label asp-for="ProgrammaStarttijd" class="block font-medium">Starttijd:</label>
-                <input asp-for="ProgrammaStarttijd" type="time" class="form-input w-full rounded border border-gray-300 bg-white" />
+                <input asp-for="ProgrammaStarttijd" type="time"
+                       class="form-input w-full rounded border border-gray-300 bg-white focus:border-red-500 focus:ring focus:ring-red-200"/>
             </div>
         </div>
 

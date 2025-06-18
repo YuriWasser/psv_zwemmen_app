@@ -75,7 +75,7 @@ namespace Core.Service
                     throw new ArgumentException("Einddatum mag niet voor de startdatum liggen", nameof(eindDatum));
                 if (zwembadId <= 0)
                     throw new ArgumentException("Zwembad ID moet groter zijn dan 0", nameof(zwembadId));
-                if (programmaId <= 0)
+                if (programmaId < 0)
                     throw new ArgumentException("Programma ID moet groter zijn dan 0", nameof(programmaId));
                 
                 var newComp = new Competitie(id, naam, startDatum, eindDatum, zwembadId, programmaId);
@@ -175,6 +175,28 @@ namespace Core.Service
             {
                 _logger.LogError(ex, "Fout bij ophalen programma met ID {Id}", id);
                 throw new Exception("Er is een fout opgetreden bij het ophalen van het programma", ex);
+            }
+        }
+        
+        public Competitie AddMetProgramma(Competitie competitie)
+        {
+            try
+            {
+                if (competitie == null)
+                    throw new ArgumentNullException(nameof(competitie), "Competitie mag niet null zijn");
+
+                var addedComp = _competitieRepository.AddMetProgramma(competitie);
+                return addedComp;
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "Competitie is null bij toevoegen");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Fout bij toevoegen van competitie met programma");
+                throw new Exception("Er is een fout opgetreden bij het toevoegen van de competitie met programma", ex);
             }
         }
     }

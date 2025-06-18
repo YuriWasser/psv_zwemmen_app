@@ -55,7 +55,7 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql =
-                    "INSERT INTO programma (competitie_id, omschrijving, datum, start_tijd) VALUES (@competitieId, @omschrijving, @datum, @starttijd)";
+                    "INSERT INTO programma (competitie_id, omschrijving, datum, start_tijd) VALUES (@competitie_id, @omschrijving, @datum, @start_tijd)";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@competitie_id", programma.CompetitieId);
@@ -95,7 +95,7 @@ namespace DataAccess.Repositories
                 connection.Open();
 
                 string sql =
-                    "UPDATE programma SET competitie_id = @competitieId, omschrijving = @omschrijving, datum = @datum, start_tijd = @starttijd WHERE id = @id";
+                    "UPDATE programma SET competitie_id = @competitie_id, omschrijving = @omschrijving, datum = @datum, start_tijd = @start_tijd WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@id", programma.Id);
@@ -138,7 +138,7 @@ namespace DataAccess.Repositories
             }
         }
         
-        public List<Programma> GetByCompetitieId(int competitieId)
+        public List<Programma> GetByCompetitieId(int competitie_Id)
         {
             var result = new List<Programma>();
 
@@ -147,10 +147,10 @@ namespace DataAccess.Repositories
                 using var connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE competitie_id = @competitieId";
+                string sql = "SELECT id, competitie_id, omschrijving, datum, start_tijd FROM programma WHERE competitie_id = @competitie_id";
 
                 using var command = new MySqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@competitieId", competitieId);
+                command.Parameters.AddWithValue("@competitie_id", competitie_Id);
 
                 using var reader = command.ExecuteReader();
 

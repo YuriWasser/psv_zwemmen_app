@@ -140,7 +140,8 @@ namespace DataAccess.Repositories
                              "naam = @naam, " +
                              "start_datum = @start_datum, " +
                              "eind_datum = @eind_datum, " +
-                             "zwembad_id = @zwembad_id " +
+                             "zwembad_id = @zwembad_id," +
+                             "programma_id = @programma_id " +
                              "WHERE id = @id";
 
                 using MySqlCommand command = new MySqlCommand(sql, connection);
@@ -149,6 +150,7 @@ namespace DataAccess.Repositories
                 command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
                 command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
                 command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
+                command.Parameters.AddWithValue("@programma_id", competitie.ProgrammaId);
 
                 int rowsAffected = command.ExecuteNonQuery();
 
@@ -267,6 +269,49 @@ namespace DataAccess.Repositories
             {
                 logger.LogError(ex, "Database error fetching programma with ID {Id}", id);
                 throw new DatabaseException($"Database error fetching programma with ID {id}", ex);
+            }
+        }
+
+        public Competitie AddMetProgramma(Competitie competitie)
+        {
+            try
+            {
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                connection.Open();
+
+                string sql = "INSERT INTO competitie (naam, start_datum, eind_datum, zwembad_id, programma_id) " +
+                             "VALUES (@naam, @start_datum, @eind_datum, @zwembad_id, @programma_id)";
+
+                using MySqlCommand command = new MySqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@naam", competitie.Naam);
+                command.Parameters.AddWithValue("@start_datum", competitie.StartDatum);
+                command.Parameters.AddWithValue("@eind_datum", competitie.EindDatum);
+                command.Parameters.AddWithValue("@zwembad_id", competitie.ZwembadId);
+                command.Parameters.AddWithValue("@programma_id", competitie.ProgrammaId);
+
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    throw new DatabaseException("No rows affected while adding competitie with programma");
+                }
+
+                string selectIdSql = "SELECT LAST_INSERT_ID()";
+                using MySqlCommand selectIdCommand = new MySqlCommand(selectIdSql, connection);
+                int newId = Convert.ToInt32(selectIdCommand.ExecuteScalar());
+                
+                return new Competitie(
+                    newId,
+                    competitie.Naam,
+                    competitie.StartDatum,
+                    competitie.EindDatum,
+                    competitie.ZwembadId,
+                    competitie.ProgrammaId
+                );
+            }
+            catch (MySqlException ex)
+            {
+                logger.LogError(ex, "Error adding competitie with programma");
+                throw new DatabaseException("Error adding competitie with programma", ex);
             }
         }
     }

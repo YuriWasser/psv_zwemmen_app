@@ -13,5 +13,6 @@ namespace Core.Interface
         
         List<Programma> GetProgrammaVoorCompetitie(int competitieId);
         Programma GetProgrammaById(int id);
+        Competitie AddMetProgramma(Competitie competitie);
     }
 }

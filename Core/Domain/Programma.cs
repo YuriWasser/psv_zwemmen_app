@@ -11,6 +11,8 @@ public class Programma
     public string Omschrijving { get; private set; }
     public DateTime Datum { get; private set; }
     public TimeSpan StartTijd { get; private set; }
+    
+    
 
 
     public Programma(int id, int competitieId, string omschrijving, DateTime datum, TimeSpan starttijd)
@@ -21,4 +23,6 @@ public class Programma
         Datum = datum;
         StartTijd = starttijd;
     }
+    
+    
 }
